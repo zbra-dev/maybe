@@ -1,0 +1,36 @@
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+.idea/
+obj/
+bin/
+Logs/
+dist/
+*.js
+*.js.map
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+/packages
+
+### VisualStudioCode ###
+**/.vscode/*
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+**/.history
