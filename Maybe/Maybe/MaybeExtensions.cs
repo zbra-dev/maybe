@@ -54,7 +54,7 @@ namespace Maybe
         #endregion
 
         #region Monad bind
-        public static Maybe<S> ToMaybe<S>(this Nullable<S> value) where S : struct
+        public static Maybe<S> ToMaybe<S>(this S? value) where S : struct
             => !value.HasValue ? Maybe<S>.Nothing
             : new Maybe<S>(value.Value);
 

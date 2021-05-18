@@ -73,7 +73,7 @@ namespace Maybe
 
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, Maybe<R>> transformer)
         {
-            if (hasValue && other.hasValue)
+            if (HasValue && other.HasValue)
             {
                 return transformer(Value, other.Value);
             }
@@ -83,7 +83,7 @@ namespace Maybe
 
         public void ZipAndConsume<U>(Maybe<U> other, Action<T, U> consumer)
         {
-            if (hasValue && other.hasValue)
+            if (HasValue && other.HasValue)
             {
                 consumer(obj, other.Value);
             }
@@ -103,7 +103,7 @@ namespace Maybe
 
         public override bool Equals(object obj) => (obj is Maybe<T> other) && Equals(other);
 
-        public override int GetHashCode() => hasValue ? Value.GetHashCode() : 0;
+        public override int GetHashCode() => HasValue ? Value.GetHashCode() : 0;
 
         public override string ToString() => HasValue ? Value.ToString() : string.Empty;
 
