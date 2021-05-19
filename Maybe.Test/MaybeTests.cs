@@ -82,10 +82,9 @@ namespace Maybe.Test
             static string transformer(int v, double o) => (v + o).ToString();
 
             var result = value.ToMaybe()
-                .Zip(otherValue.ToMaybe(), transformer)
-                .OrNull();
+                .Zip(otherValue.ToMaybe(), transformer);
 
-            result.Should().Be(expected);
+            result.Should().Be(expected.ToMaybe());
         }
 
         [Theory]
@@ -98,10 +97,9 @@ namespace Maybe.Test
             static Maybe<string> transformer(int v, double o) => (v + o).ToString().ToMaybe();
 
             var result = value.ToMaybe()
-                .Zip(otherValue.ToMaybe(), transformer)
-                .OrNull();
+                .Zip(otherValue.ToMaybe(), transformer);
 
-            result.Should().Be(expected);
+            result.Should().Be(expected.ToMaybe());
         }
 
         [Theory]
@@ -174,33 +172,32 @@ namespace Maybe.Test
         }
 
         [Theory]
-        //[InlineData(null, null)]
+        [InlineData(null, null)]
         [InlineData(1, 1)]
         public void MaybeCast_WithValidCast_ShouldCastTheInnerType(int? value, double? expected)
         {
-            int x = 3;
-            var y = (double)x;
             var result = value.ToMaybe()
                 .MaybeCast<double>();
 
             result.Should().Be(expected.ToMaybe());
         }
 
-        // TODO: DELETE THESE?
-        private class IntObj
+        [Fact]
+        public void MaybeCast_WithInvalidCast_ShouldReturnNothing()
         {
-            public int Value { get; set; }
+            var result = false.ToMaybe()
+                .MaybeCast<DateTime>();
+
+            result.HasValue.Should().BeFalse();
         }
 
-        private class DecimalObj
+        [Fact]
+        public void MaybeCast_WithInvalidFormat_ShouldReturnNothing()
         {
-            public decimal Value { get; set; }
-        }
+            var result = "falsee".ToMaybe()
+                .MaybeCast<bool>();
 
-        private class StringObj
-        {
-            public string Value { get; set; }
+            result.HasValue.Should().BeFalse();
         }
     }
-
 }
