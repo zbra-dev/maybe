@@ -58,7 +58,6 @@ namespace Maybe
             => !value.HasValue ? Maybe<S>.Nothing
             : new Maybe<S>(value.Value);
 
-
         public static Maybe<string> ToMaybe(this string value)
             => string.IsNullOrEmpty(value) ? Maybe<string>.Nothing
                                            : new Maybe<string>(value);
@@ -96,7 +95,6 @@ namespace Maybe
             => !m.HasValue ? Maybe<V>.Nothing
                            : k(m.Value).ToMaybe();
 
-
         public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, Nullable<V>> k)
             where V : struct
             => !m.HasValue ? Maybe<V>.Nothing
@@ -104,7 +102,6 @@ namespace Maybe
 
         public static Maybe<V> SelectMany<T, U, V>(this Maybe<T> m, Func<T, Maybe<U>> k, Func<T, U, V> s)
             => m.SelectMany(x => k(x).SelectMany(y => ToMaybe(s(x, y))));
-
 
         public static Maybe<V> SelectMany<T, V>(this Maybe<T> m, Func<T, Maybe<V>> k)
              => !m.HasValue ? Maybe<V>.Nothing
@@ -114,15 +111,9 @@ namespace Maybe
             => (!m.HasValue) ? alternative()
                              : m;
 
-
         public static Maybe<T> OrGetAlternative<T>(this Maybe<T> m, Func<T> alternative)
             => (!m.HasValue) ? ToMaybe(alternative())
                              : m;
-
-
         #endregion
-
-
-
     }
 }

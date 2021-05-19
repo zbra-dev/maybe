@@ -1,0 +1,52 @@
+name: $(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: Any CPU
+  buildConfiguration: Release
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: Nuget Install
+
+- task: NuGetCommand@2
+  displayName: Nuget Restore
+  inputs:
+    command: restore
+    restoreSolution: '**/*.sln'
+    feedsToUse: config
+    nugetConfigPath: $(Build.SourcesDirectory)/Nuget.config
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    workingDirectory: $(Build.SourcesDirectory)
+  
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: Maybe.Tests/Maybe.Tests.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: Nuget Pack
+  inputs:
+    command: pack
+    packagesToPack: Maybe/Maybe.csproj
+    versioningScheme: off
+
+- task: DotNetCoreCLI@2
+  displayName: Nuget Push
+  inputs:
+    command: push
+    packagesToPush: $(Build.ArtifactStagingDirectory)/*.nupkg
+    nuGetFeedType: internal
+    publishVstsFeed:  11be10eb-d8bb-4ce6-89af-576e6d63de46

@@ -91,7 +91,7 @@ namespace Maybe
 
         public bool Equals(Maybe<T> other)
         {
-            if (this.hasValue)
+            if (HasValue)
             {
                 return other.HasValue && Value.Equals(other.Value);
             }
@@ -117,7 +117,7 @@ namespace Maybe
         {
             try
             {
-                return !this.HasValue ? Maybe<TTarget>.Nothing : ((TTarget)(object)Value).ToMaybe();
+                return !HasValue ? Maybe<TTarget>.Nothing : ((TTarget)(object)Value).ToMaybe();
             }
             catch (InvalidCastException)
             {
