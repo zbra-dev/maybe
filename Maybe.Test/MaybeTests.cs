@@ -120,8 +120,8 @@ namespace Maybe.Test
 
         [Theory]
         [InlineData(null, null, true)]
-        [InlineData(null, 2, false)]
-        [InlineData(2, null, false)]
+        [InlineData(null, 0, false)]
+        [InlineData(0, null, false)]
         [InlineData(1, 1, true)]
         [InlineData(1, 2, false)]
         public void Equals_WhenObjectsAreEqual_ShouldReturnTrue(int? value, int? otherValue, bool expected)
@@ -169,35 +169,6 @@ namespace Maybe.Test
                 .Where(predicate)
                 .OrNull();
             result.Should().Be(expected);
-        }
-
-        [Theory]
-        [InlineData(null, null)]
-        [InlineData(1, 1)]
-        public void MaybeCast_WithValidCast_ShouldCastTheInnerType(int? value, double? expected)
-        {
-            var result = value.ToMaybe()
-                .MaybeCast<double>();
-
-            result.Should().Be(expected.ToMaybe());
-        }
-
-        [Fact]
-        public void MaybeCast_WithInvalidCast_ShouldReturnNothing()
-        {
-            var result = false.ToMaybe()
-                .MaybeCast<DateTime>();
-
-            result.HasValue.Should().BeFalse();
-        }
-
-        [Fact]
-        public void MaybeCast_WithInvalidFormat_ShouldReturnNothing()
-        {
-            var result = "falsee".ToMaybe()
-                .MaybeCast<bool>();
-
-            result.HasValue.Should().BeFalse();
         }
     }
 }

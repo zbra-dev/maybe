@@ -85,7 +85,7 @@ namespace Maybe
                 }
                 return Maybe<T>.Nothing;
             }
-            return new Maybe<T>((T)value);
+            return new Maybe<T>(value);
         }
 
         #endregion
@@ -95,7 +95,7 @@ namespace Maybe
             => !m.HasValue ? Maybe<V>.Nothing
                            : k(m.Value).ToMaybe();
 
-        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, Nullable<V>> k)
+        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, V?> k)
             where V : struct
             => !m.HasValue ? Maybe<V>.Nothing
                            : ToMaybe(k(m.Value));
