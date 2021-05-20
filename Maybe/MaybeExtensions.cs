@@ -16,7 +16,7 @@ namespace Maybe
         #endregion
 
         #region Interaction with Nullable
-        public static Nullable<T> ToNullable<T>(this Maybe<T> value)
+        public static T? ToNullable<T>(this Maybe<T> value)
             where T : struct
         {
             if (!value.HasValue)
@@ -29,28 +29,6 @@ namespace Maybe
             }
         }
 
-        #endregion
-
-        #region Convertion 
-        public static Maybe<T> Convert<T>(this Maybe<string> value)
-            where T : struct
-        {
-            if (!value.HasValue)
-            {
-                return Maybe<T>.Nothing;
-            }
-            else
-            {
-                try
-                {
-                    return GenericTypeConverter.GetConverter().Convert<T>(value.Value).ToMaybe();
-                }
-                catch (Exception)
-                {
-                    return Maybe<T>.Nothing;
-                }
-            }
-        }
         #endregion
 
         #region Monad bind
