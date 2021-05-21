@@ -91,7 +91,7 @@ namespace Maybe
 
         public bool Equals(Maybe<T> other)
         {
-            if (this.hasValue)
+            if (HasValue)
             {
                 return other.HasValue && Value.Equals(other.Value);
             }
@@ -112,18 +112,5 @@ namespace Maybe
         public bool Is(Func<T, bool> predicate) => HasValue && predicate(Value);
 
         public Maybe<T> Where(Func<T, bool> predicate) => !Is(predicate) ? Nothing : this;
-
-        public Maybe<TTarget> MaybeCast<TTarget>()
-        {
-            try
-            {
-                return !this.HasValue ? Maybe<TTarget>.Nothing : ((TTarget)(object)Value).ToMaybe();
-            }
-            catch (InvalidCastException)
-            {
-                return Maybe<TTarget>.Nothing;
-            }
-        }
-
     }
 }
