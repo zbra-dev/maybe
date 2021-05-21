@@ -78,9 +78,6 @@ namespace Maybe
             => !m.HasValue ? Maybe<V>.Nothing
                            : ToMaybe(k(m.Value));
 
-        public static Maybe<V> SelectMany<T, U, V>(this Maybe<T> m, Func<T, Maybe<U>> k, Func<T, U, V> s)
-            => m.SelectMany(x => k(x).SelectMany(y => ToMaybe(s(x, y))));
-
         public static Maybe<V> SelectMany<T, V>(this Maybe<T> m, Func<T, Maybe<V>> k)
              => !m.HasValue ? Maybe<V>.Nothing
                             : k(m.Value);

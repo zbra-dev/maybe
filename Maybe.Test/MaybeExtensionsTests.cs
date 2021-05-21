@@ -6,8 +6,48 @@ namespace Maybe.Test
     public class MaybeExtensionsTests
     {
         [Theory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("value", "value")]
+        public void OrEmpty_ReturnsValueOrEmpty(string subject, string expected)
+        {
+            var result = subject.ToMaybe()
+                .OrEmpty();
+
+            result.Should().Be(expected);
+        }
+
+        [Fact]
+        public void OrTrue_ReturnsValueOrTrue()
+        {
+            var result = Maybe<bool>.Nothing
+                .OrTrue();
+
+            result.Should().BeTrue();
+
+            result = false.ToMaybe()
+                .OrTrue();
+
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void OrFalse_ReturnsValueOrFalse()
+        {
+            var result = Maybe<bool>.Nothing
+                .OrFalse();
+
+            result.Should().BeFalse();
+
+            result = true.ToMaybe()
+                .OrFalse();
+
+            result.Should().BeTrue();
+        }
+
+        [Theory]
         [MemberData(nameof(Select_WithNonNullablePropertyTestCases))]
-        public void Select_WithNonNullableProperty_ReturnsSelectedProperty(Maybe<IntObj> subject, Maybe<int> expected)
+        public void Select_WithNonNullableProperty_ShouldReturnSelectedProperty(Maybe<IntObj> subject, Maybe<int> expected)
         {
             var result = subject.Select(i => i.Count);
 
@@ -73,6 +113,36 @@ namespace Maybe.Test
             return data;
         }
 
+        [Theory]
+        [MemberData(nameof(OrGetAlternative_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
+        public void OrGetAlternative_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
+        {
+            var result = subject
+                .Select(s => s.Name)
+                .OrGetAlternative(() => alternative.ToMaybe());
+            result.Should().Be(expected.ToMaybe());
+
+            result = subject
+                .Select(s => s.Name)
+                .OrGetAlternative(() => alternative);
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        public static TheoryData<Maybe<StringObj>, string, string> OrGetAlternative_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
+        {
+            var data = new TheoryData<Maybe<StringObj>, string, string>
+            {
+
+            };
+
+            data.Add(Maybe<StringObj>.Nothing, null, null);
+            data.Add(Maybe<StringObj>.Nothing, "alternative", "alternative");
+            data.Add(new StringObj("subject").ToMaybe(), null, "subject");
+            data.Add(new StringObj("subject").ToMaybe(), "alternative", "subject");
+
+            return data;
+        }
+
         public class IntObj
         {
             public int Count { get; set; }
@@ -80,6 +150,16 @@ namespace Maybe.Test
             public IntObj(int count)
             {
                 Count = count;
+            }
+        }
+
+        public class StringObj
+        {
+            public string Name { get; set; }
+
+            public StringObj(string name)
+            {
+                Name = name;
             }
         }
 
