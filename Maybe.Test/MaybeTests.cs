@@ -67,7 +67,7 @@ namespace Maybe.Test
             var result = "a";
 
             Maybe<string>.Nothing
-                .Consume(i => result = i.ToString());
+                .Consume(i => result = "b");
 
             result.Should().Be("a");
         }
@@ -154,7 +154,7 @@ namespace Maybe.Test
         [InlineData("2", true)]
         public void Is_WithPredicate_ShouldMatchValueWithPredicate(string value, bool expected)
         {
-            static bool predicate(string s) => int.Parse(s) > 1;
+            static bool predicate(string s) => s == null || int.Parse(s) > 1;
             value.ToMaybe().Is(predicate).Should().Be(expected);
         }
 
@@ -164,11 +164,11 @@ namespace Maybe.Test
         [InlineData("2", "2")]
         public void Where_WithPredicate_ShouldApplyPredicate(string value, string expected)
         {
-            static bool predicate(string s) => int.Parse(s) > 1;
+            static bool predicate(string s) => s == null || int.Parse(s) > 1;
             var result = value.ToMaybe()
-                .Where(predicate)
-                .OrNull();
-            result.Should().Be(expected);
+                .Where(predicate);
+
+            result.Should().Be(expected.ToMaybe());
         }
     }
 }
