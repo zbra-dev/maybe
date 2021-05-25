@@ -55,21 +55,13 @@ namespace Maybe
             return Maybe<T>.Nothing;
         }
 
-        public static Maybe<T> MaybeSingle<T>(this IEnumerable<Nullable<T>> enumerable) where T : struct
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> enumerable) where T : struct
         {
             if (enumerable == null || !enumerable.Any())
             {
                 return Maybe<T>.Nothing;
             }
-            try
-            {
-                return enumerable.Single<Nullable<T>>().ToMaybe<T>();
-            }
-            catch (InvalidOperationException)
-            {
-                return Maybe<T>.Nothing;
-            }
-
+            return enumerable.Single().ToMaybe();
         }
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable)
@@ -83,7 +75,7 @@ namespace Maybe
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            return MaybeSingle(enumerable.Where(predicate));
+            return MaybeSingle(enumerable?.Where(predicate));
         }
 
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> enumerable)
