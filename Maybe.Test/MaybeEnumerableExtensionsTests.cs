@@ -90,5 +90,59 @@ namespace Maybe.Test
                 .Should()
                 .ThrowExactly<InvalidOperationException>();
         }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData(new int[] { }, null)]
+        [InlineData(new int[] { 1 }, 1)]
+        [InlineData(new int[] { 2, 1 }, 2)]
+        public void MaybeFirst_WithoutPredicate_ReturnsFirstItem(IList<int> subject, int? expected)
+        {
+            var result = subject
+                .MaybeFirst();
+
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData(new int[] { }, null)]
+        [InlineData(new int[] { 1 }, null)]
+        [InlineData(new int[] { 1, 15 }, 15)]
+        [InlineData(new int[] { 1, 15, 1, 20 }, 15)]
+        public void MaybeFirst_WithPredicate_ReturnsFirstMatchingItem(IList<int> subject, int? expected)
+        {
+            static bool predicate(int i) => i > 10;
+            var result = subject
+                .MaybeFirst(predicate);
+
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        [Theory]
+        [MemberData(nameof(MaybeFirst_WithNullableItems_ReturnsFirstItemTestCases))]
+        public void MaybeFirst_WithNullableItems_ReturnsFirstItem(IList<int?> subject, int? expected)
+        {
+            var result = subject
+                .MaybeFirst();
+
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        public static TheoryData<IList<int?>, int?> MaybeFirst_WithNullableItems_ReturnsFirstItemTestCases()
+        {
+            var data = new TheoryData<IList<int?>, int?>
+            {
+                
+            };
+
+            data.Add(null, null);
+            data.Add(new int?[] { }, null);
+            data.Add(new int?[] { null }, null);
+            data.Add(new int?[] { 1 }, 1);
+            data.Add(new int?[] { 1, 2}, 1);
+
+            return data;
+        }
     }
 }
