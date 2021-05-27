@@ -34,7 +34,6 @@ namespace Maybe.Test
             result.Should().Be(expected.ToMaybe());
         }
 
-        // Should this really throw an exception?
         [Fact]
         public void MaybeSingle_WithMultipleElements_ThrowsException()
         {
@@ -133,15 +132,148 @@ namespace Maybe.Test
         {
             var data = new TheoryData<IList<int?>, int?>
             {
-                
+
             };
 
             data.Add(null, null);
             data.Add(new int?[] { }, null);
             data.Add(new int?[] { null }, null);
             data.Add(new int?[] { 1 }, 1);
-            data.Add(new int?[] { 1, 2}, 1);
+            data.Add(new int?[] { 1, 2 }, 1);
 
+            return data;
+        }
+
+        [Theory]
+        [InlineData(0, "0")]
+        [InlineData(1, "1")]
+        [InlineData(2, null)]
+        public void MaybeGet_WithDictionary_ReturnsValueAssociatedWithKey(int key, string expected)
+        {
+            var dictionary = new Dictionary<int, string>
+            {
+                { 0, "0" },
+                { 1, "1" },
+            };
+
+            var result = dictionary.MaybeGet(key);
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData(0, "0")]
+        [InlineData(1, "1")]
+        [InlineData(2, null)]
+        public void MaybeGet_WithDictionaryAndMaybeKey_ReturnsValueAssociatedWithKey(int? key, string expected)
+        {
+            var dictionary = new Dictionary<int, string>
+            {
+                { 0, "0" },
+                { 1, "1" },
+            };
+
+            var result = dictionary.MaybeGet(key.ToMaybe());
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        [Theory]
+        [InlineData(-1, null)]
+        [InlineData(0, "0")]
+        [InlineData(1, "1")]
+        [InlineData(2, null)]
+        public void MaybeGet_WithDictionaryAndMaybeValue_ReturnsValueAssociatedWithKey(int key, string expected)
+        {
+            var dictionary = new Dictionary<int, Maybe<string>>
+            {
+                { -1, Maybe<string>.Nothing },
+                { 0, "0".ToMaybe() },
+                { 1, "1".ToMaybe() },
+            };
+
+            var result = dictionary.MaybeGet(key);
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData(-1, null)]
+        [InlineData(0, "0")]
+        [InlineData(1, "1")]
+        [InlineData(2, null)]
+        public void MaybeGet_WithDictionaryAndMaybeValueAndMaybeKey_ReturnsValueAssociatedWithKey(int? key, string expected)
+        {
+            var dictionary = new Dictionary<int, Maybe<string>>
+            {
+                { -1, Maybe<string>.Nothing },
+                { 0, "0".ToMaybe() },
+                { 1, "1".ToMaybe() },
+            };
+
+            var result = dictionary.MaybeGet(key.ToMaybe());
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        [Theory]
+        [MemberData(nameof(Compact_WithEnumerableOfMaybe_ReturnsValuesTestCases))]
+        public void Compact_WithEnumerableOfMaybe_ReturnsValues(IList<Maybe<string>> subject, IList<string> expected)
+        {
+            var result = subject.Compact();
+            result.Should().BeEquivalentTo(expected, opt => opt.WithStrictOrdering());
+        }
+
+        public static TheoryData<IList<Maybe<string>>, IList<string>> Compact_WithEnumerableOfMaybe_ReturnsValuesTestCases()
+        {
+            var data = new TheoryData<IList<Maybe<string>>, IList<string>>
+            {
+
+            };
+
+            data.Add(new Maybe<string>[] { }, new string[] { });
+            data.Add(new Maybe<string>[] { Maybe<string>.Nothing }, new string[] { });
+
+            var subject = new Maybe<string>[]
+            {
+                Maybe<string>.Nothing,
+                "a".ToMaybe(),
+                Maybe<string>.Nothing,
+                "b".ToMaybe(),
+                Maybe<string>.Nothing,
+                "c".ToMaybe(),
+                Maybe<string>.Nothing
+            };
+            data.Add(subject, new string[] { "a", "b", "c" });
+
+            subject = new Maybe<string>[]
+            {
+                "a".ToMaybe(),
+                "b".ToMaybe(),
+                "c".ToMaybe(),
+            };
+            data.Add(subject, new string[] { "a", "b", "c" });
+
+            return data;
+        }
+
+        [Theory]
+        [MemberData(nameof(Compact_WithEnumerableOfNullables_ReturnsValuesTestCases))]
+        public void Compact_WithEnumerableOfNullables_ReturnsValues(IList<int?> subject, IList<int> expected)
+        {
+            var result = subject.Compact();
+            result.Should().BeEquivalentTo(expected, opt => opt.WithStrictOrdering());
+        }
+
+        public static TheoryData<IList<int?>, IList<int>> Compact_WithEnumerableOfNullables_ReturnsValuesTestCases()
+        {
+            var data = new TheoryData<IList<int?>, IList<int>>
+            {
+
+            };
+
+            data.Add(new int?[] { }, new int[] { });
+            data.Add(new int?[] { null }, new int[] { });
+            data.Add(new int?[] { null, 1, null, 2, null, 3, null }, new int[] { 1, 2, 3 });
+            data.Add(new int?[] { 1, 2, 3 }, new int[] { 1, 2, 3 });
             return data;
         }
     }
