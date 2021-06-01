@@ -55,21 +55,13 @@ namespace Maybe
             return Maybe<T>.Nothing;
         }
 
-        public static Maybe<T> MaybeSingle<T>(this IEnumerable<Nullable<T>> enumerable) where T : struct
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> enumerable) where T : struct
         {
             if (enumerable == null || !enumerable.Any())
             {
                 return Maybe<T>.Nothing;
             }
-            try
-            {
-                return enumerable.Single<Nullable<T>>().ToMaybe<T>();
-            }
-            catch (InvalidOperationException)
-            {
-                return Maybe<T>.Nothing;
-            }
-
+            return enumerable.Single().ToMaybe();
         }
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable)
@@ -83,7 +75,7 @@ namespace Maybe
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            return MaybeSingle(enumerable.Where(predicate));
+            return MaybeSingle(enumerable?.Where(predicate));
         }
 
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> enumerable)
@@ -109,9 +101,9 @@ namespace Maybe
             }
         }
 
-        public static Maybe<T> MaybeFirst<T>(this IEnumerable<Nullable<T>> enumerable) where T : struct
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> enumerable) where T : struct
         {
-            return (enumerable == null || !enumerable.Any()) ? Maybe<T>.Nothing : enumerable.First<Nullable<T>>().ToMaybe();
+            return (enumerable == null || !enumerable.Any()) ? Maybe<T>.Nothing : enumerable.First().ToMaybe();
         }
 
         public static Maybe<V> MaybeGet<K, V>(this IEnumerable<KeyValuePair<K, V>> dictionary, K key)
@@ -190,7 +182,7 @@ namespace Maybe
         public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> enumerable)
             => enumerable.Where(m => m.HasValue).Select(m => m.Value);
 
-        public static IEnumerable<T> Compact<T>(this IEnumerable<Nullable<T>> enumerable)
+        public static IEnumerable<T> Compact<T>(this IEnumerable<T?> enumerable)
             where T : struct
            => enumerable.Where(m => m.HasValue).Select(m => m.Value);
 
