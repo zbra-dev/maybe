@@ -217,6 +217,20 @@ namespace Maybe.Test
             result.Should().Be(expected.ToMaybe());
         }
 
+        [Fact]
+        public void MaybeGet_WithDictionaryAndNullKey_ThrowsException()
+        {
+            var dicionary = new Dictionary<string, string>
+            {
+                { "A", "a" },
+                { "B", "b" },
+            };
+
+            dicionary.Invoking(s => s.MaybeGet(null))
+                .Should()
+                .ThrowExactly<ArgumentNullException>();
+        }
+
         [Theory]
         [MemberData(nameof(Compact_WithEnumerableOfMaybe_ReturnsValuesTestCases))]
         public void Compact_WithEnumerableOfMaybe_ReturnsValues(IList<Maybe<string>> subject, IList<string> expected)
