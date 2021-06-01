@@ -22,12 +22,14 @@ namespace Maybe.Test
         {
             var result = Maybe<bool>.Nothing
                 .OrTrue();
+            result.Should().BeTrue();
 
+            result = true.ToMaybe()
+                .OrTrue();
             result.Should().BeTrue();
 
             result = false.ToMaybe()
                 .OrTrue();
-
             result.Should().BeFalse();
         }
 
@@ -36,12 +38,14 @@ namespace Maybe.Test
         {
             var result = Maybe<bool>.Nothing
                 .OrFalse();
+            result.Should().BeFalse();
 
+            result = false.ToMaybe()
+               .OrFalse();
             result.Should().BeFalse();
 
             result = true.ToMaybe()
                 .OrFalse();
-
             result.Should().BeTrue();
         }
 
