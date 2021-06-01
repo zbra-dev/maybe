@@ -56,15 +56,11 @@ namespace Maybe.Test
 
         public static TheoryData<Maybe<IntObj>, Maybe<int>> Select_WithNonNullablePropertyTestCases()
         {
-            var data = new TheoryData<Maybe<IntObj>, Maybe<int>>
+            return new TheoryData<Maybe<IntObj>, Maybe<int>>
             {
-
+                { Maybe<IntObj>.Nothing, Maybe<int>.Nothing },
+                { new IntObj(1).ToMaybe(), 1.ToMaybe() },
             };
-
-            data.Add(Maybe<IntObj>.Nothing, Maybe<int>.Nothing);
-            data.Add(new IntObj(1).ToMaybe(), 1.ToMaybe());
-
-            return data;
         }
 
         [Theory]
@@ -78,16 +74,12 @@ namespace Maybe.Test
 
         public static TheoryData<Maybe<NullableIntObj>, Maybe<int>> Select_WithNullablePropertyTestCases()
         {
-            var data = new TheoryData<Maybe<NullableIntObj>, Maybe<int>>
+            return new TheoryData<Maybe<NullableIntObj>, Maybe<int>>
             {
-                
+                { Maybe<NullableIntObj>.Nothing, Maybe<int>.Nothing },
+                { new NullableIntObj(null).ToMaybe(), Maybe<int>.Nothing },
+                { new NullableIntObj(1).ToMaybe(), 1.ToMaybe() },
             };
-
-            data.Add(Maybe<NullableIntObj>.Nothing, Maybe<int>.Nothing);
-            data.Add(new NullableIntObj(null).ToMaybe(), Maybe<int>.Nothing);
-            data.Add(new NullableIntObj(1).ToMaybe(), 1.ToMaybe());
-
-            return data;
         }
 
         [Theory]
@@ -101,16 +93,12 @@ namespace Maybe.Test
 
         public static TheoryData<Maybe<MaybeIntObj>, Maybe<int>> SelectMany_WithMaybePropertyTestCases()
         {
-            var data = new TheoryData<Maybe<MaybeIntObj>, Maybe<int>>
+            return new TheoryData<Maybe<MaybeIntObj>, Maybe<int>>
             {
-
+                { Maybe<MaybeIntObj>.Nothing, Maybe<int>.Nothing },
+                { new MaybeIntObj(null).ToMaybe(), Maybe<int>.Nothing },
+                { new MaybeIntObj(1).ToMaybe(), 1.ToMaybe() },
             };
-
-            data.Add(Maybe<MaybeIntObj>.Nothing, Maybe<int>.Nothing);
-            data.Add(new MaybeIntObj(null).ToMaybe(), Maybe<int>.Nothing);
-            data.Add(new MaybeIntObj(1).ToMaybe(), 1.ToMaybe());
-
-            return data;
         }
 
         [Theory]
@@ -130,17 +118,13 @@ namespace Maybe.Test
 
         public static TheoryData<Maybe<StringObj>, string, string> OrGetAlternative_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
         {
-            var data = new TheoryData<Maybe<StringObj>, string, string>
+            return new TheoryData<Maybe<StringObj>, string, string>
             {
-
+                { Maybe<StringObj>.Nothing, null, null },
+                { Maybe<StringObj>.Nothing, "alternative", "alternative" },
+                { new StringObj("subject").ToMaybe(), null, "subject" },
+                { new StringObj("subject").ToMaybe(), "alternative", "subject" },
             };
-
-            data.Add(Maybe<StringObj>.Nothing, null, null);
-            data.Add(Maybe<StringObj>.Nothing, "alternative", "alternative");
-            data.Add(new StringObj("subject").ToMaybe(), null, "subject");
-            data.Add(new StringObj("subject").ToMaybe(), "alternative", "subject");
-
-            return data;
         }
     }
 }

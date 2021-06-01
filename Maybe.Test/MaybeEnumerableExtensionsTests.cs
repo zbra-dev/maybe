@@ -66,19 +66,16 @@ namespace Maybe.Test
 
             result.Should().Be(expected.ToMaybe());
         }
+
         public static TheoryData<IList<int?>, int?> MaybeSingle_WithNullableItems_ReturnsSingleItemTestCases()
         {
-            var data = new TheoryData<IList<int?>, int?>
+            return new TheoryData<IList<int?>, int?>
             {
-
+                { null, null },
+                { new int?[] { }, null },
+                { new int?[] { null }, null },
+                { new int?[] { 1 }, 1 },
             };
-
-            data.Add(null, null);
-            data.Add(new int?[] { }, null);
-            data.Add(new int?[] { null }, null);
-            data.Add(new int?[] { 1 }, 1);
-
-            return data;
         }
 
         [Fact]
@@ -130,18 +127,14 @@ namespace Maybe.Test
 
         public static TheoryData<IList<int?>, int?> MaybeFirst_WithNullableItems_ReturnsFirstItemTestCases()
         {
-            var data = new TheoryData<IList<int?>, int?>
+            return new TheoryData<IList<int?>, int?>
             {
-
+                { null, null },
+                { new int?[] { }, null },
+                { new int?[] { null }, null },
+                { new int?[] { 1 }, 1 },
+                { new int?[] { 1, 2 }, 1 },
             };
-
-            data.Add(null, null);
-            data.Add(new int?[] { }, null);
-            data.Add(new int?[] { null }, null);
-            data.Add(new int?[] { 1 }, 1);
-            data.Add(new int?[] { 1, 2 }, 1);
-
-            return data;
         }
 
         [Theory]
@@ -224,35 +217,33 @@ namespace Maybe.Test
 
         public static TheoryData<IList<Maybe<string>>, IList<string>> Compact_WithEnumerableOfMaybe_ReturnsValuesTestCases()
         {
-            var data = new TheoryData<IList<Maybe<string>>, IList<string>>
+            return new TheoryData<IList<Maybe<string>>, IList<string>>
             {
-
+                { new Maybe<string>[] { }, new string[] { } },
+                { new Maybe<string>[] { Maybe<string>.Nothing }, new string[] { } },
+                {
+                    new Maybe<string>[]
+                    {
+                        Maybe<string>.Nothing,
+                        "a".ToMaybe(),
+                        Maybe<string>.Nothing,
+                        "b".ToMaybe(),
+                        Maybe<string>.Nothing,
+                        "c".ToMaybe(),
+                        Maybe<string>.Nothing
+                    },
+                    new string[] { "a", "b", "c" }
+                },
+                {
+                    new Maybe<string>[]
+                    {
+                        "a".ToMaybe(),
+                        "b".ToMaybe(),
+                        "c".ToMaybe(),
+                    },
+                    new string[] { "a", "b", "c" }
+                },
             };
-
-            data.Add(new Maybe<string>[] { }, new string[] { });
-            data.Add(new Maybe<string>[] { Maybe<string>.Nothing }, new string[] { });
-
-            var subject = new Maybe<string>[]
-            {
-                Maybe<string>.Nothing,
-                "a".ToMaybe(),
-                Maybe<string>.Nothing,
-                "b".ToMaybe(),
-                Maybe<string>.Nothing,
-                "c".ToMaybe(),
-                Maybe<string>.Nothing
-            };
-            data.Add(subject, new string[] { "a", "b", "c" });
-
-            subject = new Maybe<string>[]
-            {
-                "a".ToMaybe(),
-                "b".ToMaybe(),
-                "c".ToMaybe(),
-            };
-            data.Add(subject, new string[] { "a", "b", "c" });
-
-            return data;
         }
 
         [Theory]
@@ -265,16 +256,13 @@ namespace Maybe.Test
 
         public static TheoryData<IList<int?>, IList<int>> Compact_WithEnumerableOfNullables_ReturnsValuesTestCases()
         {
-            var data = new TheoryData<IList<int?>, IList<int>>
+            return new TheoryData<IList<int?>, IList<int>>
             {
-
+                { new int?[] { }, new int[] { } },
+                { new int?[] { null }, new int[] { } },
+                { new int?[] { null, 1, null, 2, null, 3, null }, new int[] { 1, 2, 3 } },
+                { new int?[] { 1, 2, 3 }, new int[] { 1, 2, 3 } },
             };
-
-            data.Add(new int?[] { }, new int[] { });
-            data.Add(new int?[] { null }, new int[] { });
-            data.Add(new int?[] { null, 1, null, 2, null, 3, null }, new int[] { 1, 2, 3 });
-            data.Add(new int?[] { 1, 2, 3 }, new int[] { 1, 2, 3 });
-            return data;
         }
     }
 }
