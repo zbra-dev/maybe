@@ -57,6 +57,16 @@ namespace Maybe.Test
             result.Should().Be(expected.ToMaybe());
         }
 
+        [Fact]
+        public void MaybeSingle_WithPredicateAndMultipleMatchingElements_ThrowsException()
+        {
+            static bool predicate(int i) => i < 10;
+            var subject = new[] { 1, 20, 2 };
+            subject.Invoking(s => s.MaybeSingle(predicate))
+                .Should()
+                .ThrowExactly<InvalidOperationException>();
+        }
+
         [Theory]
         [MemberData(nameof(MaybeSingle_WithNullableItems_ReturnsSingleItemTestCases))]
         public void MaybeSingle_WithNullableItems_ReturnsSingleItem(IList<int?> subject, int? expected)
