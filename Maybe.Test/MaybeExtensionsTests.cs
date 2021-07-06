@@ -5,6 +5,18 @@ namespace Maybe.Test
 {
     public class MaybeExtensionsTests
     {
+        [Fact]
+        public void ToMaybe_WithMaybeSubject_ReturnsItself()
+        {
+            var subject = 1.ToMaybe();
+            var result = subject.ToMaybe();
+            result.Should().Be(subject);
+
+            subject = Maybe<int>.Nothing;
+            result = subject.ToMaybe();
+            result.Should().Be(subject);
+        }
+
         [Theory]
         [InlineData(null, "")]
         [InlineData("", "")]
