@@ -100,6 +100,11 @@ namespace Maybe
                 : new Maybe<string>(value);
         }
 
+        public static Maybe<T> ToMaybe<T>(this Maybe<T> value)
+        {
+            return value;
+        }
+
         /// <summary>
         /// Converts the value to Maybe&lt;<typeparamref name="T"/>&gt;.
         /// </summary>
@@ -115,22 +120,6 @@ namespace Maybe
                 return Maybe<T>.Nothing;
             }
 
-            var valueType = value.GetType();
-
-            if (valueType.IsGenericType && valueType.GetGenericTypeDefinition() == typeof(Maybe<>))
-            {
-                bool hasValue = (bool)valueType.GetProperty("HasValue").GetGetMethod().Invoke(value, null);
-
-                if (hasValue)
-                {
-                    var val = valueType.GetProperty("Value").GetGetMethod().Invoke(value, null);
-                    if (val is T)
-                    {
-                        return new Maybe<T>((T)val);
-                    }
-                }
-                return Maybe<T>.Nothing;
-            }
             return new Maybe<T>(value);
         }
 
