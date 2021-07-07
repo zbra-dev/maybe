@@ -93,7 +93,7 @@ namespace Maybe
         }
 
         /// <summary>
-        /// Zips two maybes together, analogous to Linq's zip.
+        /// Zips two maybes together. Analogous to Linq's Zip.
         /// </summary>
         /// <returns>
         /// The zipped maybe
@@ -111,7 +111,7 @@ namespace Maybe
         }
 
         /// <summary>
-        /// Zips two maybes together, analogous to Linq's zip.
+        /// Zips two maybes together. Analogous to Linq's Zip.
         /// </summary>
         /// <returns>
         /// The zipped maybe
