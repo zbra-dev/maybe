@@ -100,6 +100,13 @@ namespace Maybe
                 : new Maybe<string>(value);
         }
 
+        /// <summary>
+        /// This methods prevents stacking maybes, it just returns value
+        /// </summary>
+        /// <returns>
+        /// value
+        /// </returns>
+        /// <param name="value"> The value to be converted.</param>
         public static Maybe<T> ToMaybe<T>(this Maybe<T> value)
         {
             return value;
