@@ -3,7 +3,7 @@
 namespace Maybe
 {
     /// <summary>
-    /// The generic Maybe class.
+    /// The generic Maybe monad.
     /// </summary>
     public struct Maybe<T>
     {
