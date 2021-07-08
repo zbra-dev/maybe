@@ -311,7 +311,6 @@ namespace Maybe
         /// </returns>
         /// <param name="source"> The dictionary that will be searched.</param>
         /// <param name="key"> The key.</param>
-        /// <exception cref="ArgumentNullException">Thrown if key is null.</exception>
         public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> source, Maybe<K> key)
             => key.HasValue ? DoMaybeGetOnDictionaryWithMaybeValues(source, key.Value) : Maybe<V>.Nothing;
 
