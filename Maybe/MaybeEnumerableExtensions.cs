@@ -151,8 +151,12 @@ namespace Maybe
         /// <param name="source"> The source.</param>
         /// <param name="predicate"> The predicate.</param>
         /// <exception cref="InvalidOperationException">Thrown if multiple elements match the predicate.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if predicate is null.</exception>
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
+            if (predicate == null)
+                throw new ArgumentNullException("predicate cannot be null");
+
             return MaybeSingle(source?.Where(predicate));
         }
 
@@ -180,8 +184,12 @@ namespace Maybe
         /// </returns>
         /// <param name="source"> The source.</param>
         /// <param name="predicate"> The predicate.</param>
+        /// <exception cref="ArgumentNullException">Thrown if predicate is null.</exception>
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
+            if (predicate == null)
+                throw new ArgumentNullException("predicate cannot be null");
+
             if (source == null)
             {
                 return Maybe<T>.Nothing;
@@ -325,8 +333,14 @@ namespace Maybe
         /// An IEnumerable&lt;<typeparamref name="T"/>&gt; with all the values in source, ignoring Maybe.Nothing.
         /// </returns>
         /// <param name="source"> The source.</param>
+        /// <exception cref="ArgumentNullException">Thrown if source is null.</exception>
         public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> source)
-            => source.Where(m => m.HasValue).Select(m => m.Value);
+        {
+            if (source == null)
+                throw new ArgumentNullException("source cannot be null");
+
+            return source.Where(m => m.HasValue).Select(m => m.Value);
+        }
 
         /// <summary>
         /// Extract the values from source, ignoring nulls.
@@ -335,10 +349,14 @@ namespace Maybe
         /// An IEnumerable&lt;<typeparamref name="T"/>&gt; with all the values in source, ignoring nulls.
         /// </returns>
         /// <param name="source"> The source.</param>
-        public static IEnumerable<T> Compact<T>(this IEnumerable<T?> source)
-            where T : struct
-           => source.Where(m => m.HasValue).Select(m => m.Value);
+        /// <exception cref="ArgumentNullException">Thrown if source is null.</exception>
+        public static IEnumerable<T> Compact<T>(this IEnumerable<T?> source) where T : struct
+        {
+            if (source == null)
+                throw new ArgumentNullException("source cannot be null");
 
+            return source.Where(m => m.HasValue).Select(m => m.Value);
+        }
         #endregion
     }
 }

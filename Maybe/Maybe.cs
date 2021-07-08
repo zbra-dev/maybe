@@ -58,7 +58,14 @@ namespace Maybe
         /// The value if HasValue is true, otherwise returns the value provided by defaultSupplier
         /// </returns>
         /// <param name="defaultSupplier"> The default value supplier.</param>
-        public T OrGet(Func<T> defaultSupplier) => HasValue ? obj : defaultSupplier();
+        /// <exception cref="ArgumentNullException">Thrown if defaultSupplier is null.</exception>
+        public T OrGet(Func<T> defaultSupplier)
+        {
+            if (defaultSupplier == null)
+                throw new ArgumentNullException("defaultSupplier cannot be null");
+
+            return HasValue ? obj : defaultSupplier();
+        }
 
         /// <summary>
         /// Returns the value if HasValue is true, otherwise throws an exception.
@@ -67,9 +74,13 @@ namespace Maybe
         /// The value if HasValue is true
         /// </returns>
         /// <param name="errorSupplier"> The error supplier that provides the exception to be thrown.</param>
+        /// <exception cref="ArgumentNullException">Thrown if errorSupplier is null.</exception>
         /// <exception cref="Exception">Thrown if HasValue is false.</exception>
         public T OrThrow(Func<Exception> errorSupplier)
         {
+            if (errorSupplier == null)
+                throw new ArgumentNullException("errorSupplier cannot be null");
+
             if (HasValue)
             {
                 return obj;
@@ -81,8 +92,12 @@ namespace Maybe
         /// Applies an action to the value if it's present.
         /// </summary>
         /// <param name="consumer"> The action to be applied to the value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if errorSupplier is null.</exception>
         public void Consume(Action<T> consumer)
         {
+            if (consumer == null)
+                throw new ArgumentNullException("consumer cannot be null");
+
             if (HasValue)
             {
                 consumer(obj);
@@ -97,8 +112,12 @@ namespace Maybe
         /// </returns>
         /// <param name="other"> The other maybe to be zipped.</param>
         /// <param name="transformer"> The transformer function to be applied.</param>
+        /// <exception cref="ArgumentNullException">Thrown if transformer is null.</exception>
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, R> transformer)
         {
+            if (transformer == null)
+                throw new ArgumentNullException("transformer cannot be null");
+
             if (HasValue && other.HasValue)
             {
                 return transformer(Value, other.Value).ToMaybe();
@@ -115,8 +134,12 @@ namespace Maybe
         /// </returns>
         /// <param name="other"> The other maybe to be zipped.</param>
         /// <param name="transformer"> The transformer function to be applied.</param>
+        /// <exception cref="ArgumentNullException">Thrown if transformer is null.</exception>
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, Maybe<R>> transformer)
         {
+            if (transformer == null)
+                throw new ArgumentNullException("transformer cannot be null");
+
             if (HasValue && other.HasValue)
             {
                 return transformer(Value, other.Value);
@@ -130,8 +153,12 @@ namespace Maybe
         /// </summary>
         /// <param name="other"> The other maybe to be zipped.</param>
         /// <param name="consumer"> The action to be applied to both maybes.</param>
+        /// <exception cref="ArgumentNullException">Thrown if consumer is null.</exception>
         public void ZipAndConsume<U>(Maybe<U> other, Action<T, U> consumer)
         {
+            if (consumer == null)
+                throw new ArgumentNullException("consumer cannot be null");
+
             if (HasValue && other.HasValue)
             {
                 consumer(obj, other.Value);
@@ -203,7 +230,13 @@ namespace Maybe
         /// False otherwise
         /// </returns>
         /// <param name="predicate"> The predicate.</param>
-        public bool Is(Func<T, bool> predicate) => HasValue && predicate(Value);
+        /// <exception cref="ArgumentNullException">Thrown if predicate is null.</exception>
+        public bool Is(Func<T, bool> predicate)
+        {
+            if (predicate == null)
+                throw new ArgumentNullException("predicate cannot be null");
+            return HasValue && predicate(Value);
+        }
 
         /// <summary>
         /// Filters the value using a predicate. Analogous to Linq's Where.
@@ -213,6 +246,12 @@ namespace Maybe
         /// Maybe.Nothing otherwise
         /// </returns>
         /// <param name="predicate"> The predicate.</param>
-        public Maybe<T> Where(Func<T, bool> predicate) => !Is(predicate) ? Nothing : this;
+        /// <exception cref="ArgumentNullException">Thrown if predicate is null.</exception>
+        public Maybe<T> Where(Func<T, bool> predicate)
+        {
+            if (predicate == null)
+                throw new ArgumentNullException("predicate cannot be null");
+            return !Is(predicate) ? Nothing : this;
+        }
     }
 }

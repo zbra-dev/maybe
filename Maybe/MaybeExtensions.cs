@@ -142,9 +142,12 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
+        /// <exception cref="ArgumentNullException">Thrown if selector is null.</exception>
         #region Operations 
         public static Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V> selector)
         {
+            if (selector == null)
+                throw new ArgumentNullException("selector cannot be null");
             return !subject.HasValue
                 ? Maybe<V>.Nothing
                 : selector(subject.Value).ToMaybe();
@@ -160,8 +163,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
+        /// <exception cref="ArgumentNullException">Thrown if selector is null.</exception>
         public static Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V?> selector) where V : struct
         {
+            if (selector == null)
+                throw new ArgumentNullException("selector cannot be null");
             return !subject.HasValue
                 ? Maybe<V>.Nothing
                 : ToMaybe(selector(subject.Value));
@@ -177,8 +183,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
+        /// <exception cref="ArgumentNullException">Thrown if selector is null.</exception>
         public static Maybe<V> SelectMany<T, V>(this Maybe<T> subject, Func<T, Maybe<V>> selector)
         {
+            if (selector == null)
+                throw new ArgumentNullException("selector cannot be null");
             return !subject.HasValue
                 ? Maybe<V>.Nothing
                 : selector(subject.Value);
@@ -192,8 +201,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        /// <exception cref="ArgumentNullException">Thrown if alternativeSupplier is null.</exception>
         public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<Maybe<T>> alternativeSupplier)
         {
+            if (alternativeSupplier == null)
+                throw new ArgumentNullException("alternativeSupplier cannot be null");
             return !subject.HasValue
                 ? alternativeSupplier()
                 : subject;
@@ -207,8 +219,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        /// <exception cref="ArgumentNullException">Thrown if alternativeSupplier is null.</exception>
         public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<T> alternativeSupplier)
         {
+            if (alternativeSupplier == null)
+                throw new ArgumentNullException("alternativeSupplier cannot be null");
             return !subject.HasValue
                 ? ToMaybe(alternativeSupplier())
                 : subject;
