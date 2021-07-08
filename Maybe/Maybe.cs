@@ -11,24 +11,21 @@ namespace Maybe
         public readonly static Maybe<T> Nothing = new Maybe<T>(default, false);
 
         private readonly T obj;
-#pragma warning disable IDE0032 // Use auto property
-        private readonly bool hasValue;
-#pragma warning restore IDE0032 // Use auto property
 
         private Maybe(T obj, bool hasValue)
         {
-            this.hasValue = hasValue;
             this.obj = obj;
+            HasValue = hasValue;
         }
 
         internal Maybe(T obj)
         {
             this.obj = obj;
-            hasValue = true;
+            HasValue = true;
         }
 
         /// <value>True if there is a value present, otherwise false.</value>
-        public bool HasValue => hasValue;
+        public bool HasValue { get; }
 
         /// <value>The encapsulated value.</value>
         /// <exception cref="Exception">Thrown if HasValue is false.</exception>
@@ -52,7 +49,7 @@ namespace Maybe
         /// The value if HasValue is true, otherwise returns defaultValue 
         /// </returns>
         /// <param name="defaultValue"> The default value.</param>
-        public T Or(T defaultValue) => hasValue ? obj : defaultValue;
+        public T Or(T defaultValue) => HasValue ? obj : defaultValue;
 
         /// <summary>
         /// Returns the value or a default provided by defaultSupplier.
@@ -61,7 +58,7 @@ namespace Maybe
         /// The value if HasValue is true, otherwise returns the value provided by defaultSupplier
         /// </returns>
         /// <param name="defaultSupplier"> The default value supplier.</param>
-        public T OrGet(Func<T> defaultSupplier) => hasValue ? obj : defaultSupplier();
+        public T OrGet(Func<T> defaultSupplier) => HasValue ? obj : defaultSupplier();
 
         /// <summary>
         /// Returns the value if HasValue is true, otherwise throws an exception.
@@ -73,7 +70,7 @@ namespace Maybe
         /// <exception cref="Exception">Thrown if HasValue is false.</exception>
         public T OrThrow(Func<Exception> errorSupplier)
         {
-            if (hasValue)
+            if (HasValue)
             {
                 return obj;
             }
@@ -86,7 +83,7 @@ namespace Maybe
         /// <param name="consumer"> The action to be applied to the value.</param>
         public void Consume(Action<T> consumer)
         {
-            if (hasValue)
+            if (HasValue)
             {
                 consumer(obj);
             }
@@ -102,7 +99,7 @@ namespace Maybe
         /// <param name="transformer"> The transformer function to be applied.</param>
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, R> transformer)
         {
-            if (hasValue && other.hasValue)
+            if (HasValue && other.HasValue)
             {
                 return transformer(Value, other.Value).ToMaybe();
             }
