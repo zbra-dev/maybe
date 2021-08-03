@@ -108,36 +108,43 @@ namespace Maybe
 
         public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, V> dictionary, K key)
         {
-            return DoMaybeGet(dictionary, key);
-        }
-
-        private static Maybe<V> DoMaybeGet<K, V>(this IDictionary<K, V> dictionary, K key)
-        {
-            return DoGeneralTryGetValue(dictionary, key, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
-        }
-
-        private static bool DoGeneralTryGetValue<K, V>(this IDictionary<K, V> dictionary, K key, out V value)
-        {
             if (dictionary == null)
             {
-                value = default;
-                return false;
+                return Maybe<V>.Nothing;
             }
 
-            return dictionary.TryGetValue(key, out value);
+            return dictionary.TryGetValue(key, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
         }
 
         public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, V> dictionary, Maybe<K> key)
-            => (key.HasValue) ? DoMaybeGet(dictionary, key.Value) : Maybe<V>.Nothing;
-        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> dictionary, K key)
-            => DoMaybeGetOnDictionaryWithMaybeValues(dictionary, key);
+        {
+            if (dictionary == null)
+            {
+                return Maybe<V>.Nothing;
+            }
 
-        private static Maybe<V> DoMaybeGetOnDictionaryWithMaybeValues<K, V>(this IDictionary<K, Maybe<V>> dictionary, K key)
-            => DoGeneralTryGetValue(dictionary, key, out var value) ? value : Maybe<V>.Nothing;
+            return key.HasValue && dictionary.TryGetValue(key.Value, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
+        }
+
+        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> dictionary, K key)
+        {
+            if (dictionary == null)
+            {
+                return Maybe<V>.Nothing;
+            }
+
+            return dictionary.TryGetValue(key, out var value) ? value : Maybe<V>.Nothing;
+        }
 
         public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> dictionary, Maybe<K> key)
-            => key.HasValue ? DoMaybeGetOnDictionaryWithMaybeValues(dictionary, key.Value) : Maybe<V>.Nothing;
+        {
+            if (dictionary == null)
+            {
+                return Maybe<V>.Nothing;
+            }
 
+            return key.HasValue && dictionary.TryGetValue(key.Value, out var value) ? value : Maybe<V>.Nothing;
+        }
         #endregion
 
         #region Compact
