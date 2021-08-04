@@ -219,58 +219,14 @@ namespace Maybe
         /// <param name="source"> The dictionary that will be searched.</param>
         /// <param name="key"> The key.</param>
         /// <exception cref="ArgumentNullException">Thrown if key is null.</exception>
-        public static Maybe<V> MaybeGet<K, V>(this IEnumerable<KeyValuePair<K, V>> source, K key)
+        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, V> source, K key)
         {
-            return DoMaybeGet(source, key);
-        }
-
-        private static Maybe<V> DoMaybeGet<K, V>(this IEnumerable<KeyValuePair<K, V>> dictionary, K key)
-        {
-            return DoGeneralTryGetValue(dictionary, key, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
-        }
-
-        private static bool DoGeneralTryGetValue<K, V>(this IEnumerable<KeyValuePair<K, V>> dictionary, K key, out V value)
-        {
-            if (dictionary == null || !dictionary.Any())
+            if (source == null)
             {
-                value = default;
-                return false;
+                return Maybe<V>.Nothing;
             }
 
-
-            //  most common since is the mutable version
-            IDictionary<K, V> readOther = dictionary as IDictionary<K, V>;
-
-            if (readOther == null)
-            {
-                // thy this one before falling back to list search
-                IReadOnlyDictionary<K, V> dic = dictionary as IReadOnlyDictionary<K, V>;
-
-                if (dic == null)
-                {
-                    // fall back to direct search
-                    // use to List to overcome the problem with SingleOrDefault since if 
-                    // V is a struct the default is a , possible and otherwise present, value.
-                    var list = dictionary.Where(pair => pair.Key.Equals(key)).ToList();
-                    if (list.Count > 0)
-                    {
-                        value = list[0].Value;
-                        return true;
-                    }
-                }
-                else
-                {
-                    return dic.TryGetValue(key, out value);
-                }
-            }
-            else
-            {
-                return readOther.TryGetValue(key, out value);
-            }
-
-
-            value = default;
-            return false;
+            return source.TryGetValue(key, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
         }
 
         /// <summary>
@@ -283,8 +239,15 @@ namespace Maybe
         /// <param name="source"> The dictionary that will be searched.</param>
         /// <param name="key"> The key.</param>
         /// <exception cref="ArgumentNullException">Thrown if key is null.</exception>
-        public static Maybe<V> MaybeGet<K, V>(this IEnumerable<KeyValuePair<K, V>> source, Maybe<K> key)
-            => (key.HasValue) ? DoMaybeGet(source, key.Value) : Maybe<V>.Nothing;
+        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, V> source, Maybe<K> key)
+        {
+            if (source == null)
+            {
+                return Maybe<V>.Nothing;
+            }
+
+            return key.HasValue && source.TryGetValue(key.Value, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
+        }
 
         /// <summary>
         /// Returns the value that is associated with the key.
@@ -296,11 +259,15 @@ namespace Maybe
         /// <param name="source"> The dictionary that will be searched.</param>
         /// <param name="key"> The key.</param>
         /// <exception cref="ArgumentNullException">Thrown if key is null.</exception>
-        public static Maybe<V> MaybeGet<K, V>(this IEnumerable<KeyValuePair<K, Maybe<V>>> source, K key)
-            => DoMaybeGetOnDictionaryWithMaybeValues(source, key);
+        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> source, K key)
+        {
+            if (source == null)
+            {
+                return Maybe<V>.Nothing;
+            }
 
-        private static Maybe<V> DoMaybeGetOnDictionaryWithMaybeValues<K, V>(this IEnumerable<KeyValuePair<K, Maybe<V>>> dictionary, K key)
-            => DoGeneralTryGetValue(dictionary, key, out Maybe<V> value) ? value : Maybe<V>.Nothing;
+            return source.TryGetValue(key, out var value) ? value : Maybe<V>.Nothing;
+        }
 
         /// <summary>
         /// Returns the value that is associated with the key.
@@ -312,8 +279,14 @@ namespace Maybe
         /// <param name="source"> The dictionary that will be searched.</param>
         /// <param name="key"> The key.</param>
         public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> source, Maybe<K> key)
-            => key.HasValue ? DoMaybeGetOnDictionaryWithMaybeValues(source, key.Value) : Maybe<V>.Nothing;
+        {
+            if (source == null)
+            {
+                return Maybe<V>.Nothing;
+            }
 
+            return key.HasValue && source.TryGetValue(key.Value, out var value) ? value : Maybe<V>.Nothing;
+        }
         #endregion
 
         #region Compact
