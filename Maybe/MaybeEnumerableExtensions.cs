@@ -106,75 +106,45 @@ namespace Maybe
             return (enumerable == null || !enumerable.Any()) ? Maybe<T>.Nothing : enumerable.First().ToMaybe();
         }
 
-        public static Maybe<V> MaybeGet<K, V>(this IEnumerable<KeyValuePair<K, V>> dictionary, K key)
+        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, V> dictionary, K key)
         {
-            return DoMaybeGet(dictionary, key);
-        }
-
-        private static Maybe<V> DoMaybeGet<K, V>(this IEnumerable<KeyValuePair<K, V>> dictionary, K key)
-        {
-            return DoGeneralTryGetValue(dictionary, key, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
-        }
-
-        private static bool DoGeneralTryGetValue<K, V>(this IEnumerable<KeyValuePair<K, V>> dictionary, K key, out V value)
-        {
-            if (dictionary == null || !dictionary.Any())
+            if (dictionary == null)
             {
-                value = default;
-                return false;
+                return Maybe<V>.Nothing;
             }
 
-
-            //  most common since is the mutable version
-            IDictionary<K, V> readOther = dictionary as IDictionary<K, V>;
-
-            if (readOther == null)
-            {
-                // thy this one before falling back to list search
-                IReadOnlyDictionary<K, V> dic = dictionary as IReadOnlyDictionary<K, V>;
-
-                if (dic == null)
-                {
-                    // fall back to direct search
-                    // use to List to overcome the problem with SingleOrDefault since if 
-                    // V is a struct the default is a , possible and otherwise present, value.
-                    var list = dictionary.Where(pair => pair.Key.Equals(key)).ToList();
-                    if (list.Count > 0)
-                    {
-                        value = list[0].Value;
-                        return true;
-                    }
-                }
-                else
-                {
-                    return dic.TryGetValue(key, out value);
-                }
-            }
-            else
-            {
-                return readOther.TryGetValue(key, out value);
-            }
-
-
-            value = default;
-            return false;
+            return dictionary.TryGetValue(key, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
         }
 
-        public static Maybe<V> MaybeGet<K, V>(this IEnumerable<KeyValuePair<K, V>> dictionary, Maybe<K> key)
-            => (key.HasValue) ? DoMaybeGet(dictionary, key.Value) : Maybe<V>.Nothing;
+        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, V> dictionary, Maybe<K> key)
+        {
+            if (dictionary == null)
+            {
+                return Maybe<V>.Nothing;
+            }
 
+            return key.HasValue && dictionary.TryGetValue(key.Value, out var value) ? value.ToMaybe() : Maybe<V>.Nothing;
+        }
 
-        public static Maybe<V> MaybeGet<K, V>(this IEnumerable<KeyValuePair<K, Maybe<V>>> dictionary, K key)
-            => DoMaybeGetOnDictionaryWithMaybeValues(dictionary, key);
+        public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> dictionary, K key)
+        {
+            if (dictionary == null)
+            {
+                return Maybe<V>.Nothing;
+            }
 
-
-        private static Maybe<V> DoMaybeGetOnDictionaryWithMaybeValues<K, V>(this IEnumerable<KeyValuePair<K, Maybe<V>>> dictionary, K key)
-            => DoGeneralTryGetValue(dictionary, key, out Maybe<V> value) ? value : Maybe<V>.Nothing;
-
+            return dictionary.TryGetValue(key, out var value) ? value : Maybe<V>.Nothing;
+        }
 
         public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, Maybe<V>> dictionary, Maybe<K> key)
-            => key.HasValue ? DoMaybeGetOnDictionaryWithMaybeValues(dictionary, key.Value) : Maybe<V>.Nothing;
+        {
+            if (dictionary == null)
+            {
+                return Maybe<V>.Nothing;
+            }
 
+            return key.HasValue && dictionary.TryGetValue(key.Value, out var value) ? value : Maybe<V>.Nothing;
+        }
         #endregion
 
         #region Compact
