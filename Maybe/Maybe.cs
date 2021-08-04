@@ -173,7 +173,7 @@ namespace Maybe
         /// Calculates the HashCode.
         /// </summary>
         /// <returns>
-        /// The HashCode.
+        /// 0 if HasValue is false, otherwise returns the value's HashCode.
         /// </returns>
         public override int GetHashCode() => HasValue ? Value.GetHashCode() : 0;
 
@@ -209,8 +209,8 @@ namespace Maybe
         /// Filters the value using a predicate. Analogous to Linq's Where.
         /// </summary>
         /// <returns>
-        /// This if the encapsulated value matches the predicate.
-        /// Maybe.Nothing otherwise
+        /// The calling maybe if the encapsulated value matches the predicate,
+        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing otherwise
         /// </returns>
         /// <param name="predicate"> The predicate.</param>
         public Maybe<T> Where(Func<T, bool> predicate) => !Is(predicate) ? Nothing : this;

@@ -86,21 +86,6 @@ namespace Maybe
         }
 
         /// <summary>
-        /// Converts the value to Maybe&lt;string&gt;.
-        /// </summary>
-        /// <returns>
-        /// Maybe&lt;string&gt;.Nothing if value is null,
-        /// otherwise new Maybe&lt;string&gt;(value)
-        /// </returns>
-        /// <param name="value"> The value to be converted.</param>
-        public static Maybe<string> ToMaybe(this string value)
-        {
-            return value == null
-                ? Maybe<string>.Nothing
-                : new Maybe<string>(value);
-        }
-
-        /// <summary>
         /// This methods prevents stacking maybes, it just returns value
         /// </summary>
         /// <returns>
