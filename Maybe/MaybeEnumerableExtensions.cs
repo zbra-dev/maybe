@@ -57,25 +57,118 @@ namespace Maybe
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> enumerable) where T : struct
         {
-            if (enumerable == null || !enumerable.Any())
+            if (enumerable == null)
             {
                 return Maybe<T>.Nothing;
             }
-            return enumerable.Single().ToMaybe();
+
+            using (var enumerator = enumerable.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var result = enumerator.Current;
+
+                    if (enumerator.MoveNext())
+                    {
+                        throw new InvalidOperationException("Sequence contains more than one element");
+                    }
+
+                    return result.ToMaybe();
+                }
+
+                return Maybe<T>.Nothing;
+            }
+        }
+
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> enumerable, Func<T?, bool> predicate) where T : struct
+        {
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            if (enumerable == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            using (var enumerator = enumerable.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var result = enumerator.Current;
+
+                    if (predicate(result))
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            if (predicate(enumerator.Current))
+                            {
+                                throw new InvalidOperationException("Sequence contains more than one element");
+                            }
+                        }
+
+                        return result.ToMaybe();
+                    }
+                }
+
+                return Maybe<T>.Nothing;
+            }
         }
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable)
         {
-            if (enumerable == null || !enumerable.Any())
+            if (enumerable == null)
             {
                 return Maybe<T>.Nothing;
             }
-            return enumerable.Single().ToMaybe();
+
+            using (var enumerator = enumerable.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var result = enumerator.Current;
+
+                    if (enumerator.MoveNext())
+                    {
+                        throw new InvalidOperationException("Sequence contains more than one element");
+                    }
+
+                    return result.ToMaybe();
+                }
+
+                return Maybe<T>.Nothing;
+            }
         }
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            return MaybeSingle(enumerable?.Where(predicate));
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            if (enumerable == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            using (var enumerator = enumerable.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var result = enumerator.Current;
+
+                    if (predicate(result))
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            if (predicate(enumerator.Current))
+                            {
+                                throw new InvalidOperationException("Sequence contains more than one element");
+                            }
+                        }
+
+                        return result.ToMaybe();
+                    }
+                }
+
+                return Maybe<T>.Nothing;
+            }
         }
 
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> enumerable)
