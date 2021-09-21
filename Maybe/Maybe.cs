@@ -2,7 +2,7 @@
 
 namespace Maybe
 {
-    public struct Maybe<T>
+    public readonly struct Maybe<T>
     {
         public readonly static Maybe<T> Nothing = new Maybe<T>(default, false);
 

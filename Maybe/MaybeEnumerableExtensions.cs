@@ -82,12 +82,12 @@ namespace Maybe
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> enumerable, Func<T?, bool> predicate) where T : struct
         {
-            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
-
             if (enumerable == null)
             {
                 return Maybe<T>.Nothing;
             }
+
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
             using (var enumerator = enumerable.GetEnumerator())
             {
@@ -140,12 +140,12 @@ namespace Maybe
 
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
-
             if (enumerable == null)
             {
                 return Maybe<T>.Nothing;
             }
+
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
             using (var enumerator = enumerable.GetEnumerator())
             {

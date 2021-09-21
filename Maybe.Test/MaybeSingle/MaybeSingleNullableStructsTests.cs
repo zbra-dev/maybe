@@ -174,5 +174,11 @@ namespace Maybe.Test
                 }
             };
         }
+
+        [Fact]
+        public void MaybeSingle_NullArgument_ShouldReturnMaybeNothing()
+        {
+            ((IEnumerable<int?>)null).MaybeSingle().Should().Be(Maybe<int>.Nothing);
+        }
     }
 }
