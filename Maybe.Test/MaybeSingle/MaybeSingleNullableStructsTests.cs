@@ -24,7 +24,7 @@ namespace Maybe.Test
         public void MaybeSingle_NullPredicate_ShouldThrow<T>(NullableStructsTestData<T> testData)
             where T : struct
         {
-            var (enumerableMock, enumeratorMock) = CreateMocks(testData.Subject);
+            var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
 
             if (testData.Predicate == null)
             {
@@ -44,7 +44,7 @@ namespace Maybe.Test
             NullableStructsTestData<T> testData) 
             where T : struct
         {
-            var (enumerableMock, enumeratorMock) = CreateMocks(testData.Subject);
+            var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
 
             Func<Maybe<T>> getResult = () => testData.Predicate == null
                 ? enumerableMock.Object.MaybeSingle()
@@ -62,25 +62,6 @@ namespace Maybe.Test
             enumerableMock.Verify(it => it.GetEnumerator(), Times.Exactly(testData.ExpectedGetEnumeratorCalls));
             enumeratorMock.Verify(it => it.Current, Times.Exactly(testData.ExpectedCurrentCalls));
             enumeratorMock.Verify(it => it.MoveNext(), Times.Exactly(testData.ExpectedMoveNextCalls));
-        }
-
-        private static (Mock<IEnumerable<T?>>, Mock<IEnumerator<T?>>) CreateMocks<T>(
-            IEnumerable<T?> subject) where T : struct
-        {
-            var enumerableMock = new Mock<IEnumerable<T?>>();
-            var enumeratorMock = new Mock<IEnumerator<T?>>();
-
-            enumerableMock.Setup(m => m.GetEnumerator()).Returns(() =>
-            {
-                var subjectEnumerator = subject.GetEnumerator();
-
-                enumeratorMock.Setup(m => m.Current).Returns(() => subjectEnumerator.Current);
-                enumeratorMock.Setup(m => m.MoveNext()).Returns(() => subjectEnumerator.MoveNext());
-
-                return enumeratorMock.Object;
-            });
-
-            return (enumerableMock, enumeratorMock);
         }
 
         public static IEnumerable<object[]> MaybeSingle_WithNullableStructElements_TestData()

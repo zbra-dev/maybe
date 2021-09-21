@@ -55,47 +55,47 @@ namespace Maybe
             return Maybe<T>.Nothing;
         }
 
-        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> enumerable) where T : struct
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> source) where T : struct
         {
-            if (enumerable == null)
+            if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
 
-            using (var enumerator = enumerable.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
-                    var result = enumerator.Current;
+                    var current = enumerator.Current;
 
                     if (enumerator.MoveNext())
                     {
                         throw new InvalidOperationException("Sequence contains more than one element");
                     }
 
-                    return result.ToMaybe();
+                    return current.ToMaybe();
                 }
 
                 return Maybe<T>.Nothing;
             }
         }
 
-        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> enumerable, Func<T?, bool> predicate) where T : struct
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) where T : struct
         {
-            if (enumerable == null)
+            if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
 
             predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
-            using (var enumerator = enumerable.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
-                    var result = enumerator.Current;
+                    var current = enumerator.Current;
 
-                    if (predicate(result))
+                    if (predicate(current))
                     {
                         while (enumerator.MoveNext())
                         {
@@ -105,7 +105,7 @@ namespace Maybe
                             }
                         }
 
-                        return result.ToMaybe();
+                        return current.ToMaybe();
                     }
                 }
 
@@ -113,47 +113,47 @@ namespace Maybe
             }
         }
 
-        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable)
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> source)
         {
-            if (enumerable == null)
+            if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
 
-            using (var enumerator = enumerable.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
-                    var result = enumerator.Current;
+                    var current = enumerator.Current;
 
                     if (enumerator.MoveNext())
                     {
                         throw new InvalidOperationException("Sequence contains more than one element");
                     }
 
-                    return result.ToMaybe();
+                    return current.ToMaybe();
                 }
 
                 return Maybe<T>.Nothing;
             }
         }
 
-        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            if (enumerable == null)
+            if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
 
             predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
-            using (var enumerator = enumerable.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
-                    var result = enumerator.Current;
+                    var current = enumerator.Current;
 
-                    if (predicate(result))
+                    if (predicate(current))
                     {
                         while (enumerator.MoveNext())
                         {
@@ -163,7 +163,7 @@ namespace Maybe
                             }
                         }
 
-                        return result.ToMaybe();
+                        return current.ToMaybe();
                     }
                 }
 
