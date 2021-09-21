@@ -78,32 +78,80 @@ namespace Maybe
             return MaybeSingle(enumerable?.Where(predicate));
         }
 
-        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> enumerable)
-        {
-            return (enumerable == null || !enumerable.Any()) ? Maybe<T>.Nothing : enumerable.First().ToMaybe();
-        }
-
-        // Note that if T is a value type, enumerable.FirstOrDefault(predicate).ToMaybe() will NOT return a Maybe.Nothing
-        // when no element is found
-        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> enumerable) where T : struct
         {
             if (enumerable == null)
             {
                 return Maybe<T>.Nothing;
             }
-            try
+
+            using (var enumerator = enumerable.GetEnumerator())
             {
-                return enumerable.First(predicate).ToMaybe();
-            }
-            catch (InvalidOperationException)
-            {
+                if (enumerator.MoveNext())
+                {
+                    return enumerator.Current.ToMaybe();
+                }
+
                 return Maybe<T>.Nothing;
             }
         }
 
-        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> enumerable) where T : struct
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) where T : struct
         {
-            return (enumerable == null || !enumerable.Any()) ? Maybe<T>.Nothing : enumerable.First().ToMaybe();
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            foreach (var element in source)
+            {
+                if (predicate(element))
+                {
+                    return element.ToMaybe();
+                }
+            }
+
+            return Maybe<T>.Nothing;
+        }
+
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source)
+        {
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            using (var enumerator = source.GetEnumerator())
+            {
+                if (enumerator.MoveNext())
+                {
+                    return enumerator.Current.ToMaybe();
+                }
+
+                return Maybe<T>.Nothing;
+            }
+        }
+
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            foreach (var element in source)
+            {
+                if (predicate(element))
+                {
+                    return element.ToMaybe();
+                }
+            }
+
+            return Maybe<T>.Nothing;
         }
 
         public static Maybe<V> MaybeGet<K, V>(this IDictionary<K, V> dictionary, K key)
