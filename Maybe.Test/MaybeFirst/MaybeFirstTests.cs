@@ -38,7 +38,7 @@ namespace Maybe.Test
 
         [Theory]
         [MemberData(nameof(MaybeFirst_WithStructOrClassElements_TestData))]
-        public void MaybeFirst_WithNullableStructElements_ShouldHaveExpectedBehavior<T>(
+        public void MaybeFirst_WithStructOrClassElements_ShouldHaveExpectedBehavior<T>(
             TestData<T> testData)
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();

@@ -78,22 +78,19 @@ namespace Maybe
             return MaybeSingle(enumerable?.Where(predicate));
         }
 
-        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> enumerable) where T : struct
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source) where T : struct
         {
-            if (enumerable == null)
+            if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
 
-            using (var enumerator = enumerable.GetEnumerator())
+            foreach (var element in source)
             {
-                if (enumerator.MoveNext())
-                {
-                    return enumerator.Current.ToMaybe();
-                }
-
-                return Maybe<T>.Nothing;
+                return element.ToMaybe();
             }
+
+            return Maybe<T>.Nothing;
         }
 
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) where T : struct
@@ -123,15 +120,12 @@ namespace Maybe
                 return Maybe<T>.Nothing;
             }
 
-            using (var enumerator = source.GetEnumerator())
+            foreach (var element in source)
             {
-                if (enumerator.MoveNext())
-                {
-                    return enumerator.Current.ToMaybe();
-                }
-
-                return Maybe<T>.Nothing;
+                return element.ToMaybe();
             }
+
+            return Maybe<T>.Nothing;
         }
 
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate)
