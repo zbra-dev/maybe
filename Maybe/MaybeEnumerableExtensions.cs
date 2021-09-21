@@ -150,11 +150,19 @@ namespace Maybe
         #region Compact
 
         public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> enumerable)
-            => enumerable.Where(m => m.HasValue).Select(m => m.Value);
+        {
+            enumerable = enumerable ?? throw new ArgumentNullException(nameof(enumerable));
+
+            return enumerable.Where(m => m.HasValue).Select(m => m.Value);
+        }
 
         public static IEnumerable<T> Compact<T>(this IEnumerable<T?> enumerable)
             where T : struct
-           => enumerable.Where(m => m.HasValue).Select(m => m.Value);
+        {
+            enumerable = enumerable ?? throw new ArgumentNullException(nameof(enumerable));
+
+            return enumerable.Where(m => m.HasValue).Select(m => m.Value);
+        }
 
         #endregion
     }

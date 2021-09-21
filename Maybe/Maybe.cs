@@ -41,11 +41,17 @@ namespace Maybe
         public T Or(T defaultValue) => hasValue ? obj : defaultValue;
 
 
-        public T OrGet(Func<T> defaultSupplier) => hasValue ? obj : defaultSupplier();
+        public T OrGet(Func<T> defaultSupplier)
+        {
+            defaultSupplier = defaultSupplier ?? throw new ArgumentNullException(nameof(defaultSupplier));
 
+            return hasValue ? obj : defaultSupplier();
+        }
 
         public T OrThrow(Func<Exception> errorSupplier)
         {
+            errorSupplier = errorSupplier ?? throw new ArgumentNullException(nameof(errorSupplier));
+
             if (hasValue)
             {
                 return obj;
@@ -55,6 +61,8 @@ namespace Maybe
 
         public void Consume(Action<T> consumer)
         {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
             if (hasValue)
             {
                 consumer(obj);
@@ -63,6 +71,8 @@ namespace Maybe
 
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, R> transformer)
         {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
             if (hasValue && other.hasValue)
             {
                 return transformer(Value, other.Value).ToMaybe();
@@ -73,6 +83,8 @@ namespace Maybe
 
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, Maybe<R>> transformer)
         {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
             if (HasValue && other.HasValue)
             {
                 return transformer(Value, other.Value);
@@ -83,6 +95,8 @@ namespace Maybe
 
         public void ZipAndConsume<U>(Maybe<U> other, Action<T, U> consumer)
         {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
             if (HasValue && other.HasValue)
             {
                 consumer(obj, other.Value);
@@ -109,8 +123,18 @@ namespace Maybe
 
         public bool Is(T other) => HasValue && Value.Equals(other);
 
-        public bool Is(Func<T, bool> predicate) => HasValue && predicate(Value);
+        public bool Is(Func<T, bool> predicate)
+        {
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
-        public Maybe<T> Where(Func<T, bool> predicate) => !Is(predicate) ? Nothing : this;
+            return HasValue && predicate(Value);
+        }
+
+        public Maybe<T> Where(Func<T, bool> predicate)
+        {
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            return !Is(predicate) ? Nothing : this;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace Maybe.Test
@@ -98,6 +99,22 @@ namespace Maybe.Test
             };
         }
 
+        [Fact]
+        public void Select_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Select<int, int>(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Select_ConstrainedStructNullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Select((Func<int, int?>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
         [Theory]
         [MemberData(nameof(SelectMany_WithMaybePropertyTestCases))]
         public void SelectMany_WithMaybeProperty_ReturnsSelectedProperty(Maybe<MaybeIntObj> subject, Maybe<int> expected)
@@ -115,6 +132,14 @@ namespace Maybe.Test
                 { new MaybeIntObj(null).ToMaybe(), Maybe<int>.Nothing },
                 { new MaybeIntObj(1).ToMaybe(), 1.ToMaybe() },
             };
+        }
+
+        [Fact]
+        public void SelectMany_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().SelectMany<int, int>(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Theory]
@@ -141,6 +166,22 @@ namespace Maybe.Test
                 { new StringObj("subject").ToMaybe(), null, "subject" },
                 { new StringObj("subject").ToMaybe(), "alternative", "subject" },
             };
+        }
+
+        [Fact]
+        public void OrGetAlternative_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrGetAlternative((Func<int>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void OrGetAlternative_MaybeNullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrGetAlternative((Func<Maybe<int>>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
         }
     }
 }

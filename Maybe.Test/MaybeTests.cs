@@ -29,6 +29,14 @@ namespace Maybe.Test
         }
 
         [Fact]
+        public void OrGet_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrGet(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
         public void OrThrow_WithNoValue_ShouldThrowException()
         {
             var subject = Maybe<int>.Nothing;
@@ -47,6 +55,14 @@ namespace Maybe.Test
                 .OrThrow(() => new ArgumentException());
 
             result.Should().Be(expected);
+        }
+
+        [Fact]
+        public void OrThrow_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrThrow(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]
@@ -70,6 +86,14 @@ namespace Maybe.Test
                 .Consume(i => result = "b");
 
             result.Should().Be("a");
+        }
+
+        [Fact]
+        public void Consume_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Consume(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Theory]
@@ -102,6 +126,22 @@ namespace Maybe.Test
             result.Should().Be(expected.ToMaybe());
         }
 
+        [Fact]
+        public void Zip_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, int>) null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Zip_MaybeNullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, Maybe<int>>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
         [Theory]
         [InlineData(null, null, null)]
         [InlineData(null, 2, null)]
@@ -116,6 +156,14 @@ namespace Maybe.Test
                 .ZipAndConsume(otherValue.ToMaybe(), action);
 
             result.Should().Be(expected);
+        }
+
+        [Fact]
+        public void ZipAndConsume_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().ZipAndConsume(Maybe<int>.Nothing, null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Theory]
@@ -158,6 +206,14 @@ namespace Maybe.Test
             value.ToMaybe().Is(predicate).Should().Be(expected);
         }
 
+        [Fact]
+        public void Is_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Is(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
         [Theory]
         [InlineData(null, null)]
         [InlineData("1", null)]
@@ -169,6 +225,14 @@ namespace Maybe.Test
                 .Where(predicate);
 
             result.Should().Be(expected.ToMaybe());
+        }
+
+        [Fact]
+        public void Where_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Where(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
         }
     }
 }

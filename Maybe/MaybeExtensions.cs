@@ -58,26 +58,41 @@ namespace Maybe
         #endregion
 
         #region Operations 
-        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, V> k)
-            => !m.HasValue ? Maybe<V>.Nothing
-                           : k(m.Value).ToMaybe();
+        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, V> transformer)
+        {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
 
-        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, V?> k)
+            return !m.HasValue ? Maybe<V>.Nothing : transformer(m.Value).ToMaybe();
+        }
+
+        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, V?> transformer)
             where V : struct
-            => !m.HasValue ? Maybe<V>.Nothing
-                           : ToMaybe(k(m.Value));
+        {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
 
-        public static Maybe<V> SelectMany<T, V>(this Maybe<T> m, Func<T, Maybe<V>> k)
-             => !m.HasValue ? Maybe<V>.Nothing
-                            : k(m.Value);
+            return !m.HasValue ? Maybe<V>.Nothing : ToMaybe(transformer(m.Value));
+        }
+
+        public static Maybe<V> SelectMany<T, V>(this Maybe<T> m, Func<T, Maybe<V>> transformer)
+        {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
+            return !m.HasValue ? Maybe<V>.Nothing : transformer(m.Value);
+        }
 
         public static Maybe<T> OrGetAlternative<T>(this Maybe<T> m, Func<Maybe<T>> alternative)
-            => (!m.HasValue) ? alternative()
-                             : m;
+        {
+            alternative = alternative ?? throw new ArgumentNullException(nameof(alternative));
+
+            return !m.HasValue ? alternative() : m;
+        }
 
         public static Maybe<T> OrGetAlternative<T>(this Maybe<T> m, Func<T> alternative)
-            => (!m.HasValue) ? ToMaybe(alternative())
-                             : m;
+        {
+            alternative = alternative ?? throw new ArgumentNullException(nameof(alternative));
+
+            return !m.HasValue ? ToMaybe(alternative()) : m;
+        }
         #endregion
     }
 }
