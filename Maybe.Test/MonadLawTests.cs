@@ -18,22 +18,6 @@ namespace Maybe.Test
             value.ToMaybe().SelectMany(F).Should().Be(F(value));
         }
 
-        public static TheoryData<object> NonRelatedData()
-        {
-            return new TheoryData<object>()
-            {
-                '1',
-                1,
-                1.0,
-                DateTime.Now,
-                new List<string>(),
-                1.ToMaybe(),
-                (1, 2),
-                "1",
-                null,
-            };
-        }
-
         [Theory]
         [MemberData(nameof(NonRelatedData))]
         public void Maybe_ShouldSatisfyRightIdentityLaw<T>(T value)
@@ -53,6 +37,22 @@ namespace Maybe.Test
             static Maybe<int> G(string it) => it.GetHashCode().ToMaybe();
 
             monodicValue.SelectMany(F).SelectMany(G).Should().Be(monodicValue.SelectMany(it => F(it).SelectMany(G)));
+        }
+
+        public static TheoryData<object> NonRelatedData()
+        {
+            return new TheoryData<object>()
+            {
+                '1',
+                1,
+                1.0,
+                DateTime.Now,
+                new List<string>(),
+                1.ToMaybe(),
+                (1, 2),
+                "1",
+                null,
+            };
         }
     }
 }
