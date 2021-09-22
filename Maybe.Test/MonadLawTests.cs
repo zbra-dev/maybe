@@ -13,7 +13,7 @@ namespace Maybe.Test
         [MemberData(nameof(NonRelatedData))]
         public void Maybe_ShouldSatisfyLeftIdentityLaw<T>(T value)
         {
-            static Maybe<string> F(T it) => it.ToString().ToMaybe();
+            static Maybe<string> F(T it) => it == null ? Maybe<string>.Nothing : it.ToString().ToMaybe();
 
             value.ToMaybe().SelectMany(F).Should().Be(F(value));
         }
@@ -30,6 +30,7 @@ namespace Maybe.Test
                 1.ToMaybe(),
                 (1, 2),
                 "1",
+                null,
             };
         }
 
