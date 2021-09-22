@@ -6,6 +6,7 @@ using Xunit;
 namespace Maybe.Test
 {
     // https://mikhail.io/2018/07/monads-explained-in-csharp-again/
+    // In our case SelectMany = Bind of the article
     public class MonadLawTests
     {
         [Theory]
@@ -45,12 +46,12 @@ namespace Maybe.Test
         [MemberData(nameof(NonRelatedData))]
         public void Maybe_ShouldSatisfyAssociativityLaw<T>(T value)
         {
-            var m = value.ToMaybe();
+            var monodicValue = value.ToMaybe();
 
             static Maybe<string> F(T it) => it.ToString().ToMaybe();
             static Maybe<int> G(string it) => it.GetHashCode().ToMaybe();
 
-            m.SelectMany(F).SelectMany(G).Should().Be(m.SelectMany(it => F(it).SelectMany(G)));
+            monodicValue.SelectMany(F).SelectMany(G).Should().Be(monodicValue.SelectMany(it => F(it).SelectMany(G)));
         }
     }
 }
