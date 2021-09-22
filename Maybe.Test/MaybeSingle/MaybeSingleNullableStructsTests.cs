@@ -160,6 +160,7 @@ namespace Maybe.Test
         public void MaybeSingle_NullArgument_ShouldReturnMaybeNothing()
         {
             ((IEnumerable<int?>)null).MaybeSingle().Should().Be(Maybe<int>.Nothing);
+            ((IEnumerable<int?>)null).MaybeSingle(it => true).Should().Be(Maybe<int>.Nothing);
         }
     }
 }

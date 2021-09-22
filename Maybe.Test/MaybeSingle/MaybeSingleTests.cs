@@ -226,6 +226,8 @@ namespace Maybe.Test
         {
             ((IEnumerable<int>)null).MaybeSingle().Should().Be(Maybe<int>.Nothing);
             ((IEnumerable<string>)null).MaybeSingle().Should().Be(Maybe<string>.Nothing);
+            ((IEnumerable<int>)null).MaybeSingle(it => true).Should().Be(Maybe<int>.Nothing);
+            ((IEnumerable<string>)null).MaybeSingle(it => true).Should().Be(Maybe<string>.Nothing);
         }
     }
 }
