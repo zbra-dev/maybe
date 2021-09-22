@@ -218,6 +218,8 @@ namespace Maybe.Test
         {
             ((IEnumerable<int>)null).MaybeFirst().Should().Be(Maybe<int>.Nothing);
             ((IEnumerable<string>)null).MaybeFirst().Should().Be(Maybe<string>.Nothing);
+            ((IEnumerable<int>)null).MaybeFirst(it => true).Should().Be(Maybe<int>.Nothing);
+            ((IEnumerable<string>)null).MaybeFirst(it => true).Should().Be(Maybe<string>.Nothing);
         }
     }
 }
