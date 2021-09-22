@@ -16,10 +16,10 @@ namespace Maybe.Test
 
             enumerableMock.Setup(m => m.GetEnumerator()).Returns(() =>
             {
-                var subjectEnumerator = source.GetEnumerator();
+                var sourceEnumerator = source.GetEnumerator();
 
-                enumeratorMock.Setup(m => m.Current).Returns(() => subjectEnumerator.Current);
-                enumeratorMock.Setup(m => m.MoveNext()).Returns(() => subjectEnumerator.MoveNext());
+                enumeratorMock.Setup(m => m.Current).Returns(() => sourceEnumerator.Current);
+                enumeratorMock.Setup(m => m.MoveNext()).Returns(() => sourceEnumerator.MoveNext());
 
                 return enumeratorMock.Object;
             });
@@ -36,10 +36,10 @@ namespace Maybe.Test
 
             enumerableMock.Setup(m => m.GetEnumerator()).Returns(() =>
             {
-                var subjectEnumerator = source.GetEnumerator();
+                var sourceEnumerator = source.GetEnumerator();
 
-                enumeratorMock.Setup(m => m.Current).Returns(() => subjectEnumerator.Current);
-                enumeratorMock.Setup(m => m.MoveNext()).Returns(() => subjectEnumerator.MoveNext());
+                enumeratorMock.Setup(m => m.Current).Returns(() => sourceEnumerator.Current);
+                enumeratorMock.Setup(m => m.MoveNext()).Returns(() => sourceEnumerator.MoveNext());
 
                 return enumeratorMock.Object;
             });
