@@ -34,9 +34,9 @@ namespace Maybe.Test
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
 
-            Func<Maybe<T>> getResult = () => enumerableMock.Object.MaybeFirst(testData.Predicate);
+            Func<Maybe<T>> getResult = () => enumerableMock.Object.MaybeSingle(testData.Predicate);
 
-            getResult.Should().Throw<ArgumentNullException>();
+            getResult.Should().ThrowExactly<ArgumentNullException>();
 
             enumerableMock.Verify(it => it.GetEnumerator(), Times.Exactly(testData.ExpectedGetEnumeratorCalls));
             enumeratorMock.Verify(it => it.Current, Times.Exactly(testData.ExpectedCurrentCalls));
@@ -45,8 +45,7 @@ namespace Maybe.Test
 
         [Theory]
         [MemberData(nameof(MaybeSingle_WithLessThanTwoElements_TestData))]
-        public void MaybeSingle_WithLessThanTwoElements_ShouldHaveExpectedBehavior<T>(
-            TestData<T> testData)
+        public void MaybeSingle_WithLessThanTwoElements_ShouldHaveExpectedBehavior<T>(TestData<T> testData)
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
 
@@ -59,8 +58,7 @@ namespace Maybe.Test
 
         [Theory]
         [MemberData(nameof(MaybeSingle_WithLessThanTwoFilteredElements_TestData))]
-        public void MaybeSingle_WithLessThanTwoFilteredElements_ShouldHaveExpectedBehavior<T>(
-            TestData<T> testData)
+        public void MaybeSingle_WithLessThanTwoFilteredElements_ShouldHaveExpectedBehavior<T>(TestData<T> testData)
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
 
@@ -73,14 +71,13 @@ namespace Maybe.Test
 
         [Theory]
         [MemberData(nameof(MaybeSingle_WithMoreThanOneElement_TestData))]
-        public void MaybeSingle_WithMoreThanOneElement_ShouldThrow<T>(
-            TestData<T> testData)
+        public void MaybeSingle_WithMoreThanOneElement_ShouldThrow<T>(TestData<T> testData)
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
 
             Func<Maybe<T>> getResult = () => enumerableMock.Object.MaybeSingle();
 
-            getResult.Should().Throw<InvalidOperationException>().WithMessage("Sequence contains more than one element");
+            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("Sequence contains more than one element");
 
             enumerableMock.Verify(it => it.GetEnumerator(), Times.Exactly(testData.ExpectedGetEnumeratorCalls));
             enumeratorMock.Verify(it => it.Current, Times.Exactly(testData.ExpectedCurrentCalls));
@@ -89,14 +86,13 @@ namespace Maybe.Test
 
         [Theory]
         [MemberData(nameof(MaybeSingle_WithMoreThanOneFilteredElement_TestData))]
-        public void MaybeSingle_WithMoreThanOneFilteredElement_ShouldThrow<T>(
-            TestData<T> testData)
+        public void MaybeSingle_WithMoreThanOneFilteredElement_ShouldThrow<T>(TestData<T> testData)
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
 
             Func<Maybe<T>> getResult = () => enumerableMock.Object.MaybeSingle(testData.Predicate);
 
-            getResult.Should().Throw<InvalidOperationException>().WithMessage("Sequence contains more than one element");
+            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("Sequence contains more than one element");
 
             enumerableMock.Verify(it => it.GetEnumerator(), Times.Exactly(testData.ExpectedGetEnumeratorCalls));
             enumeratorMock.Verify(it => it.Current, Times.Exactly(testData.ExpectedCurrentCalls));
