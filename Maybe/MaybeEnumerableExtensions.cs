@@ -109,7 +109,7 @@ namespace Maybe
         /// Returns the single element of the source.
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty or null.
+        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty, null or the single element is null
         /// Otherwise returns the encapsulated single value
         /// </returns>
         /// <param name="source"> The source.</param>
@@ -143,10 +143,11 @@ namespace Maybe
         /// Returns the single element of the source.
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty or null.
+        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty, null or the single element is null
         /// Otherwise returns the encapsulated single value
         /// </returns>
         /// <param name="source"> The source.</param>
+        /// <param name="predicate">The predicate to filter out source elements</param>
         /// <exception cref="InvalidOperationException">Thrown if source contains more than one element.</exception>
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) where T : struct
         {
@@ -185,7 +186,7 @@ namespace Maybe
         /// Returns the single element of the source.
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty or null.
+        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty, null or the single element is null
         /// Otherwise returns the encapsulated single value
         /// </returns>
         /// <param name="source"> The source.</param>
@@ -219,10 +220,11 @@ namespace Maybe
         /// Returns the single element of the source.
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty or null.
+        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty, null or the single element is null
         /// Otherwise returns the encapsulated single value
         /// </returns>
         /// <param name="source"> The source.</param>
+        /// <param name="predicate"></param>
         /// <exception cref="InvalidOperationException">Thrown if source contains more than one element.</exception>
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
