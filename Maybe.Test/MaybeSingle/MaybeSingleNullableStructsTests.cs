@@ -191,8 +191,8 @@ namespace Maybe.Test
                 new NullableStructsTestData<int> {
                     Subject = new int?[] { null },
                     ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 0,
-                    ExpectedMoveNextCalls = 1,
+                    ExpectedCurrentCalls = 1,
+                    ExpectedMoveNextCalls = 2,
                     ExpectedResult = Maybe<int>.Nothing,
                 }
             };
@@ -250,8 +250,8 @@ namespace Maybe.Test
                     Subject = new int?[] { 1, null, 3, 4, 5, null, 7 },
                     Predicate = i => i == null,
                     ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 4,
-                    ExpectedMoveNextCalls = 4,
+                    ExpectedCurrentCalls = 6,
+                    ExpectedMoveNextCalls = 6,
                     ShouldThrow = true,
                 }
             };
