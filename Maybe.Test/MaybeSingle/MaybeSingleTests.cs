@@ -106,7 +106,8 @@ namespace Maybe.Test
             {
                 return new object[]
                 {
-                    new TestData<T> {
+                    new TestData<T>
+                    {
                         Subject = subject,
                         Predicate = null,
                         ExpectedGetEnumeratorCalls = 0,
@@ -127,7 +128,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new TestData<int> {
+                new TestData<int>
+                {
                     Subject = new int[] { },
                     Predicate = i => i > 1,
                     ExpectedGetEnumeratorCalls = 1,
@@ -138,7 +140,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<int> {
+                new TestData<int>
+                {
                     Subject = new int[] { 1 },
                     Predicate = i => i > 1,
                     ExpectedGetEnumeratorCalls = 1,
@@ -149,7 +152,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<int> {
+                new TestData<int>
+                {
                     Subject = new int[] { 1, 2, 3, 4, 5 },
                     Predicate = i => i == 3,
                     ExpectedGetEnumeratorCalls = 1,
@@ -160,7 +164,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<string> {
+                new TestData<string>
+                {
                     Subject = new string[] { },
                     Predicate = i => i.Length > 1,
                     ExpectedGetEnumeratorCalls = 1,
@@ -171,7 +176,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<string> {
+                new TestData<string>
+                {
                     Subject = new string[] { "1" },
                     Predicate = i => int.Parse(i) > 1,
                     ExpectedGetEnumeratorCalls = 1,
@@ -182,7 +188,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<string> {
+                new TestData<string>
+                {
                     Subject = new string[] { "1", "2", "3", "4", "5" },
                     Predicate = i => int.Parse(i) == 3,
                     ExpectedGetEnumeratorCalls = 1,
@@ -197,7 +204,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new TestData<int> {
+                new TestData<int>
+                {
                     Subject = new int[] { },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 0,
@@ -207,7 +215,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<int> {
+                new TestData<int>
+                {
                     Subject = new int[] { 1 },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -217,7 +226,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<string> {
+                new TestData<string>
+                {
                     Subject = new string[] { },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 0,
@@ -227,7 +237,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<string> {
+                new TestData<string>
+                {
                     Subject = new string[] { "1" },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -241,7 +252,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new TestData<int> {
+                new TestData<int>
+                {
                     Subject = new int[] { 1, 2 },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -251,7 +263,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<string> {
+                new TestData<string>
+                {
                     Subject = new string[] { "1", "2" },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -265,7 +278,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new TestData<int> {
+                new TestData<int>
+                {
                     Subject = new int[] { 1, 2, 3, 4, 5, 6, 7 },
                     Predicate = i => i > 2,
                     ExpectedGetEnumeratorCalls = 1,
@@ -276,7 +290,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new TestData<string> {
+                new TestData<string>
+                {
                     Subject = new string[] { "1", "2", "3", "4", "5", "6", "7" },
                     Predicate = i => int.Parse(i) > 2,
                     ExpectedGetEnumeratorCalls = 1,

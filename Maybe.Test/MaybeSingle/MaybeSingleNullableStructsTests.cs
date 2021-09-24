@@ -28,7 +28,7 @@ namespace Maybe.Test
 
         [Theory]
         [MemberData(nameof(MaybeSingle_WithNullPredicate_TestData))]
-        public void MaybeSingle_WithNullPredicate_ShouldThrow<T>(NullableStructsTestData<T> testData) 
+        public void MaybeSingle_WithNullPredicate_ShouldThrow<T>(NullableStructsTestData<T> testData)
             where T : struct
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
@@ -44,7 +44,7 @@ namespace Maybe.Test
 
         [Theory]
         [MemberData(nameof(MaybeSingle_WithLessThanTwoElements_TestData))]
-        public void MaybeSingle_WithLessThanTwoElements_ShouldHaveExpectedBehavior<T>(NullableStructsTestData<T> testData) 
+        public void MaybeSingle_WithLessThanTwoElements_ShouldHaveExpectedBehavior<T>(NullableStructsTestData<T> testData)
             where T : struct
         {
             var (enumerableMock, enumeratorMock) = testData.Subject.GetMocks();
@@ -109,7 +109,8 @@ namespace Maybe.Test
             {
                 return new object[]
                 {
-                    new NullableStructsTestData<T> {
+                    new NullableStructsTestData<T>
+                    {
                         Subject = subject,
                         Predicate = null,
                         ExpectedGetEnumeratorCalls = 0,
@@ -130,7 +131,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { },
                     Predicate = i => i > 1,
                     ExpectedGetEnumeratorCalls = 1,
@@ -141,7 +143,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { 1 },
                     Predicate = i => i > 1,
                     ExpectedGetEnumeratorCalls = 1,
@@ -152,7 +155,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { null },
                     Predicate = i => i > 1,
                     ExpectedGetEnumeratorCalls = 1,
@@ -163,7 +167,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { 1, 2, 3, 4, 5 },
                     Predicate = i => i == 3,
                     ExpectedGetEnumeratorCalls = 1,
@@ -178,7 +183,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 0,
@@ -188,7 +194,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { null },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -198,7 +205,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { 1 },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -212,7 +220,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { null, null },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -222,7 +231,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { null, 1 },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -232,7 +242,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { 1, 2 },
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
@@ -246,7 +257,8 @@ namespace Maybe.Test
         {
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { 1, null, 3, 4, 5, null, 7 },
                     Predicate = i => i == null,
                     ExpectedGetEnumeratorCalls = 1,
@@ -257,7 +269,8 @@ namespace Maybe.Test
             };
             yield return new object[]
             {
-                new NullableStructsTestData<int> {
+                new NullableStructsTestData<int>
+                {
                     Subject = new int?[] { 1, 2, 3, 4, 5, 6, 7 },
                     Predicate = i => i > 2,
                     ExpectedGetEnumeratorCalls = 1,
