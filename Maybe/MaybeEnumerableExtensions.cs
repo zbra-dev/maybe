@@ -170,7 +170,7 @@ namespace Maybe
                         {
                             if (predicate(enumerator.Current))
                             {
-                                throw new InvalidOperationException("Sequence contains more than one element");
+                                throw new InvalidOperationException("Sequence contains more than one matching element");
                             }
                         }
 
@@ -247,7 +247,7 @@ namespace Maybe
                         {
                             if (predicate(enumerator.Current))
                             {
-                                throw new InvalidOperationException("Sequence contains more than one element");
+                                throw new InvalidOperationException("Sequence contains more than one matching element");
                             }
                         }
 
