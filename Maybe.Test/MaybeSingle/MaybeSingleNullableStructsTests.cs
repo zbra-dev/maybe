@@ -16,7 +16,6 @@ namespace Maybe.Test
             public int ExpectedCurrentCalls { get; set; }
             public int ExpectedMoveNextCalls { get; set; }
             public Maybe<T> ExpectedResult { get; set; }
-            public bool ShouldThrow { get; set; }
         }
 
         [Fact]
@@ -226,7 +225,6 @@ namespace Maybe.Test
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
                     ExpectedMoveNextCalls = 2,
-                    ShouldThrow = true,
                 }
             };
             yield return new object[]
@@ -237,7 +235,6 @@ namespace Maybe.Test
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
                     ExpectedMoveNextCalls = 2,
-                    ShouldThrow = true,
                 }
             };
             yield return new object[]
@@ -248,7 +245,6 @@ namespace Maybe.Test
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 1,
                     ExpectedMoveNextCalls = 2,
-                    ShouldThrow = true,
                 }
             };
         }
@@ -264,7 +260,6 @@ namespace Maybe.Test
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 6,
                     ExpectedMoveNextCalls = 6,
-                    ShouldThrow = true,
                 }
             };
             yield return new object[]
@@ -276,7 +271,6 @@ namespace Maybe.Test
                     ExpectedGetEnumeratorCalls = 1,
                     ExpectedCurrentCalls = 4,
                     ExpectedMoveNextCalls = 4,
-                    ShouldThrow = true,
                 }
             };
         }
