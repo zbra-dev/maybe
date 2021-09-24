@@ -128,11 +128,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
-        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, V> transformer)
+        public static Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V> selector)
         {
-            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
 
-            return !m.HasValue ? Maybe<V>.Nothing : transformer(m.Value).ToMaybe();
+            return !subject.HasValue ? Maybe<V>.Nothing : selector(subject.Value).ToMaybe();
         }
 
         /// <summary>
@@ -145,12 +145,12 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
-        public static Maybe<V> Select<T, V>(this Maybe<T> m, Func<T, V?> transformer)
+        public static Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V?> selector)
             where V : struct
         {
-            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
 
-            return !m.HasValue ? Maybe<V>.Nothing : ToMaybe(transformer(m.Value));
+            return !subject.HasValue ? Maybe<V>.Nothing : ToMaybe(selector(subject.Value));
         }
 
         /// <summary>
@@ -163,11 +163,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
-        public static Maybe<V> SelectMany<T, V>(this Maybe<T> m, Func<T, Maybe<V>> transformer)
+        public static Maybe<V> SelectMany<T, V>(this Maybe<T> subject, Func<T, Maybe<V>> selector)
         {
-            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
 
-            return !m.HasValue ? Maybe<V>.Nothing : transformer(m.Value);
+            return !subject.HasValue ? Maybe<V>.Nothing : selector(subject.Value);
         }
 
         /// <summary>
@@ -178,11 +178,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="alternativeSupplier"> The alternative supplier.</param>
-        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> m, Func<Maybe<T>> alternative)
+        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<Maybe<T>> alternativeSupplier)
         {
-            alternative = alternative ?? throw new ArgumentNullException(nameof(alternative));
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
-            return !m.HasValue ? alternative() : m;
+            return !subject.HasValue ? alternativeSupplier() : subject;
         }
 
         /// <summary>
@@ -193,11 +193,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="alternativeSupplier"> The alternative supplier.</param>
-        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> m, Func<T> alternative)
+        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<T> alternativeSupplier)
         {
-            alternative = alternative ?? throw new ArgumentNullException(nameof(alternative));
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
-            return !m.HasValue ? ToMaybe(alternative()) : m;
+            return !subject.HasValue ? ToMaybe(alternativeSupplier()) : subject;
         }
         #endregion
     }

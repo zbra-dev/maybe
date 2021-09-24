@@ -297,11 +297,11 @@ namespace Maybe
         /// An IEnumerable&lt;<typeparamref name="T"/>&gt; with all the values in source, ignoring Maybe.Nothing.
         /// </returns>
         /// <param name="source"> The source.</param>
-        public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> enumerable)
+        public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> source)
         {
-            enumerable = enumerable ?? throw new ArgumentNullException(nameof(enumerable));
+            source = source ?? throw new ArgumentNullException(nameof(source));
 
-            return enumerable.Where(m => m.HasValue).Select(m => m.Value);
+            return source.Where(m => m.HasValue).Select(m => m.Value);
         }
 
         /// <summary>
@@ -311,12 +311,12 @@ namespace Maybe
         /// An IEnumerable&lt;<typeparamref name="T"/>&gt; with all the values in source, ignoring nulls.
         /// </returns>
         /// <param name="source"> The source.</param>
-        public static IEnumerable<T> Compact<T>(this IEnumerable<T?> enumerable)
+        public static IEnumerable<T> Compact<T>(this IEnumerable<T?> source)
             where T : struct
         {
-            enumerable = enumerable ?? throw new ArgumentNullException(nameof(enumerable));
+            source = source ?? throw new ArgumentNullException(nameof(source));
 
-            return enumerable.Where(m => m.HasValue).Select(m => m.Value);
+            return source.Where(m => m.HasValue).Select(m => m.Value);
         }
 
         #endregion

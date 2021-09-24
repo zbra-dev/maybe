@@ -62,7 +62,7 @@ namespace Maybe
         {
             defaultSupplier = defaultSupplier ?? throw new ArgumentNullException(nameof(defaultSupplier));
 
-            return hasValue ? obj : defaultSupplier();
+            return HasValue ? obj : defaultSupplier();
         }
 
         /// <summary>
