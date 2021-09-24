@@ -72,7 +72,10 @@ namespace Maybe.Test
         public void ToMaybe_WithEmptyString_ShouldNotReturnMaybeNothing()
         {
             var subject = "";
-            subject.ToMaybe().Should().NotBe(Maybe<string>.Nothing);
+            var maybe = subject.ToMaybe();
+            maybe.Should().NotBe(Maybe<string>.Nothing);
+            maybe.HasValue.Should().BeTrue();
+            maybe.Value.Should().Be(subject);
         }
 
         [Theory]
