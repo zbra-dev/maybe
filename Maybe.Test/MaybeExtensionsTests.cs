@@ -61,6 +61,23 @@ namespace Maybe.Test
             result.Should().BeTrue();
         }
 
+        [Fact]
+        public void ToMaybe_WithNullString_ShouldReturnMaybeNothing()
+        {
+            string subject = null;
+            subject.ToMaybe().Should().Be(Maybe<string>.Nothing);
+        }
+
+        [Fact]
+        public void ToMaybe_WithEmptyString_ShouldNotReturnMaybeNothing()
+        {
+            var subject = "";
+            var maybe = subject.ToMaybe();
+            maybe.Should().NotBe(Maybe<string>.Nothing);
+            maybe.HasValue.Should().BeTrue();
+            maybe.Value.Should().Be(subject);
+        }
+
         [Theory]
         [MemberData(nameof(Select_WithNonNullablePropertyTestCases))]
         public void Select_WithNonNullableProperty_ShouldReturnSelectedProperty(Maybe<IntObj> subject, Maybe<int> expected)
