@@ -209,8 +209,7 @@ namespace Maybe
         /// </returns>
         /// <param name="other"> The other value.</param>
         public bool Is(T other) => HasValue && Value.Equals(other);
-
-        
+                
         /// <summary>
         /// Determines if the encapsulated value matches a predicate.
         /// </summary>
