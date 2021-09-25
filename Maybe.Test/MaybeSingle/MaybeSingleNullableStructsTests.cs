@@ -19,7 +19,7 @@ namespace Maybe.Test
         }
 
         [Fact]
-        public void MaybeSingle_NullArgument_ShouldReturnMaybeNothing()
+        public void MaybeSingle_WithNullSequence_ShouldReturnMaybeNothing()
         {
             ((IEnumerable<int?>)null).MaybeSingle().Should().Be(Maybe<int>.Nothing);
             ((IEnumerable<int?>)null).MaybeSingle(it => true).Should().Be(Maybe<int>.Nothing);
@@ -94,7 +94,7 @@ namespace Maybe.Test
 
             Func<Maybe<T>> getResult = () => enumerableMock.Object.MaybeSingle(testData.Predicate);
 
-            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("Sequence contains more than one element");
+            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("Sequence contains more than one matching element");
 
             enumerableMock.Verify(it => it.GetEnumerator(), Times.Exactly(testData.ExpectedGetEnumeratorCalls));
             enumeratorMock.Verify(it => it.Current, Times.Exactly(testData.ExpectedCurrentCalls));
@@ -124,6 +124,43 @@ namespace Maybe.Test
             yield return CreateNullPredicateTestData(new int?[] { null });
             yield return CreateNullPredicateTestData(new int?[] { 1, 2 });
             yield return CreateNullPredicateTestData(new int?[] { null, 1 });
+        }
+
+        public static IEnumerable<object[]> MaybeSingle_WithLessThanTwoElements_TestData()
+        {
+            yield return new object[]
+            {
+                new NullableStructsTestData<int>
+                {
+                    Subject = new int?[] { },
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 0,
+                    ExpectedMoveNextCalls = 1,
+                    ExpectedResult = Maybe<int>.Nothing,
+                }
+            };
+            yield return new object[]
+            {
+                new NullableStructsTestData<int>
+                {
+                    Subject = new int?[] { null },
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 1,
+                    ExpectedMoveNextCalls = 2,
+                    ExpectedResult = Maybe<int>.Nothing,
+                }
+            };
+            yield return new object[]
+            {
+                new NullableStructsTestData<int>
+                {
+                    Subject = new int?[] { 1 },
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 1,
+                    ExpectedMoveNextCalls = 2,
+                    ExpectedResult = 1.ToMaybe(),
+                }
+            };
         }
 
         public static IEnumerable<object[]> MaybeSingle_WithLessThanTwoFilteredElements_TestData()
@@ -174,43 +211,6 @@ namespace Maybe.Test
                     ExpectedCurrentCalls = 5,
                     ExpectedMoveNextCalls = 6,
                     ExpectedResult = 3.ToMaybe(),
-                }
-            };
-        }
-
-        public static IEnumerable<object[]> MaybeSingle_WithLessThanTwoElements_TestData()
-        {
-            yield return new object[]
-            {
-                new NullableStructsTestData<int>
-                {
-                    Subject = new int?[] { },
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 0,
-                    ExpectedMoveNextCalls = 1,
-                    ExpectedResult = Maybe<int>.Nothing,
-                }
-            };
-            yield return new object[]
-            {
-                new NullableStructsTestData<int>
-                {
-                    Subject = new int?[] { null },
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 1,
-                    ExpectedMoveNextCalls = 2,
-                    ExpectedResult = Maybe<int>.Nothing,
-                }
-            };
-            yield return new object[]
-            {
-                new NullableStructsTestData<int>
-                {
-                    Subject = new int?[] { 1 },
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 1,
-                    ExpectedMoveNextCalls = 2,
-                    ExpectedResult = 1.ToMaybe(),
                 }
             };
         }

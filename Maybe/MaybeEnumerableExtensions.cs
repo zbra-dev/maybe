@@ -161,8 +161,6 @@ namespace Maybe
                 return Maybe<T>.Nothing;
             }
 
-            source.SingleOrDefault(null);
-
             predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
             using (var enumerator = source.GetEnumerator())
