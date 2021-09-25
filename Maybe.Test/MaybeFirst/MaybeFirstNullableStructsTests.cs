@@ -19,7 +19,7 @@ namespace Maybe.Test
         }
 
         [Fact]
-        public void MaybeFirst_NullArgument_ShouldReturnMaybeNothing()
+        public void MaybeFirst_WithNullSequence_ShouldReturnMaybeNothing()
         {
             ((IEnumerable<int?>)null).MaybeFirst().Should().Be(Maybe<int>.Nothing);
             ((IEnumerable<int?>)null).MaybeFirst(it => true).Should().Be(Maybe<int>.Nothing);

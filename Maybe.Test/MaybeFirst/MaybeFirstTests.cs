@@ -19,7 +19,7 @@ namespace Maybe.Test
         }
 
         [Fact]
-        public void MaybeFirst_NullArgument_ShouldReturnMaybeNothing()
+        public void MaybeFirst_WithNullSequence_ShouldReturnMaybeNothing()
         {
             ((IEnumerable<int>)null).MaybeFirst().Should().Be(Maybe<int>.Nothing);
             ((IEnumerable<string>)null).MaybeFirst().Should().Be(Maybe<string>.Nothing);
@@ -93,82 +93,6 @@ namespace Maybe.Test
             yield return CreateNullPredicateTestData(new string[] { "1", "2" });
         }
 
-        public static IEnumerable<object[]> MaybeFirst_WithZeroOrMoreFilteredElements_TestData()
-        {
-            yield return new object[]
-            {
-                new TestData<int>
-                {
-                    Subject = new int[] { },
-                    Predicate = i => i > 1,
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 0,
-                    ExpectedMoveNextCalls = 1,
-                    ExpectedResult = Maybe<int>.Nothing,
-                }
-            };
-            yield return new object[]
-            {
-                new TestData<int>
-                {
-                    Subject = new int[] { 1 },
-                    Predicate = i => i > 1,
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 1,
-                    ExpectedMoveNextCalls = 2,
-                    ExpectedResult = Maybe<int>.Nothing,
-                }
-            };
-            yield return new object[]
-            {
-                new TestData<int>
-                {
-                    Subject = new int[] { 1, 2, 3, 4, 5, 6, 7 },
-                    Predicate = i => i > 2,
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 3,
-                    ExpectedMoveNextCalls = 3,
-                    ExpectedResult = 3.ToMaybe(),
-                }
-            };
-            yield return new object[]
-            {
-                new TestData<string>
-                {
-                    Subject = new string[] { },
-                    Predicate = i => i.Length > 1,
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 0,
-                    ExpectedMoveNextCalls = 1,
-                    ExpectedResult = Maybe<string>.Nothing,
-                }
-            };
-            yield return new object[]
-            {
-                new TestData<string>
-                {
-                    Subject = new string[] { "1" },
-                    Predicate = i => int.Parse(i) > 1,
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 1,
-                    ExpectedMoveNextCalls = 2,
-                    ExpectedResult = Maybe<string>.Nothing,
-                }
-            };        
-            yield return new object[]
-            {
-                new TestData<string>
-                {
-                    Subject = new string[] { "1", "2", "3", "4", "5", "6", "7" },
-                    Predicate = i => int.Parse(i) > 2,
-                    ExpectedGetEnumeratorCalls = 1,
-                    ExpectedCurrentCalls = 3,
-                    ExpectedMoveNextCalls = 3,
-                    ExpectedResult = "3".ToMaybe(),
-                }
-            };
-        }
-
         public static IEnumerable<object[]> MaybeFirst_WithZeroOrMoreElements_TestData()
         {
             yield return new object[]
@@ -235,6 +159,82 @@ namespace Maybe.Test
                     ExpectedCurrentCalls = 1,
                     ExpectedMoveNextCalls = 1,
                     ExpectedResult = "1".ToMaybe(),
+                }
+            };
+        }
+
+        public static IEnumerable<object[]> MaybeFirst_WithZeroOrMoreFilteredElements_TestData()
+        {
+            yield return new object[]
+            {
+                new TestData<int>
+                {
+                    Subject = new int[] { },
+                    Predicate = i => i > 1,
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 0,
+                    ExpectedMoveNextCalls = 1,
+                    ExpectedResult = Maybe<int>.Nothing,
+                }
+            };
+            yield return new object[]
+            {
+                new TestData<int>
+                {
+                    Subject = new int[] { 1 },
+                    Predicate = i => i > 1,
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 1,
+                    ExpectedMoveNextCalls = 2,
+                    ExpectedResult = Maybe<int>.Nothing,
+                }
+            };
+            yield return new object[]
+            {
+                new TestData<int>
+                {
+                    Subject = new int[] { 1, 2, 3, 4, 5, 6, 7 },
+                    Predicate = i => i > 2,
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 3,
+                    ExpectedMoveNextCalls = 3,
+                    ExpectedResult = 3.ToMaybe(),
+                }
+            };
+            yield return new object[]
+            {
+                new TestData<string>
+                {
+                    Subject = new string[] { },
+                    Predicate = i => i.Length > 1,
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 0,
+                    ExpectedMoveNextCalls = 1,
+                    ExpectedResult = Maybe<string>.Nothing,
+                }
+            };
+            yield return new object[]
+            {
+                new TestData<string>
+                {
+                    Subject = new string[] { "1" },
+                    Predicate = i => int.Parse(i) > 1,
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 1,
+                    ExpectedMoveNextCalls = 2,
+                    ExpectedResult = Maybe<string>.Nothing,
+                }
+            };
+            yield return new object[]
+            {
+                new TestData<string>
+                {
+                    Subject = new string[] { "1", "2", "3", "4", "5", "6", "7" },
+                    Predicate = i => int.Parse(i) > 2,
+                    ExpectedGetEnumeratorCalls = 1,
+                    ExpectedCurrentCalls = 3,
+                    ExpectedMoveNextCalls = 3,
+                    ExpectedResult = "3".ToMaybe(),
                 }
             };
         }
