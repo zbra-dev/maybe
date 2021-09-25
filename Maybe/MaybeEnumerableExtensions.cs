@@ -180,6 +180,17 @@ namespace Maybe
             return Maybe<T>.Nothing;
         }
 
+        /// <summary>
+        /// Returns the first element of a sequence that satisfies a specified condition or 
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
+        /// </summary>
+        /// <returns>
+        /// <see cref="Maybe{T}" /> of the first element that satisfies a specified condition or <see cref="Maybe{T}.Nothing" /> if no such element is found.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is empty, <see langword="null" /> or the first element found is <see langword="null" />.
+        /// </returns>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate" /> is <see langword="null" />.</exception>
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) where T : struct
         {
             if (source == null)
@@ -224,6 +235,17 @@ namespace Maybe
             return Maybe<T>.Nothing;
         }
 
+        /// <summary>
+        /// Returns the first element of a sequence that satisfies a specified condition or 
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
+        /// </summary>
+        /// <returns>
+        /// <see cref="Maybe{T}" /> of the first element that satisfies a specified condition or <see cref="Maybe{T}.Nothing" /> if no such element is found.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is empty, <see langword="null" /> or the first element found is <see langword="null" />.
+        /// </returns>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate" /> is <see langword="null" />.</exception>
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             if (source == null)
