@@ -156,6 +156,15 @@ namespace Maybe
             return MaybeSingle(source?.Where(predicate));
         }
 
+        /// <summary>
+        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// if the sequence is empty or the first element is <see langword="null" />.<br/>
+        /// </summary>
+        /// <returns>
+        /// <see cref="Maybe{T}" /> of the first element in the sequence or <see cref="Maybe{T}.Nothing" /> if the sequence is empty.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is <see langword="null" /> or the first element is <see langword="null" />.
+        /// </returns>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source) where T : struct
         {
             if (source == null)
@@ -191,6 +200,15 @@ namespace Maybe
             return Maybe<T>.Nothing;
         }
 
+        /// <summary>
+        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// if the sequence is empty or the first element is <see langword="null" />.<br/>
+        /// </summary>
+        /// <returns>
+        /// <see cref="Maybe{T}" /> of the first element in the sequence or <see cref="Maybe{T}.Nothing" /> if the sequence is empty.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is <see langword="null" /> or the first element is <see langword="null" />.
+        /// </returns>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source)
         {
             if (source == null)
