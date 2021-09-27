@@ -117,6 +117,7 @@ namespace Maybe
 
         #endregion
 
+        #region Operations 
         /// <summary>
         /// Projects the value according to the selector.
         /// Analogous to Linq's Select.
@@ -127,12 +128,11 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
-        #region Operations 
         public static Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V> selector)
         {
-            return !subject.HasValue
-                ? Maybe<V>.Nothing
-                : selector(subject.Value).ToMaybe();
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
+
+            return !subject.HasValue ? Maybe<V>.Nothing : selector(subject.Value).ToMaybe();
         }
 
         /// <summary>
@@ -145,11 +145,12 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject that will be projected.</param>
         /// <param name="selector"> The selector to be applied.</param>
-        public static Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V?> selector) where V : struct
+        public static Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V?> selector)
+            where V : struct
         {
-            return !subject.HasValue
-                ? Maybe<V>.Nothing
-                : ToMaybe(selector(subject.Value));
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
+
+            return !subject.HasValue ? Maybe<V>.Nothing : ToMaybe(selector(subject.Value));
         }
 
         /// <summary>
@@ -164,9 +165,9 @@ namespace Maybe
         /// <param name="selector"> The selector to be applied.</param>
         public static Maybe<V> SelectMany<T, V>(this Maybe<T> subject, Func<T, Maybe<V>> selector)
         {
-            return !subject.HasValue
-                ? Maybe<V>.Nothing
-                : selector(subject.Value);
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
+
+            return !subject.HasValue ? Maybe<V>.Nothing : selector(subject.Value);
         }
 
         /// <summary>
@@ -179,9 +180,9 @@ namespace Maybe
         /// <param name="alternativeSupplier"> The alternative supplier.</param>
         public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<Maybe<T>> alternativeSupplier)
         {
-            return !subject.HasValue
-                ? alternativeSupplier()
-                : subject;
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return !subject.HasValue ? alternativeSupplier() : subject;
         }
 
         /// <summary>
@@ -194,9 +195,9 @@ namespace Maybe
         /// <param name="alternativeSupplier"> The alternative supplier.</param>
         public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<T> alternativeSupplier)
         {
-            return !subject.HasValue
-                ? ToMaybe(alternativeSupplier())
-                : subject;
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return !subject.HasValue ? ToMaybe(alternativeSupplier()) : subject;
         }
         #endregion
     }

@@ -298,7 +298,11 @@ namespace Maybe
         /// </returns>
         /// <param name="source"> The source.</param>
         public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> source)
-            => source.Where(m => m.HasValue).Select(m => m.Value);
+        {
+            source = source ?? throw new ArgumentNullException(nameof(source));
+
+            return source.Where(m => m.HasValue).Select(m => m.Value);
+        }
 
         /// <summary>
         /// Extract the values from source, ignoring nulls.
@@ -309,7 +313,11 @@ namespace Maybe
         /// <param name="source"> The source.</param>
         public static IEnumerable<T> Compact<T>(this IEnumerable<T?> source)
             where T : struct
-           => source.Where(m => m.HasValue).Select(m => m.Value);
+        {
+            source = source ?? throw new ArgumentNullException(nameof(source));
+
+            return source.Where(m => m.HasValue).Select(m => m.Value);
+        }
 
         #endregion
     }

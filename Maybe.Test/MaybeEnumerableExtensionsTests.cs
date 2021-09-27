@@ -288,5 +288,21 @@ namespace Maybe.Test
                 { new int?[] { 1, 2, 3 }, new int[] { 1, 2, 3 } },
             };
         }
+
+        [Fact]
+        public void Compact_ConstrainedStructNullArgument_ShouldThrow()
+        {
+            Action subject = () => ((int?[])null).Compact();
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Compact_MaybeNullArgument_ShouldThrow()
+        {
+            Action subject = () => ((IEnumerable<Maybe<int>>)null).Compact();
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
     }
 }
