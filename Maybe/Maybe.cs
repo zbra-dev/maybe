@@ -5,7 +5,7 @@ namespace Maybe
     /// <summary>
     /// The generic Maybe monad.
     /// </summary>
-    public struct Maybe<T>
+    public readonly struct Maybe<T>
     {
         /// <value>A Maybe without a value.</value>
         public readonly static Maybe<T> Nothing = new Maybe<T>(default, false);

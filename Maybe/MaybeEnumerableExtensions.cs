@@ -106,54 +106,167 @@ namespace Maybe
         }
 
         /// <summary>
-        /// Returns the single element of the source.
+        /// Returns <see cref="Maybe{T}" /> of the only element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// if the sequence is empty or the only element is <see langword="null" />.<br/>
+        /// This method throws an <see cref="ArgumentNullException"/> if there is more than one element in the sequence.
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty or null.
-        /// Otherwise returns the encapsulated single value
+        /// <see cref="Maybe{T}" /> of the only element in the sequence or <see cref="Maybe{T}.Nothing" /> if the sequence is empty.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is <see langword="null" /> or the only element is <see langword="null" />.
         /// </returns>
-        /// <param name="source"> The source.</param>
-        /// <exception cref="InvalidOperationException">Thrown if source contains more than one element.</exception>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return a single element from.</param>
+        /// <exception cref="InvalidOperationException">Thrown if <paramref name="source"/> contains more than one element.</exception>
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> source) where T : struct
         {
-            if (source == null || !source.Any())
+            if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
-            return source.Single().ToMaybe();
+
+            using (var enumerator = source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var current = enumerator.Current;
+
+                    if (enumerator.MoveNext())
+                    {
+                        throw new InvalidOperationException("Sequence contains more than one element");
+                    }
+
+                    return current.ToMaybe();
+                }
+
+                return Maybe<T>.Nothing;
+            }
         }
 
         /// <summary>
-        /// Returns the single element of the source.
+        /// Returns the only element of a sequence that satisfies a specified condition or 
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/> 
+        /// This method throws an <see cref="ArgumentNullException"/> if more than one element satisfies the condition.
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is empty or null.
-        /// Otherwise returns the encapsulated single value
+        /// <see cref="Maybe{T}" /> of the only element that satisfies a specified condition or <see cref="Maybe{T}.Nothing" /> if no such element is found.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is empty, <see langword="null" /> or the only element found is <see langword="null" />.
         /// </returns>
-        /// <param name="source"> The source.</param>
-        /// <exception cref="InvalidOperationException">Thrown if source contains more than one element.</exception>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return a single element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <exception cref="InvalidOperationException">Thrown if <paramref name="source"/> contains more than one element.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate" /> is <see langword="null" />.</exception>
+        public static Maybe<T> MaybeSingle<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) where T : struct
+        {
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            using (var enumerator = source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var current = enumerator.Current;
+
+                    if (predicate(current))
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            if (predicate(enumerator.Current))
+                            {
+                                throw new InvalidOperationException("Sequence contains more than one matching element");
+                            }
+                        }
+
+                        return current.ToMaybe();
+                    }
+                }
+
+                return Maybe<T>.Nothing;
+            }
+        }
+
+        /// <summary>
+        /// Returns <see cref="Maybe{T}" /> of the only element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// if the sequence is empty or the only element is <see langword="null" />.<br/>
+        /// This method throws an <see cref="ArgumentNullException"/> if there is more than one element in the sequence.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Maybe{T}" /> of the only element in the sequence or <see cref="Maybe{T}.Nothing" /> if the sequence is empty.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is <see langword="null" /> or the only element is <see langword="null" />.
+        /// </returns>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return a single element from.</param>
+        /// <exception cref="InvalidOperationException">Thrown if <paramref name="source"/> contains more than one element.</exception>
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> source)
         {
-            if (source == null || !source.Any())
+            if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
-            return source.Single().ToMaybe();
+
+            using (var enumerator = source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var current = enumerator.Current;
+
+                    if (enumerator.MoveNext())
+                    {
+                        throw new InvalidOperationException("Sequence contains more than one element");
+                    }
+
+                    return current.ToMaybe();
+                }
+
+                return Maybe<T>.Nothing;
+            }
         }
 
         /// <summary>
-        /// Returns the single element of the source that matches the predicate.
+        /// Returns the only element of a sequence that satisfies a specified condition or 
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/> 
+        /// This method throws an <see cref="ArgumentNullException"/> if more than one element satisfies the condition.
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is null or no elements match the predicate.
-        /// Otherwise returns the encapsulated single matching value
+        /// <see cref="Maybe{T}" /> of the only element that satisfies a specified condition or <see cref="Maybe{T}.Nothing" /> if no such element is found.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is empty, <see langword="null" /> or the only element found is <see langword="null" />.
         /// </returns>
-        /// <param name="source"> The source.</param>
-        /// <param name="predicate"> The predicate.</param>
-        /// <exception cref="InvalidOperationException">Thrown if multiple elements match the predicate.</exception>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return a single element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <exception cref="InvalidOperationException">Thrown if <paramref name="source"/> contains more than one element.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate" /> is <see langword="null" />.</exception>
         public static Maybe<T> MaybeSingle<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            return MaybeSingle(source?.Where(predicate));
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            using (var enumerator = source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var current = enumerator.Current;
+
+                    if (predicate(current))
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            if (predicate(enumerator.Current))
+                            {
+                                throw new InvalidOperationException("Sequence contains more than one matching element");
+                            }
+                        }
+
+                        return current.ToMaybe();
+                    }
+                }
+
+                return Maybe<T>.Nothing;
+            }
         }
 
         /// <summary>
