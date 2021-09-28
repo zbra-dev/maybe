@@ -270,56 +270,113 @@ namespace Maybe
         }
 
         /// <summary>
-        /// Returns the first element of source.
+        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// if the sequence is empty or the first element is <see langword="null" />.<br/>
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is null or empty.
-        /// Otherwise returns the encapsulated first value in source
+        /// <see cref="Maybe{T}" /> of the first element in the sequence or <see cref="Maybe{T}.Nothing" /> if the sequence is empty.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is <see langword="null" /> or the first element is <see langword="null" />.
         /// </returns>
-        /// <param name="source"> The source.</param>
-        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source)
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source) where T : struct
         {
-            return (source == null || !source.Any()) ? Maybe<T>.Nothing : source.First().ToMaybe();
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            foreach (var element in source)
+            {
+                return element.ToMaybe();
+            }
+
+            return Maybe<T>.Nothing;
         }
 
-        // Note that if T is a value type, enumerable.FirstOrDefault(predicate).ToMaybe() will NOT return a Maybe.Nothing
-        // when no element is found
         /// <summary>
-        /// Returns the first element of source that matches the predicate.
+        /// Returns the first element of a sequence that satisfies a specified condition or 
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
         /// </summary>
         /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is null or no elements match the predicate.
-        /// Otherwise returns the encapsulated first matching value in source
+        /// <see cref="Maybe{T}" /> of the first element that satisfies a specified condition or <see cref="Maybe{T}.Nothing" /> if no such element is found.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is empty, <see langword="null" /> or the first element found is <see langword="null" />.
         /// </returns>
-        /// <param name="source"> The source.</param>
-        /// <param name="predicate"> The predicate.</param>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate" /> is <see langword="null" />.</exception>
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) where T : struct
+        {
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            foreach (var element in source)
+            {
+                if (predicate(element))
+                {
+                    return element.ToMaybe();
+                }
+            }
+
+            return Maybe<T>.Nothing;
+        }
+
+        /// <summary>
+        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// if the sequence is empty or the first element is <see langword="null" />.<br/>
+        /// </summary>
+        /// <returns>
+        /// <see cref="Maybe{T}" /> of the first element in the sequence or <see cref="Maybe{T}.Nothing" /> if the sequence is empty.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is <see langword="null" /> or the first element is <see langword="null" />.
+        /// </returns>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
+        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source)
+        {
+            if (source == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            foreach (var element in source)
+            {
+                return element.ToMaybe();
+            }
+
+            return Maybe<T>.Nothing;
+        }
+
+        /// <summary>
+        /// Returns the first element of a sequence that satisfies a specified condition or 
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
+        /// </summary>
+        /// <returns>
+        /// <see cref="Maybe{T}" /> of the first element that satisfies a specified condition or <see cref="Maybe{T}.Nothing" /> if no such element is found.<br/>
+        /// <see cref="Maybe{T}.Nothing" /> is also returned if <paramref name="source"/> is empty, <see langword="null" /> or the first element found is <see langword="null" />.
+        /// </returns>
+        /// <param name="source">An <see cref="IEnumerable{T}" /> to return the first element from.</param>
+        /// <param name="predicate">A function to test an element for a condition.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate" /> is <see langword="null" />.</exception>
         public static Maybe<T> MaybeFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             if (source == null)
             {
                 return Maybe<T>.Nothing;
             }
-            try
-            {
-                return source.First(predicate).ToMaybe();
-            }
-            catch (InvalidOperationException)
-            {
-                return Maybe<T>.Nothing;
-            }
-        }
 
-        /// <summary>
-        /// Returns the first element of source.
-        /// </summary>
-        /// <returns>
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if source is null or empty.
-        /// Otherwise returns the encapsulated first value in source
-        /// </returns>
-        /// <param name="source"> The source.</param>
-        public static Maybe<T> MaybeFirst<T>(this IEnumerable<T?> source) where T : struct
-        {
-            return (source == null || !source.Any()) ? Maybe<T>.Nothing : source.First().ToMaybe();
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            foreach (var element in source)
+            {
+                if (predicate(element))
+                {
+                    return element.ToMaybe();
+                }
+            }
+
+            return Maybe<T>.Nothing;
         }
 
         /// <summary>
@@ -411,7 +468,11 @@ namespace Maybe
         /// </returns>
         /// <param name="source"> The source.</param>
         public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> source)
-            => source.Where(m => m.HasValue).Select(m => m.Value);
+        {
+            source = source ?? throw new ArgumentNullException(nameof(source));
+
+            return source.Where(m => m.HasValue).Select(m => m.Value);
+        }
 
         /// <summary>
         /// Extract the values from source, ignoring nulls.
@@ -422,7 +483,11 @@ namespace Maybe
         /// <param name="source"> The source.</param>
         public static IEnumerable<T> Compact<T>(this IEnumerable<T?> source)
             where T : struct
-           => source.Where(m => m.HasValue).Select(m => m.Value);
+        {
+            source = source ?? throw new ArgumentNullException(nameof(source));
+
+            return source.Where(m => m.HasValue).Select(m => m.Value);
+        }
 
         #endregion
     }

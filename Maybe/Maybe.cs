@@ -58,7 +58,12 @@ namespace Maybe
         /// The value if HasValue is true, otherwise returns the value provided by defaultSupplier
         /// </returns>
         /// <param name="defaultSupplier"> The default value supplier.</param>
-        public T OrGet(Func<T> defaultSupplier) => HasValue ? obj : defaultSupplier();
+        public T OrGet(Func<T> defaultSupplier)
+        {
+            defaultSupplier = defaultSupplier ?? throw new ArgumentNullException(nameof(defaultSupplier));
+
+            return HasValue ? obj : defaultSupplier();
+        }
 
         /// <summary>
         /// Returns the value if HasValue is true, otherwise throws an exception.
@@ -70,6 +75,8 @@ namespace Maybe
         /// <exception cref="Exception">Thrown if HasValue is false.</exception>
         public T OrThrow(Func<Exception> errorSupplier)
         {
+            errorSupplier = errorSupplier ?? throw new ArgumentNullException(nameof(errorSupplier));
+
             if (HasValue)
             {
                 return obj;
@@ -83,6 +90,8 @@ namespace Maybe
         /// <param name="consumer"> The action to be applied to the value.</param>
         public void Consume(Action<T> consumer)
         {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
             if (HasValue)
             {
                 consumer(obj);
@@ -99,6 +108,8 @@ namespace Maybe
         /// <param name="transformer"> The transformer function to be applied.</param>
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, R> transformer)
         {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
             if (HasValue && other.HasValue)
             {
                 return transformer(Value, other.Value).ToMaybe();
@@ -117,6 +128,8 @@ namespace Maybe
         /// <param name="transformer"> The transformer function to be applied.</param>
         public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, Maybe<R>> transformer)
         {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
             if (HasValue && other.HasValue)
             {
                 return transformer(Value, other.Value);
@@ -132,6 +145,8 @@ namespace Maybe
         /// <param name="consumer"> The action to be applied to both maybes.</param>
         public void ZipAndConsume<U>(Maybe<U> other, Action<T, U> consumer)
         {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
             if (HasValue && other.HasValue)
             {
                 consumer(obj, other.Value);
@@ -194,7 +209,7 @@ namespace Maybe
         /// </returns>
         /// <param name="other"> The other value.</param>
         public bool Is(T other) => HasValue && Value.Equals(other);
-
+                
         /// <summary>
         /// Determines if the encapsulated value matches a predicate.
         /// </summary>
@@ -203,7 +218,12 @@ namespace Maybe
         /// False otherwise
         /// </returns>
         /// <param name="predicate"> The predicate.</param>
-        public bool Is(Func<T, bool> predicate) => HasValue && predicate(Value);
+        public bool Is(Func<T, bool> predicate)
+        {
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            return HasValue && predicate(Value);
+        }
 
         /// <summary>
         /// Filters the value using a predicate. Analogous to Linq's Where.
@@ -213,6 +233,11 @@ namespace Maybe
         /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing otherwise
         /// </returns>
         /// <param name="predicate"> The predicate.</param>
-        public Maybe<T> Where(Func<T, bool> predicate) => !Is(predicate) ? Nothing : this;
+        public Maybe<T> Where(Func<T, bool> predicate)
+        {
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            return !Is(predicate) ? Nothing : this;
+        }
     }
 }

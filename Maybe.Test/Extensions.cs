@@ -6,7 +6,7 @@ namespace Maybe.Test
 {
     public static class Extensions
     {
-        public static (Mock<IEnumerable<T?>>, Mock<IEnumerator<T?>>) GetMocks<T>(this IEnumerable<T?> source)
+        public static (Mock<IEnumerable<T?>>, Mock<IEnumerator<T?>>) GetMocks<T>(this IEnumerable<T?> source) 
             where T : struct
         {
             source = source ?? throw new ArgumentNullException(nameof(source));
