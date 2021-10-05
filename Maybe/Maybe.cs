@@ -8,7 +8,7 @@ namespace Maybe
     public readonly struct Maybe<T>
     {
         /// <value>A Maybe without a value.</value>
-        public readonly static Maybe<T> Nothing = new Maybe<T>(default, false);
+        public static readonly Maybe<T> Nothing = new Maybe<T>(default, false);
 
         private readonly T obj;
 
@@ -63,6 +63,20 @@ namespace Maybe
             defaultSupplier = defaultSupplier ?? throw new ArgumentNullException(nameof(defaultSupplier));
 
             return HasValue ? obj : defaultSupplier();
+        }
+        
+        /// <summary>
+        /// Returns the subject or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided by alternativeSupplier
+        /// </returns>
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public Maybe<T> OrGet(Func<Maybe<T>> alternativeSupplier)
+        {
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return !HasValue ? alternativeSupplier() : this;
         }
 
         /// <summary>

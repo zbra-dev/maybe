@@ -29,9 +29,17 @@ namespace Maybe.Test
         }
 
         [Fact]
-        public void OrGet_NullArgument_ShouldThrow()
+        public void OrGet_Func_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().OrGet(null);
+            Action subject = () => 1.ToMaybe().OrGet((Func<int>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void OrGet_FuncMaybe_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrGet((Func<Maybe<int>>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }

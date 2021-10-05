@@ -163,15 +163,15 @@ namespace Maybe.Test
         [MemberData(nameof(OrGetAlternative_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
         public void OrGetAlternative_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
         {
+            var maybeResult = subject
+                .Select(s => s.Name)
+                .OrGet(alternative.ToMaybe);
+            maybeResult.Should().Be(expected.ToMaybe());
+
             var result = subject
                 .Select(s => s.Name)
-                .OrGetAlternative(() => alternative.ToMaybe());
-            result.Should().Be(expected.ToMaybe());
-
-            result = subject
-                .Select(s => s.Name)
-                .OrGetAlternative(() => alternative);
-            result.Should().Be(expected.ToMaybe());
+                .OrGet(() => alternative);
+            result.Should().Be(expected);
         }
 
         public static TheoryData<Maybe<StringObj>, string, string> OrGetAlternative_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
@@ -188,7 +188,7 @@ namespace Maybe.Test
         [Fact]
         public void OrGetAlternative_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().OrGetAlternative((Func<int>)null);
+            Action subject = () => 1.ToMaybe().OrGet((Func<int>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -196,7 +196,7 @@ namespace Maybe.Test
         [Fact]
         public void OrGetAlternative_MaybeNullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().OrGetAlternative((Func<Maybe<int>>)null);
+            Action subject = () => 1.ToMaybe().OrGet((Func<Maybe<int>>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
