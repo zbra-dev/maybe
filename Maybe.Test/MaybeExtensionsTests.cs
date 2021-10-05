@@ -177,6 +177,11 @@ namespace Maybe.Test
                 .Select(s => s.Name)
                 .OrMaybe(alternative);
             result.Should().Be(expected.ToMaybe());
+
+            result = subject
+                .Select(s => s.Name)
+                .OrMaybe(() => alternative);
+            result.Should().Be(expected.ToMaybe());
         }
 
         public static TheoryData<Maybe<StringObj>, string, string> Or_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()

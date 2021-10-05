@@ -102,6 +102,18 @@ namespace Maybe
         {
             return !HasValue ? alternative.ToMaybe() : this;
         }
+        
+        /// <summary>
+        /// Returns this object or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided
+        /// </returns>
+        /// <param name="alternative"> The alternative.</param>
+        public Maybe<T> OrMaybe(Func<T> alternative)
+        {
+            return !HasValue ? alternative().ToMaybe() : this;
+        }
 
         /// <summary>
         /// Returns the value if HasValue is true, otherwise throws an exception.
