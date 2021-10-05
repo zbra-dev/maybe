@@ -169,6 +169,64 @@ namespace Maybe
 
             return !subject.HasValue ? Maybe<V>.Nothing : selector(subject.Value);
         }
+        
+        /// <summary>
+        /// Zips two maybes together. Analogous to Linq's Zip.
+        /// </summary>
+        /// <returns>
+        /// The zipped maybe
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="other"> The other maybe to be zipped.</param>
+        /// <param name="transformer"> The transformer function to be applied.</param>
+        public static Maybe<R> Zip<T, U, R>(this Maybe<T> subject, Maybe<U> other, Func<T, U, R> transformer)
+        {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
+            if (subject.HasValue && other.HasValue)
+            {
+                return transformer(subject.Value, other.Value).ToMaybe();
+            }
+
+            return Maybe<R>.Nothing;
+        }
+
+        /// <summary>
+        /// Zips two maybes together. Analogous to Linq's Zip.
+        /// </summary>
+        /// <returns>
+        /// The zipped maybe
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="other"> The other maybe to be zipped.</param>
+        /// <param name="transformer"> The transformer function to be applied.</param>
+        public static Maybe<R> Zip<T, U, R>(this Maybe<T> subject, Maybe<U> other, Func<T, U, Maybe<R>> transformer)
+        {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
+            if (subject.HasValue && other.HasValue)
+            {
+                return transformer(subject.Value, other.Value);
+            }
+
+            return Maybe<R>.Nothing;
+        }
+
+        /// <summary>
+        /// Zips and consumes two maybes.
+        /// </summary>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="other"> The other maybe to be zipped.</param>
+        /// <param name="consumer"> The action to be applied to both maybes.</param>
+        public static void ZipAndConsume<T, U>(this Maybe<T> subject, Maybe<U> other, Action<T, U> consumer)
+        {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
+            if (subject.HasValue && other.HasValue)
+            {
+                consumer(subject.Value, other.Value);
+            }
+        }
 
         /// <summary>
         /// Returns the subject or an alternative.
