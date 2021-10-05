@@ -149,61 +149,6 @@ namespace Maybe
         }
 
         /// <summary>
-        /// Zips two maybes together. Analogous to Linq's Zip.
-        /// </summary>
-        /// <returns>
-        /// The zipped maybe
-        /// </returns>
-        /// <param name="other"> The other maybe to be zipped.</param>
-        /// <param name="transformer"> The transformer function to be applied.</param>
-        public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, R> transformer)
-        {
-            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
-
-            if (HasValue && other.HasValue)
-            {
-                return transformer(Value, other.Value).ToMaybe();
-            }
-
-            return Maybe<R>.Nothing;
-        }
-
-        /// <summary>
-        /// Zips two maybes together. Analogous to Linq's Zip.
-        /// </summary>
-        /// <returns>
-        /// The zipped maybe
-        /// </returns>
-        /// <param name="other"> The other maybe to be zipped.</param>
-        /// <param name="transformer"> The transformer function to be applied.</param>
-        public Maybe<R> Zip<U, R>(Maybe<U> other, Func<T, U, Maybe<R>> transformer)
-        {
-            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
-
-            if (HasValue && other.HasValue)
-            {
-                return transformer(Value, other.Value);
-            }
-
-            return Maybe<R>.Nothing;
-        }
-
-        /// <summary>
-        /// Zips and consumes two maybes.
-        /// </summary>
-        /// <param name="other"> The other maybe to be zipped.</param>
-        /// <param name="consumer"> The action to be applied to both maybes.</param>
-        public void ZipAndConsume<U>(Maybe<U> other, Action<T, U> consumer)
-        {
-            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
-
-            if (HasValue && other.HasValue)
-            {
-                consumer(obj, other.Value);
-            }
-        }
-
-        /// <summary>
         /// Determines if this instance is equals to another maybe instance.
         /// </summary>
         /// <returns>

@@ -24,7 +24,7 @@ namespace Maybe
         /// null if subject.HasValue is false, otherwise subject.Value
         /// </returns>
         /// <param name="subject"> The subject.</param>
-        public static T OrNull<T>(this Maybe<T> subject) where T : class => subject.Or((T)null);
+        public static T OrNull<T>(this Maybe<T> subject) where T : class => subject.Or(null);
 
         /// <summary>
         /// Returns the encapsulated value or true.
@@ -107,7 +107,12 @@ namespace Maybe
         /// <param name="value"> The value to be converted.</param>
         public static Maybe<T> ToMaybe<T>(this T value)
         {
-            return value == null ? Maybe<T>.Nothing : new Maybe<T>(value);
+            if (value == null)
+            {
+                return Maybe<T>.Nothing;
+            }
+
+            return new Maybe<T>(value);
         }
 
         #endregion
@@ -163,6 +168,94 @@ namespace Maybe
             selector = selector ?? throw new ArgumentNullException(nameof(selector));
 
             return !subject.HasValue ? Maybe<V>.Nothing : selector(subject.Value);
+        }
+        
+        /// <summary>
+        /// Zips two maybes together. Analogous to Linq's Zip.
+        /// </summary>
+        /// <returns>
+        /// The zipped maybe
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="other"> The other maybe to be zipped.</param>
+        /// <param name="transformer"> The transformer function to be applied.</param>
+        public static Maybe<R> Zip<T, U, R>(this Maybe<T> subject, Maybe<U> other, Func<T, U, R> transformer)
+        {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
+            if (subject.HasValue && other.HasValue)
+            {
+                return transformer(subject.Value, other.Value).ToMaybe();
+            }
+
+            return Maybe<R>.Nothing;
+        }
+
+        /// <summary>
+        /// Zips two maybes together. Analogous to Linq's Zip.
+        /// </summary>
+        /// <returns>
+        /// The zipped maybe
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="other"> The other maybe to be zipped.</param>
+        /// <param name="transformer"> The transformer function to be applied.</param>
+        public static Maybe<R> Zip<T, U, R>(this Maybe<T> subject, Maybe<U> other, Func<T, U, Maybe<R>> transformer)
+        {
+            transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+
+            if (subject.HasValue && other.HasValue)
+            {
+                return transformer(subject.Value, other.Value);
+            }
+
+            return Maybe<R>.Nothing;
+        }
+
+        /// <summary>
+        /// Zips and consumes two maybes.
+        /// </summary>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="other"> The other maybe to be zipped.</param>
+        /// <param name="consumer"> The action to be applied to both maybes.</param>
+        public static void ZipAndConsume<T, U>(this Maybe<T> subject, Maybe<U> other, Action<T, U> consumer)
+        {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
+            if (subject.HasValue && other.HasValue)
+            {
+                consumer(subject.Value, other.Value);
+            }
+        }
+
+        /// <summary>
+        /// Returns the subject or an alternative.
+        /// </summary>
+        /// <returns>
+        /// The subject if HasValue is true, otherwise an alternative provided by alternativeSupplier
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<Maybe<T>> alternativeSupplier)
+        {
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return !subject.HasValue ? alternativeSupplier() : subject;
+        }
+
+        /// <summary>
+        /// Returns the subject or an alternative.
+        /// </summary>
+        /// <returns>
+        /// The subject if HasValue is true, otherwise an alternative provided by alternativeSupplier
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<T> alternativeSupplier)
+        {
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return !subject.HasValue ? ToMaybe(alternativeSupplier()) : subject;
         }
         #endregion
     }
