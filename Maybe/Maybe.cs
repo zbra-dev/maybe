@@ -66,7 +66,7 @@ namespace Maybe
         }
         
         /// <summary>
-        /// Returns the subject or an alternative.
+        /// Returns the this object or an alternative.
         /// </summary>
         /// <returns>
         /// This if HasValue is true, otherwise an alternative provided by alternativeSupplier
