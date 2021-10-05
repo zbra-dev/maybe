@@ -20,18 +20,18 @@ namespace Maybe.Test
         [Theory]
         [InlineData(1, 2, 1)]
         [InlineData(null, 2, 2)]
-        public void OrGet_ShouldReturnValueOrDefaultValue(int? value, int defaultValue, int expected)
+        public void Or_Func_ShouldReturnValueOrDefaultValue(int? value, int defaultValue, int expected)
         {
             var result = value.ToMaybe()
-                .OrGet(() => defaultValue);
+                .Or(() => defaultValue);
 
             result.Should().Be(expected);
         }
 
         [Fact]
-        public void OrGet_Func_NullArgument_ShouldThrow()
+        public void Or_Func_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().OrGet((Func<int>)null);
+            Action subject = () => 1.ToMaybe().Or((Func<int>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -39,7 +39,7 @@ namespace Maybe.Test
         [Fact]
         public void OrGet_FuncMaybe_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().OrGet((Func<Maybe<int>>)null);
+            Action subject = () => 1.ToMaybe().OrMaybe((Func<Maybe<int>>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }

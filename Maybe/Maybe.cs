@@ -58,7 +58,7 @@ namespace Maybe
         /// The value if HasValue is true, otherwise returns the value provided by defaultSupplier
         /// </returns>
         /// <param name="defaultSupplier"> The default value supplier.</param>
-        public T OrGet(Func<T> defaultSupplier)
+        public T Or(Func<T> defaultSupplier)
         {
             defaultSupplier = defaultSupplier ?? throw new ArgumentNullException(nameof(defaultSupplier));
 
@@ -66,17 +66,41 @@ namespace Maybe
         }
         
         /// <summary>
-        /// Returns the this object or an alternative.
+        /// Returns this object or an alternative.
         /// </summary>
         /// <returns>
         /// This if HasValue is true, otherwise an alternative provided by alternativeSupplier
         /// </returns>
         /// <param name="alternativeSupplier"> The alternative supplier.</param>
-        public Maybe<T> OrGet(Func<Maybe<T>> alternativeSupplier)
+        public Maybe<T> OrMaybe(Func<Maybe<T>> alternativeSupplier)
         {
             alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
             return !HasValue ? alternativeSupplier() : this;
+        }
+
+        /// <summary>
+        /// Returns this object or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided
+        /// </returns>
+        /// <param name="alternative"> The alternative.</param>
+        public Maybe<T> OrMaybe(Maybe<T> alternative)
+        {
+            return !HasValue ? alternative : this;
+        }
+
+        /// <summary>
+        /// Returns this object or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided
+        /// </returns>
+        /// <param name="alternative"> The alternative.</param>
+        public Maybe<T> OrMaybe(T alternative)
+        {
+            return !HasValue ? alternative.ToMaybe() : this;
         }
 
         /// <summary>

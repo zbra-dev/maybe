@@ -18,7 +18,7 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject.</param>
         public static IEnumerable<T> OrEmpty<T>(this Maybe<IEnumerable<T>> subject)
-            => subject.OrGet(() => Enumerable.Empty<T>());
+            => subject.Or(() => Enumerable.Empty<T>());
 
         /// <summary>
         /// Returns the encapsulated value or an empty collection.
@@ -28,7 +28,7 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject.</param>
         public static ICollection<T> OrEmpty<T>(this Maybe<ICollection<T>> subject)
-            => subject.OrGet(() => new HashSet<T>());
+            => subject.Or(() => new HashSet<T>());
 
         /// <summary>
         /// Returns the encapsulated value or an empty read only collection.
@@ -38,7 +38,7 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject.</param>
         public static IReadOnlyCollection<T> OrEmpty<T>(this Maybe<IReadOnlyCollection<T>> subject)
-            => subject.OrGet(() => new HashSet<T>());
+            => subject.Or(() => new HashSet<T>());
 
         /// <summary>
         /// Returns the encapsulated value or an empty list.
@@ -67,7 +67,7 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject.</param>
         public static IList<T> OrEmpty<T>(this Maybe<IList<T>> subject)
-            => subject.OrGet(() => new T[0]);
+            => subject.Or(() => new T[0]);
 
         /// <summary>
         /// Returns the encapsulated value or an empty set.
@@ -77,7 +77,7 @@ namespace Maybe
         /// </returns>
         /// <param name="subject"> The subject.</param>
         public static ISet<T> OrEmpty<T>(this Maybe<ISet<T>> subject)
-            => subject.OrGet(() => new HashSet<T>());
+            => subject.Or(() => new HashSet<T>());
 
         #endregion
 

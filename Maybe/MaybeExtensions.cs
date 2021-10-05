@@ -24,7 +24,7 @@ namespace Maybe
         /// null if subject.HasValue is false, otherwise subject.Value
         /// </returns>
         /// <param name="subject"> The subject.</param>
-        public static T OrNull<T>(this Maybe<T> subject) where T : class => subject.Or(null);
+        public static T OrNull<T>(this Maybe<T> subject) where T : class => subject.Or((T)null);
 
         /// <summary>
         /// Returns the encapsulated value or true.
