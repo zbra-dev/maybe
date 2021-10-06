@@ -7,7 +7,7 @@ namespace Maybe
     /// <summary>
     /// Contains extensions methods for enumerables.
     /// </summary>
-    public static class MaybeEnumerableExtentions
+    public static class MaybeEnumerableExtensions
     {
         #region Empties
         /// <summary>
@@ -459,7 +459,7 @@ namespace Maybe
         }
         #endregion
 
-        #region Compact
+        #region Values
         /// <summary>
         /// Extract the values from source, ignoring Maybe.Nothing.
         /// </summary>
@@ -467,28 +467,12 @@ namespace Maybe
         /// An IEnumerable&lt;<typeparamref name="T"/>&gt; with all the values in source, ignoring Maybe.Nothing.
         /// </returns>
         /// <param name="source"> The source.</param>
-        public static IEnumerable<T> Compact<T>(this IEnumerable<Maybe<T>> source)
+        public static IEnumerable<T> Values<T>(this IEnumerable<Maybe<T>> source)
         {
             source = source ?? throw new ArgumentNullException(nameof(source));
 
             return source.Where(m => m.HasValue).Select(m => m.Value);
         }
-
-        /// <summary>
-        /// Extract the values from source, ignoring nulls.
-        /// </summary>
-        /// <returns>
-        /// An IEnumerable&lt;<typeparamref name="T"/>&gt; with all the values in source, ignoring nulls.
-        /// </returns>
-        /// <param name="source"> The source.</param>
-        public static IEnumerable<T> Compact<T>(this IEnumerable<T?> source)
-            where T : struct
-        {
-            source = source ?? throw new ArgumentNullException(nameof(source));
-
-            return source.Where(m => m.HasValue).Select(m => m.Value);
-        }
-
         #endregion
     }
 }

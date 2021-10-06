@@ -5,7 +5,7 @@ namespace Maybe
     /// <summary>
     /// Contains extensions methods for the maybe class.
     /// </summary>
-    public static class MaybeExtentions
+    public static class MaybeExtensions
     {
         #region Defaults Values
         /// <summary>
