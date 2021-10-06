@@ -295,5 +295,14 @@ namespace Maybe.Test
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
+        
+        [Fact]
+        public void OrMaybe_Func_MaybeNullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrMaybe((Func<int>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
     }
 }

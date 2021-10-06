@@ -107,12 +107,14 @@ namespace Maybe
         /// Returns this object or an alternative.
         /// </summary>
         /// <returns>
-        /// This if HasValue is true, otherwise an alternative provided
+        /// This if HasValue is true, otherwise an alternative provided provided by alternativeSupplier
         /// </returns>
-        /// <param name="alternative"> The alternative.</param>
-        public Maybe<T> OrMaybe(Func<T> alternative)
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public Maybe<T> OrMaybe(Func<T> alternativeSupplier)
         {
-            return !HasValue ? alternative().ToMaybe() : this;
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return !HasValue ? alternativeSupplier().ToMaybe() : this;
         }
 
         /// <summary>
