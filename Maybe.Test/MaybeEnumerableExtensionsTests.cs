@@ -232,14 +232,14 @@ namespace Maybe.Test
         }
 
         [Theory]
-        [MemberData(nameof(Compact_WithEnumerableOfMaybe_ReturnsValuesTestCases))]
-        public void Compact_WithEnumerableOfMaybe_ReturnsValues(IList<Maybe<string>> subject, IList<string> expected)
+        [MemberData(nameof(Values_WithEnumerableOfMaybe_ReturnsValuesTestCases))]
+        public void Values_WithEnumerableOfMaybe_ReturnsValues(IList<Maybe<string>> subject, IList<string> expected)
         {
-            var result = subject.Compact();
+            var result = subject.Values();
             result.Should().BeEquivalentTo(expected, opt => opt.WithStrictOrdering());
         }
 
-        public static TheoryData<IList<Maybe<string>>, IList<string>> Compact_WithEnumerableOfMaybe_ReturnsValuesTestCases()
+        public static TheoryData<IList<Maybe<string>>, IList<string>> Values_WithEnumerableOfMaybe_ReturnsValuesTestCases()
         {
             return new TheoryData<IList<Maybe<string>>, IList<string>>
             {
@@ -270,37 +270,10 @@ namespace Maybe.Test
             };
         }
 
-        [Theory]
-        [MemberData(nameof(Compact_WithEnumerableOfNullables_ReturnsValuesTestCases))]
-        public void Compact_WithEnumerableOfNullables_ReturnsValues(IList<int?> subject, IList<int> expected)
-        {
-            var result = subject.Compact();
-            result.Should().BeEquivalentTo(expected, opt => opt.WithStrictOrdering());
-        }
-
-        public static TheoryData<IList<int?>, IList<int>> Compact_WithEnumerableOfNullables_ReturnsValuesTestCases()
-        {
-            return new TheoryData<IList<int?>, IList<int>>
-            {
-                { new int?[] { }, new int[] { } },
-                { new int?[] { null }, new int[] { } },
-                { new int?[] { null, 1, null, 2, null, 3, null }, new int[] { 1, 2, 3 } },
-                { new int?[] { 1, 2, 3 }, new int[] { 1, 2, 3 } },
-            };
-        }
-
         [Fact]
-        public void Compact_ConstrainedStructNullArgument_ShouldThrow()
+        public void Values_MaybeNullArgument_ShouldThrow()
         {
-            Action subject = () => ((int?[])null).Compact();
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void Compact_MaybeNullArgument_ShouldThrow()
-        {
-            Action subject = () => ((IEnumerable<Maybe<int>>)null).Compact();
+            Action subject = () => ((IEnumerable<Maybe<int>>)null).Values();
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
