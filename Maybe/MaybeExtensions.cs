@@ -24,7 +24,7 @@ namespace Maybe
         /// null if subject.HasValue is false, otherwise subject.Value
         /// </returns>
         /// <param name="subject"> The subject.</param>
-        public static T OrNull<T>(this Maybe<T> subject) where T : class => subject.Or(null);
+        public static T OrNull<T>(this Maybe<T> subject) where T : class => subject.Or((T)null);
 
         /// <summary>
         /// Returns the encapsulated value or true.
@@ -226,36 +226,6 @@ namespace Maybe
             {
                 consumer(subject.Value, other.Value);
             }
-        }
-
-        /// <summary>
-        /// Returns the subject or an alternative.
-        /// </summary>
-        /// <returns>
-        /// The subject if HasValue is true, otherwise an alternative provided by alternativeSupplier
-        /// </returns>
-        /// <param name="subject"> The subject that will be projected.</param>
-        /// <param name="alternativeSupplier"> The alternative supplier.</param>
-        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<Maybe<T>> alternativeSupplier)
-        {
-            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
-
-            return !subject.HasValue ? alternativeSupplier() : subject;
-        }
-
-        /// <summary>
-        /// Returns the subject or an alternative.
-        /// </summary>
-        /// <returns>
-        /// The subject if HasValue is true, otherwise an alternative provided by alternativeSupplier
-        /// </returns>
-        /// <param name="subject"> The subject that will be projected.</param>
-        /// <param name="alternativeSupplier"> The alternative supplier.</param>
-        public static Maybe<T> OrGetAlternative<T>(this Maybe<T> subject, Func<T> alternativeSupplier)
-        {
-            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
-
-            return !subject.HasValue ? ToMaybe(alternativeSupplier()) : subject;
         }
         #endregion
     }

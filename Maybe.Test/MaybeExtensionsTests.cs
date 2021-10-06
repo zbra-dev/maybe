@@ -158,57 +158,5 @@ namespace Maybe.Test
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
-
-        [Theory]
-        [MemberData(nameof(Or_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
-        public void OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
-        {
-            var result = subject
-                .Select(s => s.Name)
-                .OrMaybe(alternative.ToMaybe);
-            result.Should().Be(expected.ToMaybe());
-
-            result = subject
-                .Select(s => s.Name)
-                .OrMaybe(alternative.ToMaybe());
-            result.Should().Be(expected.ToMaybe());
-
-            result = subject
-                .Select(s => s.Name)
-                .OrMaybe(alternative);
-            result.Should().Be(expected.ToMaybe());
-
-            result = subject
-                .Select(s => s.Name)
-                .OrMaybe(() => alternative);
-            result.Should().Be(expected.ToMaybe());
-        }
-
-        public static TheoryData<Maybe<StringObj>, string, string> Or_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
-        {
-            return new TheoryData<Maybe<StringObj>, string, string>
-            {
-                { Maybe<StringObj>.Nothing, null, null },
-                { Maybe<StringObj>.Nothing, "alternative", "alternative" },
-                { new StringObj("subject").ToMaybe(), null, "subject" },
-                { new StringObj("subject").ToMaybe(), "alternative", "subject" },
-            };
-        }
-
-        [Fact]
-        public void Or_NullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().Or((Func<int>)null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void OrMaybe_MaybeNullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().OrMaybe((Func<Maybe<int>>)null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
     }
 }
