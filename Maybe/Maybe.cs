@@ -76,7 +76,7 @@ namespace Maybe
         {
             alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
-            return !HasValue ? alternativeSupplier() : this;
+            return HasValue ? this : alternativeSupplier();
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Maybe
         /// <param name="alternative"> The alternative.</param>
         public Maybe<T> OrMaybe(Maybe<T> alternative)
         {
-            return !HasValue ? alternative : this;
+            return HasValue ? this : alternative;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Maybe
         /// <param name="alternative"> The alternative.</param>
         public Maybe<T> OrMaybe(T alternative)
         {
-            return !HasValue ? alternative.ToMaybe() : this;
+            return HasValue ? this : alternative.ToMaybe();
         }
         
         /// <summary>
@@ -114,7 +114,7 @@ namespace Maybe
         {
             alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
-            return !HasValue ? alternativeSupplier().ToMaybe() : this;
+            return HasValue ? this : alternativeSupplier().ToMaybe();
         }
 
         /// <summary>

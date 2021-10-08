@@ -37,7 +37,7 @@ namespace Maybe.Test
         }
 
         [Fact]
-        public void OrGet_FuncMaybe_NullArgument_ShouldThrow()
+        public void OrMaybe_FuncMaybe_NullArgument_ShouldThrow()
         {
             Action subject = () => 1.ToMaybe().OrMaybe((Func<Maybe<int>>)null);
 
@@ -245,7 +245,7 @@ namespace Maybe.Test
         
         
         [Theory]
-        [MemberData(nameof(Or_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
+        [MemberData(nameof(OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
         public void OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
         {
             var result = subject
@@ -269,7 +269,7 @@ namespace Maybe.Test
             result.Should().Be(expected.ToMaybe());
         }
 
-        public static TheoryData<Maybe<StringObj>, string, string> Or_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
+        public static TheoryData<Maybe<StringObj>, string, string> OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
         {
             return new TheoryData<Maybe<StringObj>, string, string>
             {
