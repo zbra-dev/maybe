@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Maybe
 {
@@ -151,7 +152,7 @@ namespace Maybe
         {
             if (HasValue)
             {
-                return other.HasValue && Value.Equals(other.Value);
+                return other.HasValue && EqualityComparer<T>.Default.Equals(Value, other.Value);
             }
             else
             {
