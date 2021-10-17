@@ -99,6 +99,47 @@ namespace Maybe
         }
 
         /// <summary>
+        /// Determines if the encapsulated value matches another value using Equals.
+        /// </summary>
+        /// <returns>
+        /// True if HasValue is true and the Value matches the other value using Equals.
+        /// False otherwise
+        /// </returns>
+        /// <param name="other"> The other value.</param>
+        public bool Is(T other) => HasValue && Value.Equals(other);
+                
+        /// <summary>
+        /// Determines if the encapsulated value matches a predicate.
+        /// </summary>
+        /// <returns>
+        /// True if HasValue is true and the Value matches the predicate.
+        /// False otherwise
+        /// </returns>
+        /// <param name="predicate"> The predicate.</param>
+        public bool Is(Func<T, bool> predicate)
+        {
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            return HasValue && predicate(Value);
+        }
+
+        /// <summary>
+        /// Filters the value using a predicate. Analogous to Linq's Where.
+        /// </summary>
+        /// <returns>
+        /// The calling maybe if the encapsulated value matches the predicate,
+        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing otherwise
+        /// </returns>
+        /// <param name="predicate"> The predicate.</param>
+        public Maybe<T> Where(Func<T, bool> predicate)
+        {
+            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+
+            return !Is(predicate) ? Nothing : this;
+        }
+
+        #region Equals, GetHashCode and ToString
+        /// <summary>
         /// Determines if this instance is equals to another maybe instance.
         /// </summary>
         /// <returns>
@@ -144,45 +185,6 @@ namespace Maybe
         /// The string representation of Value if HasValue is true, otherwise string.Empty.
         /// </returns>
         public override string ToString() => HasValue ? Value.ToString() : string.Empty;
-
-        /// <summary>
-        /// Determines if the encapsulated value matches another value using Equals.
-        /// </summary>
-        /// <returns>
-        /// True if HasValue is true and the Value matches the other value using Equals.
-        /// False otherwise
-        /// </returns>
-        /// <param name="other"> The other value.</param>
-        public bool Is(T other) => HasValue && Value.Equals(other);
-                
-        /// <summary>
-        /// Determines if the encapsulated value matches a predicate.
-        /// </summary>
-        /// <returns>
-        /// True if HasValue is true and the Value matches the predicate.
-        /// False otherwise
-        /// </returns>
-        /// <param name="predicate"> The predicate.</param>
-        public bool Is(Func<T, bool> predicate)
-        {
-            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
-
-            return HasValue && predicate(Value);
-        }
-
-        /// <summary>
-        /// Filters the value using a predicate. Analogous to Linq's Where.
-        /// </summary>
-        /// <returns>
-        /// The calling maybe if the encapsulated value matches the predicate,
-        /// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing otherwise
-        /// </returns>
-        /// <param name="predicate"> The predicate.</param>
-        public Maybe<T> Where(Func<T, bool> predicate)
-        {
-            predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
-
-            return !Is(predicate) ? Nothing : this;
-        }
+        #endregion
     }
 }
