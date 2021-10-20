@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Maybe
 {
     /// <summary>
     /// The generic Maybe monad.
     /// </summary>
-    public readonly struct Maybe<T>
+    public readonly struct Maybe<T> : IEquatable<Maybe<T>>
     {
         /// <value>A Maybe without a value.</value>
         public readonly static Maybe<T> Nothing = new Maybe<T>(default, false);
@@ -99,53 +100,6 @@ namespace Maybe
         }
 
         /// <summary>
-        /// Determines if this instance is equals to another maybe instance.
-        /// </summary>
-        /// <returns>
-        /// True if HasValue is false for both maybes or if HasValue is true for both and their values match using Equals.
-        /// False otherwise
-        /// </returns>
-        /// <param name="other"> The other maybe.</param>
-        public bool Equals(Maybe<T> other)
-        {
-            if (HasValue)
-            {
-                return other.HasValue && Value.Equals(other.Value);
-            }
-            else
-            {
-                return !other.HasValue;
-            }
-        }
-
-        /// <summary>
-        /// Determines if this instance is equals to another obj instance.
-        /// </summary>
-        /// <returns>
-        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt; 
-        /// and it matches the current instance using Equals(Maybe&lt;T&gt; other).
-        /// False otherwise
-        /// </returns>
-        /// <param name="obj"> The other obj.</param>
-        public override bool Equals(object obj) => (obj is Maybe<T> other) && Equals(other);
-
-        /// <summary>
-        /// Calculates the HashCode.
-        /// </summary>
-        /// <returns>
-        /// 0 if HasValue is false, otherwise returns the value's HashCode.
-        /// </returns>
-        public override int GetHashCode() => HasValue ? Value.GetHashCode() : 0;
-
-        /// <summary>
-        /// The string representation of this instance.
-        /// </summary>
-        /// <returns>
-        /// The string representation of Value if HasValue is true, otherwise string.Empty.
-        /// </returns>
-        public override string ToString() => HasValue ? Value.ToString() : string.Empty;
-
-        /// <summary>
         /// Determines if the encapsulated value matches another value using Equals.
         /// </summary>
         /// <returns>
@@ -184,5 +138,54 @@ namespace Maybe
 
             return !Is(predicate) ? Nothing : this;
         }
+
+        #region Equals, GetHashCode and ToString
+        /// <summary>
+        /// Determines if this instance is equals to another maybe instance.
+        /// </summary>
+        /// <returns>
+        /// True if HasValue is false for both maybes or if HasValue is true for both and their values match using Equals.
+        /// False otherwise
+        /// </returns>
+        /// <param name="other"> The other maybe.</param>
+        public bool Equals(Maybe<T> other)
+        {
+            if (HasValue)
+            {
+                return other.HasValue && EqualityComparer<T>.Default.Equals(Value, other.Value);
+            }
+            else
+            {
+                return !other.HasValue;
+            }
+        }
+
+        /// <summary>
+        /// Determines if this instance is equals to another obj instance.
+        /// </summary>
+        /// <returns>
+        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt; 
+        /// and it matches the current instance using Equals(Maybe&lt;T&gt; other).
+        /// False otherwise
+        /// </returns>
+        /// <param name="obj"> The other obj.</param>
+        public override bool Equals(object obj) => (obj is Maybe<T> other) && Equals(other);
+
+        /// <summary>
+        /// Calculates the HashCode.
+        /// </summary>
+        /// <returns>
+        /// 0 if HasValue is false, otherwise returns the value's HashCode.
+        /// </returns>
+        public override int GetHashCode() => HasValue ? Value.GetHashCode() : 0;
+
+        /// <summary>
+        /// The string representation of this instance.
+        /// </summary>
+        /// <returns>
+        /// The string representation of Value if HasValue is true, otherwise string.Empty.
+        /// </returns>
+        public override string ToString() => HasValue ? Value.ToString() : string.Empty;
+        #endregion
     }
 }
