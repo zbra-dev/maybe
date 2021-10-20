@@ -20,18 +20,26 @@ namespace Maybe.Test
         [Theory]
         [InlineData(1, 2, 1)]
         [InlineData(null, 2, 2)]
-        public void OrGet_ShouldReturnValueOrDefaultValue(int? value, int defaultValue, int expected)
+        public void Or_Func_ShouldReturnValueOrDefaultValue(int? value, int defaultValue, int expected)
         {
             var result = value.ToMaybe()
-                .OrGet(() => defaultValue);
+                .Or(() => defaultValue);
 
             result.Should().Be(expected);
         }
 
         [Fact]
-        public void OrGet_NullArgument_ShouldThrow()
+        public void Or_Func_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().OrGet(null);
+            Action subject = () => 1.ToMaybe().Or((Func<int>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void OrMaybe_FuncMaybe_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrMaybe((Func<Maybe<int>>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -234,5 +242,67 @@ namespace Maybe.Test
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
+        
+        
+        [Theory]
+        [MemberData(nameof(OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
+        public void OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
+        {
+            var result = subject
+                .Select(s => s.Name)
+                .OrMaybe(alternative.ToMaybe);
+            result.Should().Be(expected.ToMaybe());
+
+            result = subject
+                .Select(s => s.Name)
+                .OrMaybe(alternative.ToMaybe());
+            result.Should().Be(expected.ToMaybe());
+
+            result = subject
+                .Select(s => s.Name)
+                .OrMaybe(alternative);
+            result.Should().Be(expected.ToMaybe());
+
+            result = subject
+                .Select(s => s.Name)
+                .OrMaybe(() => alternative);
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        public static TheoryData<Maybe<StringObj>, string, string> OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
+        {
+            return new TheoryData<Maybe<StringObj>, string, string>
+            {
+                { Maybe<StringObj>.Nothing, null, null },
+                { Maybe<StringObj>.Nothing, "alternative", "alternative" },
+                { new StringObj("subject").ToMaybe(), null, "subject" },
+                { new StringObj("subject").ToMaybe(), "alternative", "subject" },
+            };
+        }
+
+        [Fact]
+        public void Or_NullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().Or((Func<int>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void OrMaybe_MaybeNullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrMaybe((Func<Maybe<int>>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+        
+        [Fact]
+        public void OrMaybe_Func_MaybeNullArgument_ShouldThrow()
+        {
+            Action subject = () => 1.ToMaybe().OrMaybe((Func<int>)null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
     }
 }
