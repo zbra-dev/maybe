@@ -19,6 +19,11 @@ namespace Maybe.Test.CompareTo
             LessThanOrEqual(subject, otherSubject).Should().BeFalse();
         }
 
+        private bool IsGreaterThan<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject > otherSubject;
+        private bool IsGreaterThanOrEqual<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject >= otherSubject;
+        private bool IsLessThan<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject < otherSubject;
+        private bool LessThanOrEqual<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject <= otherSubject;
+
         [Theory]
         [MemberData(nameof(LessThan_TestData))]
         public void LessThan_ComparableData_ShouldPass<T>(T value, T otherValue)
@@ -104,11 +109,6 @@ namespace Maybe.Test.CompareTo
                 .ThrowExactly<ArgumentException>()
                 .WithMessage("At least one object must implement IComparable.");
         }
-
-        private bool IsGreaterThan<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject > otherSubject;
-        private bool IsGreaterThanOrEqual<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject >= otherSubject;
-        private bool IsLessThan<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject < otherSubject;
-        private bool LessThanOrEqual<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject <= otherSubject;
 
         public static TheoryData<object, object> GreaterThan_TestData()
         {

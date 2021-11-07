@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Maybe.Test.CompareTo
 {
-    public class SortingTests
+    public class SortingOrderingTests
     {
         [Theory]
         [MemberData(nameof(Sorted_TestData))]
