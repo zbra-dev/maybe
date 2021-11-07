@@ -16,13 +16,13 @@ namespace Maybe.Test.CompareTo
             IsGreaterThan(subject, otherSubject).Should().BeTrue();
             IsGreaterThanOrEqual(subject, otherSubject).Should().BeTrue();
             IsLessThan(subject, otherSubject).Should().BeFalse();
-            LessThanOrEqual(subject, otherSubject).Should().BeFalse();
+            IsLessThanOrEqual(subject, otherSubject).Should().BeFalse();
         }
 
         private bool IsGreaterThan<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject > otherSubject;
         private bool IsGreaterThanOrEqual<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject >= otherSubject;
         private bool IsLessThan<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject < otherSubject;
-        private bool LessThanOrEqual<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject <= otherSubject;
+        private bool IsLessThanOrEqual<T>(Maybe<T> subject, Maybe<T> otherSubject) => subject <= otherSubject;
 
         [Theory]
         [MemberData(nameof(LessThan_TestData))]
@@ -34,7 +34,7 @@ namespace Maybe.Test.CompareTo
             IsGreaterThan(subject, otherSubject).Should().BeFalse();
             IsGreaterThanOrEqual(subject, otherSubject).Should().BeFalse();
             IsLessThan(subject, otherSubject).Should().BeTrue();
-            LessThanOrEqual(subject, otherSubject).Should().BeTrue();
+            IsLessThanOrEqual(subject, otherSubject).Should().BeTrue();
         }
 
         [Theory]
@@ -47,7 +47,7 @@ namespace Maybe.Test.CompareTo
             IsGreaterThan(subject, otherSubject).Should().BeFalse();
             IsGreaterThanOrEqual(subject, otherSubject).Should().BeTrue();
             IsLessThan(subject, otherSubject).Should().BeFalse();
-            LessThanOrEqual(subject, otherSubject).Should().BeTrue();
+            IsLessThanOrEqual(subject, otherSubject).Should().BeTrue();
         }
 
         [Theory]
