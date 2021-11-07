@@ -21,10 +21,10 @@ namespace Maybe.Test.CompareTo
 
         [Theory]
         [MemberData(nameof(ComparableData))]
-        public void CompareTo_SubjectNothingOtherSomething_ResultShoulBeMinusOne<T>(T otherSubjectValue)
+        public void CompareTo_SubjectNothingOtherSomething_ResultShoulBeMinusOne<T>(T otherValue)
         {
             var subject = Maybe<T>.Nothing;
-            var otherSubject = otherSubjectValue.ToMaybe();
+            var otherSubject = otherValue.ToMaybe();
 
             var comparisonResult = subject.CompareTo(otherSubject);
 
@@ -33,9 +33,9 @@ namespace Maybe.Test.CompareTo
 
         [Theory]
         [MemberData(nameof(ComparableData))]
-        public void CompareTo_SubjectSomethingOtherNothing_ResultShouldBeOne<T>(T subjectValue)
+        public void CompareTo_SubjectSomethingOtherNothing_ResultShouldBeOne<T>(T value)
         {
-            var subject = subjectValue.ToMaybe();
+            var subject = value.ToMaybe();
             var otherSubject = Maybe<T>.Nothing;
 
             var comparisonResult = subject.CompareTo(otherSubject);
