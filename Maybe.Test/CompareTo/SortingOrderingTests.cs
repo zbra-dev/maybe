@@ -19,11 +19,11 @@ namespace Maybe.Test.CompareTo
 
             Array.Sort(sortedSubject);
 
-            sortedSubject.Should().BeEquivalentTo(sortedSubjectAscending);
+            sortedSubject.Should().BeEquivalentTo(sortedSubjectAscending, options => options.WithStrictOrdering());
 
             sortedSubject = sortedSubject.Reverse().ToArray();
 
-            sortedSubject.Should().BeEquivalentTo(sortedSubjectDescending);
+            sortedSubject.Should().BeEquivalentTo(sortedSubjectDescending, options => options.WithStrictOrdering());
         }
 
         [Theory]
