@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using FluentAssertions.Primitives;
+using Moq;
 using System;
 using System.Collections.Generic;
 
@@ -45,6 +47,11 @@ namespace Maybe.Test
             });
 
             return (enumerableMock, enumeratorMock);
+        }
+
+        public static AndConstraint<BooleanAssertions> NotBe(this BooleanAssertions booleanAssertions, bool expectedResult)
+        {
+            return booleanAssertions.Be(!expectedResult);
         }
     }
 }

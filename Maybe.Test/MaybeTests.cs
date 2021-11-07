@@ -185,6 +185,21 @@ namespace Maybe.Test
             value.ToMaybe().Equals(otherValue.ToMaybe()).Should().Be(expected);
         }
 
+        [Theory]
+        [InlineData(null, null, true)]
+        [InlineData(null, 0, false)]
+        [InlineData(0, null, false)]
+        [InlineData(1, 1, true)]
+        [InlineData(1, 2, false)]
+        public void EqualityOperator_WhenObjectsAreEqual_ShouldReturnTrue(int? value, int? otherValue, bool expected)
+        {
+            static bool AreEqual(int? value, int? otherValue) => value.ToMaybe() == otherValue.ToMaybe();
+            static bool AreDifferent(int? value, int? otherValue) => value.ToMaybe() != otherValue.ToMaybe();
+
+            AreEqual(value, otherValue).Should().Be(expected);
+            AreDifferent(value, otherValue).Should().NotBe(expected);
+        }
+
         [Fact]
         public void Equals_WhenTypesAreDifferent_ShouldReturnFalse()
         {
