@@ -9,7 +9,7 @@ namespace Maybe.Test.CompareTo
     public class SortingOrderingTests
     {
         [Theory]
-        [MemberData(nameof(Sorted_TestData))]
+        [MemberData(nameof(ComparableData))]
         public void ArraySort_ComparableData_ShouldSort<T>(
             Maybe<T>[] subject, 
             Maybe<T>[] sortedSubjectAscending, 
@@ -27,7 +27,7 @@ namespace Maybe.Test.CompareTo
         }
 
         [Theory]
-        [MemberData(nameof(Sorted_TestData))]
+        [MemberData(nameof(ComparableData))]
         public void Ordering_ComparableData_ShouldSort<T>(
             Maybe<T>[] subject,
             Maybe<T>[] sortedSubjectAscending,
@@ -42,7 +42,43 @@ namespace Maybe.Test.CompareTo
             sortedSubject.Should().BeEquivalentTo(sortedSubjectDescending, options => options.WithStrictOrdering());
         }
 
-        public static IEnumerable<object[]> Sorted_TestData()
+        [Theory]
+        [MemberData(nameof(NonComparableData))]
+        public void ArraySort_NonComparableData_ShouldThrow<T>(Maybe<T>[] subject)
+        {
+            Action sortSubject = () => Array.Sort(subject);
+
+            sortSubject
+                .Should()
+                .ThrowExactly<InvalidOperationException>()
+                .WithMessage("Failed to compare two elements in the array.");
+        }
+
+        [Theory]
+        [MemberData(nameof(NonComparableData))]
+        public void OrderBy_NonComparableData_ShouldThrow<T>(Maybe<T>[] subject)
+        {
+            Action orderSubjectAscending = () => subject.OrderBy(it => it).ToArray();
+
+            orderSubjectAscending
+                .Should()
+                .ThrowExactly<InvalidOperationException>()
+                .WithMessage("Failed to compare two elements in the array.");
+        }
+
+        [Theory]
+        [MemberData(nameof(NonComparableData))]
+        public void OrderByDescending_NonComparableData_ShouldThrow<T>(Maybe<T>[] subject)
+        {
+            Action orderSubjectDescending = () => subject.OrderByDescending(it => it).ToArray();
+
+            orderSubjectDescending
+                .Should()
+                .ThrowExactly<InvalidOperationException>()
+                .WithMessage("Failed to compare two elements in the array.");
+        }
+
+        public static IEnumerable<object[]> ComparableData()
         {
             static object[] Create<T>(
                 Maybe<T>[] subject, 
@@ -79,6 +115,19 @@ namespace Maybe.Test.CompareTo
                 new[] { '2'.ToMaybe(), '1'.ToMaybe(), '3'.ToMaybe() },
                 new[] { '1'.ToMaybe(), '2'.ToMaybe(), '3'.ToMaybe() },
                 new[] { '3'.ToMaybe(), '2'.ToMaybe(), '1'.ToMaybe() });
+        }
+
+        public static IEnumerable<object[]> NonComparableData()
+        {
+            static object[] Create<T>(params T[] items)
+            {
+                return new object[] { items.Select(item => item.ToMaybe()).ToArray() };
+            }
+
+            yield return Create(new IntObj(1), new IntObj(2));
+            yield return Create(new StringObj(""), new StringObj("1"));
+            yield return Create(new NullableIntObj(null), new NullableIntObj(1));
+            yield return Create(new MaybeIntObj(null), new MaybeIntObj(1));
         }
     }
 }
