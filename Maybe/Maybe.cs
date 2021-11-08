@@ -292,7 +292,7 @@ namespace Maybe
         /// </summary>
         /// <param name="left">The first <see cref="Maybe{T}" /> to compare.</param>
         /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
-        /// <returns>A boolean indicating whether or not the left <see cref="Maybe{T}" /> is less than or equal the right <see cref="Maybe{T}" />.</returns>
+        /// <returns>A boolean indicating whether or not the left <see cref="Maybe{T}" /> is less than or equal to the right <see cref="Maybe{T}" />.</returns>
         public static bool operator <=(Maybe<T> left, Maybe<T> right) => left.CompareTo(right) <= 0;
 
         /// <summary>
