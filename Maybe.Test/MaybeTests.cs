@@ -174,6 +174,16 @@ namespace Maybe.Test
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
+        [Fact]
+        public void Equals_WhenObjectReferencesAreEqual()
+        {
+            var a = new object().ToMaybe();
+            var b = new object().ToMaybe();
+            (a == b).Should().BeFalse();
+            a = b;
+            (a == b).Should().BeTrue();
+        }
+
         [Theory]
         [InlineData(null, null, true)]
         [InlineData(null, 0, false)]
