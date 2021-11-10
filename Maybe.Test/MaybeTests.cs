@@ -258,7 +258,6 @@ namespace Maybe.Test
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
-
         [Theory]
         [MemberData(nameof(OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
         public void OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
