@@ -8,7 +8,18 @@ namespace Maybe.Test
 {
     public static class Extensions
     {
-        public static (Mock<IEnumerable<T?>>, Mock<IEnumerator<T?>>) GetMocks<T>(this IEnumerable<T?> source) 
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            source = source ?? throw new ArgumentNullException(nameof(source));
+            action = action ?? throw new ArgumentNullException(nameof(action));
+
+            foreach (var item in source)
+            {
+                action(item);
+            }
+        }
+
+        public static (Mock<IEnumerable<T?>>, Mock<IEnumerator<T?>>) GetMocks<T>(this IEnumerable<T?> source)
             where T : struct
         {
             source = source ?? throw new ArgumentNullException(nameof(source));
@@ -51,6 +62,8 @@ namespace Maybe.Test
 
         public static AndConstraint<BooleanAssertions> NotBe(this BooleanAssertions booleanAssertions, bool expectedResult)
         {
+            booleanAssertions = booleanAssertions ?? throw new ArgumentNullException(nameof(booleanAssertions));
+
             return booleanAssertions.Be(!expectedResult);
         }
     }

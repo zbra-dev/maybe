@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using System;
+using System.Collections;
+using System.Linq;
 using Xunit;
 
 namespace Maybe.Test.CompareTo
@@ -114,7 +116,7 @@ namespace Maybe.Test.CompareTo
         {
             var now = DateTime.Now;
 
-            return new TheoryData<object, object>()
+            var data = new TheoryData<object, object>()
             {
                 { '2', '1' },
                 { 2, 1 },
@@ -122,13 +124,19 @@ namespace Maybe.Test.CompareTo
                 { "b", "a" },
                 {  now.AddDays(1), now },
             };
+
+            Numbers.ConstantPairs
+                .Where(it => Comparer.Default.Compare(it.A, it.B) > 0)
+                .ForEach(it => data.Add(it.A, it.B));
+
+            return data;
         }
 
         public static TheoryData<object, object> LessThan_TestData()
         {
             var now = DateTime.Now;
 
-            return new TheoryData<object, object>()
+            var data = new TheoryData<object, object>()
             {
                 { '1', '2' },
                 { 1, 2 },
@@ -136,13 +144,19 @@ namespace Maybe.Test.CompareTo
                 { "a", "b" },
                 {  now, now.AddDays(1) },
             };
+
+            Numbers.ConstantPairs
+                .Where(it => Comparer.Default.Compare(it.A, it.B) < 0)
+                .ForEach(it => data.Add(it.A, it.B));
+
+            return data;
         }
 
         public static TheoryData<object, object> Equal_TestData()
         {
             var now = DateTime.Now;
 
-            return new TheoryData<object, object>()
+            var data = new TheoryData<object, object>()
             {
                 { '2', '2' },
                 { 2, 2 },
@@ -150,6 +164,12 @@ namespace Maybe.Test.CompareTo
                 { "b", "b" },
                 {  now, now },
             };
+
+            Numbers.ConstantPairs
+                .Where(it => Comparer.Default.Compare(it.A, it.B) == 0)
+                .ForEach(it => data.Add(it.A, it.B));
+
+            return data;
         }
 
         public static TheoryData<object, object> NonComparableData()

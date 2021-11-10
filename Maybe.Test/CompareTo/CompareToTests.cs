@@ -44,6 +44,18 @@ namespace Maybe.Test.CompareTo
         }
 
         [Theory]
+        [MemberData(nameof(ComparableData))]
+        public void CompareTo_SameSubjects_ResultShouldBeZero<T>(T value)
+        {
+            var subject = value.ToMaybe();
+            var otherSubject = value.ToMaybe();
+
+            var comparisonResult = subject.CompareTo(otherSubject);
+
+            comparisonResult.Should().Be(0);
+        }
+
+        [Theory]
         [MemberData(nameof(NonComparableData))]
         public void CompareTo_NonComparableData_ShouldThrow<T>(T value, T otherValue)
         {
@@ -58,9 +70,9 @@ namespace Maybe.Test.CompareTo
                 .WithMessage("At least one object must implement IComparable.");
         }
 
-        public static TheoryData<object> ComparableData()
+        public static IEnumerable<object[]> ComparableData()
         {
-            return new TheoryData<object>()
+            var data = new TheoryData<object>()
             {
                 '1',
                 1,
@@ -70,7 +82,13 @@ namespace Maybe.Test.CompareTo
                 1.ToMaybe(),
                 (1, 2),
                 "1",
+                0,
+                -1,
             };
+
+            Numbers.Constants.ForEach(data.Add);
+
+            return data;
         }
 
         public static TheoryData<object, object> NonComparableData()

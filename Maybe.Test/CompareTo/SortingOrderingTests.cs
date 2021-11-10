@@ -11,8 +11,8 @@ namespace Maybe.Test.CompareTo
         [Theory]
         [MemberData(nameof(ComparableData))]
         public void ArraySort_ComparableData_ShouldSort<T>(
-            Maybe<T>[] subject, 
-            Maybe<T>[] sortedSubjectAscending, 
+            Maybe<T>[] subject,
+            Maybe<T>[] sortedSubjectAscending,
             Maybe<T>[] sortedSubjectDescending)
         {
             var sortedSubject = subject;
@@ -81,9 +81,9 @@ namespace Maybe.Test.CompareTo
         public static IEnumerable<object[]> ComparableData()
         {
             static object[] Create<T>(
-                Maybe<T>[] subject, 
-                Maybe<T>[] sortedSubjectAscending, 
-                Maybe<T> [] sortedSubjectDescending)
+                Maybe<T>[] subject,
+                Maybe<T>[] sortedSubjectAscending,
+                Maybe<T>[] sortedSubjectDescending)
             {
                 return new object[]
                 {
@@ -92,7 +92,7 @@ namespace Maybe.Test.CompareTo
             }
 
             yield return Create(
-                new [] { 2.ToMaybe(), 1.ToMaybe(), Maybe<int>.Nothing, Maybe<int>.Nothing, 3.ToMaybe() },
+                new[] { 2.ToMaybe(), 1.ToMaybe(), Maybe<int>.Nothing, Maybe<int>.Nothing, 3.ToMaybe() },
                 new[] { Maybe<int>.Nothing, Maybe<int>.Nothing, 1.ToMaybe(), 2.ToMaybe(), 3.ToMaybe() },
                 new[] { 3.ToMaybe(), 2.ToMaybe(), 1.ToMaybe(), Maybe<int>.Nothing, Maybe<int>.Nothing });
 

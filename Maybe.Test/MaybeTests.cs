@@ -137,7 +137,7 @@ namespace Maybe.Test
         [Fact]
         public void Zip_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, int>) null);
+            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, int>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -257,8 +257,8 @@ namespace Maybe.Test
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
-        
-        
+
+
         [Theory]
         [MemberData(nameof(OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
         public void OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
@@ -310,7 +310,7 @@ namespace Maybe.Test
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
-        
+
         [Fact]
         public void OrMaybe_Func_MaybeNullArgument_ShouldThrow()
         {
