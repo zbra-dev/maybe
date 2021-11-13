@@ -5,7 +5,16 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maybe.Test", "Maybe.Test\Maybe.Test.csproj", "{F5DD5CA7-C20A-4E6A-A06A-1C4118D10945}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maybe", "Maybe\Maybe.csproj", "{15B03988-B848-41CC-9B68-1BA4AB16A78F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maybe", "Maybe\Maybe.csproj", "{15B03988-B848-41CC-9B68-1BA4AB16A78F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F189332B-7C1B-4FDE-AA19-656D2568E4D7}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
+		LICENSE = LICENSE
+		nuget.config = nuget.config
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
