@@ -1,7 +1,7 @@
 name: $(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
 
 trigger:
-- main
+  - main
 
 pool:
   vmImage: ubuntu-latest
@@ -12,33 +12,40 @@ variables:
   buildConfiguration: Release
 
 steps:
-- task: NuGetToolInstaller@1
-  displayName: Nuget Install
+  - task: NuGetToolInstaller@1
+    displayName: Nuget Install
 
-- task: NuGetCommand@2
-  displayName: Nuget Restore
-  inputs:
-    command: restore
-    restoreSolution: '**/*.sln'
-    feedsToUse: config
-    nugetConfigPath: $(Build.SourcesDirectory)/Nuget.config
+  - task: NuGetCommand@2
+    displayName: Nuget Restore
+    inputs:
+      command: restore
+      restoreSolution: '**/*.sln'
+      feedsToUse: config
+      nugetConfigPath: $(Build.SourcesDirectory)/Nuget.config
 
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    workingDirectory: $(Build.SourcesDirectory)
-  
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    projects: Maybe.Tests/Maybe.Tests.csproj
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: '**/*.csproj'
+      workingDirectory: $(Build.SourcesDirectory)
 
-- task: DotNetCoreCLI@2
-  displayName: Nuget Pack
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: Maybe.Tests/Maybe.Tests.csproj
+
+  - task: DotNetCoreCLI@2
+    displayName: Nuget Pack
+    inputs:
+      command: pack
+      packagesToPack: Maybe/Maybe.csproj
+      versioningScheme: off
+
+  - task: NuGetCommand@2
   inputs:
-    command: pack
-    packagesToPack: Maybe/Maybe.csproj
-    versioningScheme: off
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '0c089090-f195-4a8e-a321-e7d6468d7a0f'
