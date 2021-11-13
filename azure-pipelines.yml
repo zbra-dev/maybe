@@ -44,8 +44,8 @@ steps:
       versioningScheme: off
 
   - task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: '0c089090-f195-4a8e-a321-e7d6468d7a0f'
+    inputs:
+      command: push
+      packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg
+      nuGetFeedType: internal
+      publishVstsFeed: 0c089090-f195-4a8e-a321-e7d6468d7a0f
