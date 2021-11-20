@@ -169,7 +169,7 @@ namespace Maybe
 
             return !subject.HasValue ? Maybe<V>.Nothing : selector(subject.Value);
         }
-        
+
         /// <summary>
         /// Zips two maybes together. Analogous to Linq's Zip.
         /// </summary>

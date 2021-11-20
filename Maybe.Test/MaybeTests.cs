@@ -137,7 +137,7 @@ namespace Maybe.Test
         [Fact]
         public void Zip_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, int>) null);
+            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, int>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -174,6 +174,16 @@ namespace Maybe.Test
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
+        [Fact]
+        public void Equals_WhenObjectReferencesAreEqual()
+        {
+            var a = new object().ToMaybe();
+            var b = new object().ToMaybe();
+            (a == b).Should().BeFalse();
+            a = b;
+            (a == b).Should().BeTrue();
+        }
+
         [Theory]
         [InlineData(null, null, true)]
         [InlineData(null, 0, false)]
@@ -183,6 +193,21 @@ namespace Maybe.Test
         public void Equals_WhenObjectsAreEqual_ShouldReturnTrue(int? value, int? otherValue, bool expected)
         {
             value.ToMaybe().Equals(otherValue.ToMaybe()).Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(null, null, true)]
+        [InlineData(null, 0, false)]
+        [InlineData(0, null, false)]
+        [InlineData(1, 1, true)]
+        [InlineData(1, 2, false)]
+        public void EqualityOperator_WhenObjectsAreEqual_ShouldReturnTrue(int? value, int? otherValue, bool expected)
+        {
+            static bool AreEqual(int? value, int? otherValue) => value.ToMaybe() == otherValue.ToMaybe();
+            static bool AreDifferent(int? value, int? otherValue) => value.ToMaybe() != otherValue.ToMaybe();
+
+            AreEqual(value, otherValue).Should().Be(expected);
+            AreDifferent(value, otherValue).Should().NotBe(expected);
         }
 
         [Fact]
@@ -242,8 +267,7 @@ namespace Maybe.Test
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
-        
-        
+
         [Theory]
         [MemberData(nameof(OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
         public void OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
@@ -295,7 +319,7 @@ namespace Maybe.Test
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
-        
+
         [Fact]
         public void OrMaybe_Func_MaybeNullArgument_ShouldThrow()
         {

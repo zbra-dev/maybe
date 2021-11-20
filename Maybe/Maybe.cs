@@ -6,7 +6,7 @@ namespace Maybe
     /// <summary>
     /// The generic Maybe monad.
     /// </summary>
-    public readonly struct Maybe<T> : IEquatable<Maybe<T>>
+    public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IComparable<Maybe<T>>
     {
         /// <value>A Maybe without a value.</value>
         public static readonly Maybe<T> Nothing = new Maybe<T>(default, false);
@@ -65,7 +65,7 @@ namespace Maybe
 
             return HasValue ? obj : defaultSupplier();
         }
-        
+
         /// <summary>
         /// Returns this object or an alternative.
         /// </summary>
@@ -103,7 +103,7 @@ namespace Maybe
         {
             return HasValue ? this : alternative.ToMaybe();
         }
-        
+
         /// <summary>
         /// Returns this object or an alternative.
         /// </summary>
@@ -160,7 +160,7 @@ namespace Maybe
         /// </returns>
         /// <param name="other"> The other value.</param>
         public bool Is(T other) => HasValue && Value.Equals(other);
-                
+
         /// <summary>
         /// Determines if the encapsulated value matches a predicate.
         /// </summary>
@@ -191,7 +191,7 @@ namespace Maybe
             return !Is(predicate) ? Nothing : this;
         }
 
-        #region Equals, GetHashCode and ToString
+        #region Equals, GetHashCode, ToString and CompareTo
         /// <summary>
         /// Determines if this instance is equals to another maybe instance.
         /// </summary>
@@ -238,6 +238,86 @@ namespace Maybe
         /// The string representation of Value if HasValue is true, otherwise string.Empty.
         /// </returns>
         public override string ToString() => HasValue ? Value.ToString() : string.Empty;
+
+        /// <summary>
+        /// Comparison method responsible for ordering or sorting collections of <see cref="Maybe{T}" />. <br/>    
+        /// A return of 0 means that both maybes are equal.<br/>     
+        /// A return of -1 means that this instance of maybe is less than the other maybe being compared.<br/>     
+        /// A return of 1 means that this instance of maybe is greater than the other maybe being compared.<br/>  
+        /// </summary>
+        /// <param name="other">The other <see cref="Maybe{T}" /> to compare</param>
+        /// <returns>
+        /// A integer used for sorting and ordering.
+        /// </returns>
+        public int CompareTo(Maybe<T> other)
+        {
+            if (HasValue && !other.HasValue)
+            {
+                return 1;
+            }
+
+            if (!HasValue && other.HasValue)
+            {
+                return -1;
+            }
+
+            if (!HasValue && !other.HasValue)
+            {
+                return 0;
+            }
+
+            return Comparer<T>.Default.Compare(Value, other.Value);
+        }
+        #endregion
+
+        #region <, >, <=, >=, ==, != overloads
+        /// <summary>
+        /// Determines if an <see cref="Maybe{T}" /> is less than another <see cref="Maybe{T}" />.
+        /// </summary>
+        /// <param name="left">The first <see cref="Maybe{T}" /> to compare.</param>
+        /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
+        /// <returns>A boolean indicating whether or not the left <see cref="Maybe{T}" /> is less than the right <see cref="Maybe{T}" />.</returns>
+        public static bool operator <(Maybe<T> left, Maybe<T> right) => left.CompareTo(right) < 0;
+
+        /// <summary>
+        /// Determines if an <see cref="Maybe{T}" /> is greater than another <see cref="Maybe{T}" />.
+        /// </summary>
+        /// <param name="left">The first <see cref="Maybe{T}" /> to compare.</param>
+        /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
+        /// <returns>A boolean indicating whether or not the left <see cref="Maybe{T}" /> is greater than the right <see cref="Maybe{T}" />.</returns>
+        public static bool operator >(Maybe<T> left, Maybe<T> right) => left.CompareTo(right) > 0;
+
+        /// <summary>
+        /// Determines if an <see cref="Maybe{T}" /> is less than or equal to another <see cref="Maybe{T}" />.
+        /// </summary>
+        /// <param name="left">The first <see cref="Maybe{T}" /> to compare.</param>
+        /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
+        /// <returns>A boolean indicating whether or not the left <see cref="Maybe{T}" /> is less than or equal to the right <see cref="Maybe{T}" />.</returns>
+        public static bool operator <=(Maybe<T> left, Maybe<T> right) => left.CompareTo(right) <= 0;
+
+        /// <summary>
+        /// Determines if an <see cref="Maybe{T}" /> is greater than or equal to another <see cref="Maybe{T}" />.
+        /// </summary>
+        /// <param name="left">The first <see cref="Maybe{T}" /> to compare.</param>
+        /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
+        /// <returns>A boolean indicating whether or not the left <see cref="Maybe{T}" /> is greater than or equal to the right <see cref="Maybe{T}" />.</returns>
+        public static bool operator >=(Maybe<T> left, Maybe<T> right) => left.CompareTo(right) >= 0;
+
+        /// <summary>
+        /// Determines whether two <see cref="Maybe{T}" /> are equal.
+        /// </summary>
+        /// <param name="left">The first <see cref="Maybe{T}" /> to compare.</param>
+        /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
+        /// <returns>A boolean indicating whether or not the <see cref="Maybe{T}" /> are equal.</returns>
+        public static bool operator ==(Maybe<T> left, Maybe<T> right) => left.Equals(right);
+
+        /// <summary>
+        /// Determines whether two <see cref="Maybe{T}" /> are unequal.
+        /// </summary>
+        /// <param name="left">The first <see cref="Maybe{T}" /> to compare.</param>
+        /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
+        /// <returns>A boolean indicating whether or not the <see cref="Maybe{T}" /> are unequal.</returns>
+        public static bool operator !=(Maybe<T> left, Maybe<T> right) => !left.Equals(right);
         #endregion
     }
 }
