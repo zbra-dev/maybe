@@ -23,24 +23,37 @@ There are multiple ways to retrieve the value of a `Maybe<T>`.
 
 ```
 var maybe = "some value".ToMaybe();
-var v = maybe.Value; // this will throw if it has no value
+
+// this will throw if it has no value
+var v = maybe.Value;
+
 v = maybe.Or("");
 v = maybe.Or(() => FindAValue());
 v = maybe.OrThrow(() => new ArgumentException());
-v = maybe.OrNull(); // when T is a class
-v = maybe.OrEmpty(); // when T is a string
-var length = maybe.Select(s => s.Length); // length is a Maybe<int>
 
-var s = maybe.ToNullable(); // s is a string?
+// when T is a class
+v = maybe.OrNull();
+
+// when T is a string
+v = maybe.OrEmpty();
+
+// returns a Maybe<int>
+var length = maybe.Select(s => s.Length);
+
+// returns a string?
+var s = maybe.ToNullable();
 ```
 
 There are other ways of using it in a more fluent-like API.
 
 ```
 var maybe = "some value".ToMaybe();
-maybe.Consume(s => CallMethod(s)); // CallMethod is only called if maybe has a value
 
-var result = maybe.Where(s => s.StartsWith("some")); // result is a Maybe<string>
+// CallMethod is only called if maybe has a value
+maybe.Consume(s => CallMethod(s));
+
+// returns a Maybe<string>
+var result = maybe.Where(s => s.StartsWith("some"));
 ```
 
 Comparing maybes is also supported.
