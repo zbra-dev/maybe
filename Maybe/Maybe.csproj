@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>ZBRA.Maybe</PackageId>
+    <Authors>ZBRA Solutions</Authors>
+    <PackageDescription>
+      An utility library that helps avoiding nulls.
+    </PackageDescription>
+    <PackageProjectUrl>https://github.com/zbra-solutions/maybe</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/zbra-solutions/maybe</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>0.1.0</Version>
   </PropertyGroup>
 
