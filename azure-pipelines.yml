@@ -47,15 +47,11 @@ steps:
     packagesToPack: Maybe/Maybe.csproj
     versioningScheme: off
 
-- task: NuGetAuthenticate@0
-  displayName: NuGet Authenticate
-  inputs:
-    nuGetServiceConnections: Nuget
-    
 - task: NuGetCommand@2
   displayName: NuGet push
   condition: eq(${{ parameters.publishPackage }}, true)
   inputs:
     command: push
-    feedsToUse: config
-    includeNugetOrg: true
+    packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg
+    nuGetFeedType: external
+    publishFeedCredentials: Nuget
