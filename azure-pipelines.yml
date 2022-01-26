@@ -6,6 +6,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+parameters:
+  - name: publishPackage
+    displayName: Publish Package to Nuget Library
+    type: boolean
+    default: false
+
 variables:
   solution: '**/*.sln'
   buildPlatform: Any CPU
@@ -40,3 +46,16 @@ steps:
     command: pack
     packagesToPack: Maybe/Maybe.csproj
     versioningScheme: off
+
+- task: NuGetAuthenticate@0
+  displayName: NuGet Authenticate
+  inputs:
+    nuGetServiceConnections: Nuget
+    
+- task: NuGetCommand@2
+  displayName: NuGet push
+  condition: eq(${{ parameters.publishPackage }}, true)
+  inputs:
+    command: push
+    feedsToUse: config
+    includeNugetOrg: true
