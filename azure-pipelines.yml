@@ -6,6 +6,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+parameters:
+  - name: publishPackage
+    displayName: Publish Package to Nuget Library
+    type: boolean
+    default: false
+
 variables:
   solution: '**/*.sln'
   buildPlatform: Any CPU
@@ -20,8 +26,6 @@ steps:
   inputs:
     command: restore
     restoreSolution: '**/*.sln'
-    feedsToUse: config
-    nugetConfigPath: $(Build.SourcesDirectory)/Nuget.config
 
 - task: DotNetCoreCLI@2
   displayName: Build
@@ -42,3 +46,12 @@ steps:
     command: pack
     packagesToPack: Maybe/Maybe.csproj
     versioningScheme: off
+
+- task: NuGetCommand@2
+  displayName: NuGet push
+  condition: eq(${{ parameters.publishPackage }}, true)
+  inputs:
+    command: push
+    packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg
+    nuGetFeedType: external
+    publishFeedCredentials: Nuget
