@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Maybe.Test.CompareTo
+namespace ZBRA.Maybe.Test.CompareTo
 {
     public class CompareToTests
     {

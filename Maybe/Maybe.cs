@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Maybe
+namespace ZBRA.Maybe
 {
     /// <summary>
     /// The generic Maybe monad.

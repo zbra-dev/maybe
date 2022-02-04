@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Maybe
+namespace ZBRA.Maybe
 {
     /// <summary>
     /// Contains extensions methods for the maybe class.

@@ -4,7 +4,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 
-namespace Maybe.Test
+namespace ZBRA.Maybe.Test
 {
     public static class Extensions
     {

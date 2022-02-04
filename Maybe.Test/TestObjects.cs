@@ -1,4 +1,4 @@
-﻿namespace Maybe.Test
+﻿namespace ZBRA.Maybe.Test
 {
     public class IntObj
     {

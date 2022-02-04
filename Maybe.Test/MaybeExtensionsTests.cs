@@ -2,7 +2,7 @@ using FluentAssertions;
 using System;
 using Xunit;
 
-namespace Maybe.Test
+namespace ZBRA.Maybe.Test
 {
     public class MaybeExtensionsTests
     {

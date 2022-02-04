@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Maybe
+namespace ZBRA.Maybe
 {
     /// <summary>
     /// Contains extensions methods for enumerables.

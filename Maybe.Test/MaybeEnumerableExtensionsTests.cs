@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Maybe.Test
+namespace ZBRA.Maybe.Test
 {
     public class MaybeEnumerableExtensionsTests
     {

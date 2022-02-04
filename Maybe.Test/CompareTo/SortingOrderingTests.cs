@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Maybe.Test.CompareTo
+namespace ZBRA.Maybe.Test.CompareTo
 {
     public class SortingOrderingTests
     {

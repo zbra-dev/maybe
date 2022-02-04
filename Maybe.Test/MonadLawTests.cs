@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Maybe.Test
+namespace ZBRA.Maybe.Test
 {
     // https://mikhail.io/2018/07/monads-explained-in-csharp-again/
     // In our case SelectMany = Bind of the article
