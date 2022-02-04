@@ -34,7 +34,7 @@ steps:
   displayName: Test
   inputs:
     command: test
-    projects: Maybe.Tests/Maybe.Tests.csproj
+    projects: Maybe.Test/Maybe.Test.csproj
 
 - task: DotNetCoreCLI@2
   displayName: Nuget Pack
