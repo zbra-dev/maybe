@@ -14,7 +14,6 @@
     <Version>0.2.0</Version>
     <AssemblyName>ZBRA.Maybe</AssemblyName>
     <RootNamespace>ZBRA.Maybe</RootNamespace>
-    <PackageLicenseUrl>https://github.com/zbra-solutions/maybe/blob/main/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
