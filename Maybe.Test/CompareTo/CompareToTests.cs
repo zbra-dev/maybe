@@ -9,7 +9,9 @@ namespace Maybe.Test.CompareTo
     {
         [Theory]
         [MemberData(nameof(ComparableData))]
+#pragma warning disable xUnit1026 // does not use parameter _
         public void CompareTo_BothNothing_ResultShouldBeZero<T>(T _)
+#pragma warning restore xUnit1026 // does not use parameter _
         {
             var subject = Maybe<T>.Nothing;
             var otherSubject = Maybe<T>.Nothing;
