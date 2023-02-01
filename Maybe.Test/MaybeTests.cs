@@ -328,5 +328,22 @@ namespace ZBRA.Maybe.Test
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
+        [Fact]
+        public void ImplicitConversion_FromObject_ShouldReturnMaybeWithValue()
+        {
+            var value = new object();
+
+            Maybe<object> subject = value;
+
+            subject.Value.Should().Be(value);
+        }
+
+        [Fact]
+        public void ImplicitConversion_FromNullObject_ShouldReturnMaybeWithoutValue()
+        {
+            Maybe<object> subject = null;
+
+            subject.Should().Be(Maybe<object>.Nothing);
+        }
     }
 }

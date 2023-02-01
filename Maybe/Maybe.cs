@@ -47,7 +47,7 @@ namespace ZBRA.Maybe
         /// Returns the value or a default.
         /// </summary>
         /// <returns>
-        /// The value if HasValue is true, otherwise returns defaultValue 
+        /// The value if HasValue is true, otherwise returns defaultValue
         /// </returns>
         /// <param name="defaultValue"> The default value.</param>
         public T Or(T defaultValue) => HasValue ? obj : defaultValue;
@@ -216,7 +216,7 @@ namespace ZBRA.Maybe
         /// Determines if this instance is equals to another obj instance.
         /// </summary>
         /// <returns>
-        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt; 
+        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt;
         /// and it matches the current instance using Equals(Maybe&lt;T&gt; other).
         /// False otherwise
         /// </returns>
@@ -240,10 +240,10 @@ namespace ZBRA.Maybe
         public override string ToString() => HasValue ? Value.ToString() : string.Empty;
 
         /// <summary>
-        /// Comparison method responsible for ordering or sorting collections of <see cref="Maybe{T}" />. <br/>    
-        /// A return of 0 means that both maybes are equal.<br/>     
-        /// A return of -1 means that this instance of maybe is less than the other maybe being compared.<br/>     
-        /// A return of 1 means that this instance of maybe is greater than the other maybe being compared.<br/>  
+        /// Comparison method responsible for ordering or sorting collections of <see cref="Maybe{T}" />. <br/>
+        /// A return of 0 means that both maybes are equal.<br/>
+        /// A return of -1 means that this instance of maybe is less than the other maybe being compared.<br/>
+        /// A return of 1 means that this instance of maybe is greater than the other maybe being compared.<br/>
         /// </summary>
         /// <param name="other">The other <see cref="Maybe{T}" /> to compare</param>
         /// <returns>
@@ -318,6 +318,25 @@ namespace ZBRA.Maybe
         /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
         /// <returns>A boolean indicating whether or not the <see cref="Maybe{T}" /> are unequal.</returns>
         public static bool operator !=(Maybe<T> left, Maybe<T> right) => !left.Equals(right);
+        #endregion
+
+        #region Implicit type conversion
+        /// <summary>
+        /// Converts the value to <see cref="Maybe{T}" />.
+        /// </summary>
+        /// <param name="value"> The value to be converted.</param>
+        /// <returns>
+        /// <see cref="Maybe{T}" />.Nothing if value is null,
+        /// otherwise new <see cref="Maybe{T}" />(value)
+        /// </returns>
+        public static implicit operator Maybe<T>(T value)
+        {
+            if (value == null)
+            {
+                return Nothing;
+            }
+            return new Maybe<T>(value);
+        }
         #endregion
     }
 }
