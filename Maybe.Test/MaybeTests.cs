@@ -352,6 +352,7 @@ namespace ZBRA.Maybe.Test
             {
                 '1',
                 1,
+                0,
                 1.0,
                 DateTime.Now,
                 new List<string>(),
