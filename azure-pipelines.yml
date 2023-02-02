@@ -27,13 +27,17 @@ steps:
     command: restore
     restoreSolution: '**/*.sln'
 
+- task: UseDotNet@2
+  inputs:
+    version: 3.1.x
+
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: build
     projects: '**/*.csproj'
     workingDirectory: $(Build.SourcesDirectory)
-  
+
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
