@@ -8,7 +8,7 @@ namespace ZBRA.Maybe
     /// </summary>
     public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IComparable<Maybe<T>>
     {
-        /// <value>A Maybe without a value.</value>
+        /// <summary>A Maybe without a value.</summary>
         public static readonly Maybe<T> Nothing = new Maybe<T>(default, false);
 
         private readonly T obj;
@@ -25,10 +25,10 @@ namespace ZBRA.Maybe
             HasValue = true;
         }
 
-        /// <value>True if there is a value present, otherwise false.</value>
+        /// <summary>True if there is a value present, otherwise false.</summary>
         public bool HasValue { get; }
 
-        /// <value>The encapsulated value.</value>
+        /// <summary>The encapsulated value.</summary>
         /// <exception cref="Exception">Thrown if HasValue is false.</exception>
         public T Value
         {
@@ -47,7 +47,7 @@ namespace ZBRA.Maybe
         /// Returns the value or a default.
         /// </summary>
         /// <returns>
-        /// The value if HasValue is true, otherwise returns defaultValue 
+        /// The value if HasValue is true, otherwise returns defaultValue
         /// </returns>
         /// <param name="defaultValue"> The default value.</param>
         public T Or(T defaultValue) => HasValue ? obj : defaultValue;
@@ -138,20 +138,6 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Applies an action to the value if it's present.
-        /// </summary>
-        /// <param name="consumer"> The action to be applied to the value.</param>
-        public void Consume(Action<T> consumer)
-        {
-            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
-
-            if (HasValue)
-            {
-                consumer(obj);
-            }
-        }
-
-        /// <summary>
         /// Determines if the encapsulated value matches another value using Equals.
         /// </summary>
         /// <returns>
@@ -216,7 +202,7 @@ namespace ZBRA.Maybe
         /// Determines if this instance is equals to another obj instance.
         /// </summary>
         /// <returns>
-        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt; 
+        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt;
         /// and it matches the current instance using Equals(Maybe&lt;T&gt; other).
         /// False otherwise
         /// </returns>
@@ -240,10 +226,10 @@ namespace ZBRA.Maybe
         public override string ToString() => HasValue ? Value.ToString() : string.Empty;
 
         /// <summary>
-        /// Comparison method responsible for ordering or sorting collections of <see cref="Maybe{T}" />. <br/>    
-        /// A return of 0 means that both maybes are equal.<br/>     
-        /// A return of -1 means that this instance of maybe is less than the other maybe being compared.<br/>     
-        /// A return of 1 means that this instance of maybe is greater than the other maybe being compared.<br/>  
+        /// Comparison method responsible for ordering or sorting collections of <see cref="Maybe{T}" />. <br/>
+        /// A return of 0 means that both maybes are equal.<br/>
+        /// A return of -1 means that this instance of maybe is less than the other maybe being compared.<br/>
+        /// A return of 1 means that this instance of maybe is greater than the other maybe being compared.<br/>
         /// </summary>
         /// <param name="other">The other <see cref="Maybe{T}" /> to compare</param>
         /// <returns>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace ZBRA.Maybe
 {
@@ -117,7 +118,22 @@ namespace ZBRA.Maybe
 
         #endregion
 
-        #region Operations 
+        #region Operations
+        /// <summary>
+        /// Applies an action to the value if it's present.
+        /// </summary>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="consumer"> The action to be applied to the value.</param>
+        public static void Consume<T>(this Maybe<T> subject, Action<T> consumer)
+        {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
+            if (subject.HasValue)
+            {
+                consumer(subject.Value);
+            }
+        }
+
         /// <summary>
         /// Projects the value according to the selector.
         /// Analogous to Linq's Select.
@@ -225,6 +241,75 @@ namespace ZBRA.Maybe
             if (subject.HasValue && other.HasValue)
             {
                 consumer(subject.Value, other.Value);
+            }
+        }
+        #endregion
+
+        #region Async Operations
+        /// <summary>
+        /// Projects the value according to the selector.
+        /// Analogous to Linq's Select.
+        /// </summary>
+        /// <returns>
+        /// A Task that returns Maybe&lt;<typeparamref name="V"/>&gt;.Nothing if subject.HasValue is false,
+        /// otherwise returns an instance of Maybe&lt;<typeparamref name="V"/>&gt; with the projected value
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="selector"> The selector to be applied.</param>
+        public static async Task<Maybe<V>> SelectAsync<T, V>(this Maybe<T> subject, Func<T, Task<V>> selector)
+        {
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
+
+            return !subject.HasValue ? Maybe<V>.Nothing : (await selector(subject.Value)).ToMaybe();
+        }
+
+        /// <summary>
+        /// Projects the value according to the selector.
+        /// Analogous to Linq's Select.
+        /// </summary>
+        /// <returns>
+        /// Maybe&lt;<typeparamref name="V"/>&gt;.Nothing if subject.HasValue is false,
+        /// otherwise returns an instance of Maybe&lt;<typeparamref name="V"/>&gt; with the projected value
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="selector"> The selector to be applied.</param>
+        public static async Task<Maybe<V>> SelectAsync<T, V>(this Maybe<T> subject, Func<T, Task<V?>> selector)
+            where V : struct
+        {
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
+
+            return !subject.HasValue ? Maybe<V>.Nothing : ToMaybe(await selector(subject.Value));
+        }
+
+        /// <summary>
+        /// Projects the value according to the selector and flatten it.
+        /// Analogous to Linq's SelectMany.
+        /// </summary>
+        /// <returns>
+        /// Maybe&lt;<typeparamref name="V"/>&gt;.Nothing if subject.HasValue is false,
+        /// otherwise returns an instance of Maybe&lt;<typeparamref name="V"/>&gt; with the projected value
+        /// </returns>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="selector"> The selector to be applied.</param>
+        public static async Task<Maybe<V>> SelectManyAsync<T, V>(this Maybe<T> subject, Func<T, Task<Maybe<V>>> selector)
+        {
+            selector = selector ?? throw new ArgumentNullException(nameof(selector));
+
+            return !subject.HasValue ? Maybe<V>.Nothing : await selector(subject.Value);
+        }
+
+        /// <summary>
+        /// Applies an action to the value if it's present.
+        /// </summary>
+        /// <param name="subject"> The subject that will be projected.</param>
+        /// <param name="consumer"> The action to be applied to the value.</param>
+        public static async Task ConsumeAsync<T>(this Maybe<T> subject, Func<T, Task> consumer)
+        {
+            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+
+            if (subject.HasValue)
+            {
+                await consumer(subject.Value);
             }
         }
         #endregion
