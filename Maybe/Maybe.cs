@@ -305,5 +305,24 @@ namespace ZBRA.Maybe
         /// <returns>A boolean indicating whether or not the <see cref="Maybe{T}" /> are unequal.</returns>
         public static bool operator !=(Maybe<T> left, Maybe<T> right) => !left.Equals(right);
         #endregion
+
+        #region Implicit type conversion
+        /// <summary>
+        /// Converts the value to <see cref="Maybe{T}" />.
+        /// </summary>
+        /// <param name="value"> The value to be converted.</param>
+        /// <returns>
+        /// <see cref="Maybe{T}" />.Nothing if value is null,
+        /// otherwise new <see cref="Maybe{T}" />(value)
+        /// </returns>
+        public static implicit operator Maybe<T>(T value)
+        {
+            if (value == null)
+            {
+                return Nothing;
+            }
+            return new Maybe<T>(value);
+        }
+        #endregion
     }
 }

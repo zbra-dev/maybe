@@ -108,12 +108,8 @@ namespace ZBRA.Maybe
         /// <param name="value"> The value to be converted.</param>
         public static Maybe<T> ToMaybe<T>(this T value)
         {
-            if (value == null)
-            {
-                return Maybe<T>.Nothing;
-            }
-
-            return new Maybe<T>(value);
+            // Using implicit conversion
+            return value;
         }
 
         #endregion
