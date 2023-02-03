@@ -1,5 +1,6 @@
 using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ZBRA.Maybe.Test
@@ -328,5 +329,46 @@ namespace ZBRA.Maybe.Test
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
+        [Fact]
+        public void ImplicitConversion_FromNullObject_ShouldReturnMaybeWithoutValue()
+        {
+            Maybe<object> subject = null;
+
+            subject.Should().Be(Maybe<object>.Nothing);
+        }
+
+        [Theory]
+        [MemberData(nameof(NonNullData))]
+        public void ImplicitConversion_FromNonNullObject_ShouldReturnMaybeWithValue<T>(T value)
+        {
+            Maybe<T> subject = value;
+
+            subject.Value.Should().Be(value);
+        }
+
+        public static TheoryData<object> NonNullData()
+        {
+            return new TheoryData<object>()
+            {
+                '1',
+                1,
+                0,
+                1.0,
+                DateTime.Now,
+                new List<string>(),
+                1.ToMaybe(),
+                (1, 2),
+                "1",
+                true,
+                (byte)1,
+                (sbyte)1,
+                (float)1.0,
+                (uint)1,
+                (long)1,
+                (ulong)1,
+                (short)1,
+                (ushort)1,
+            };
+        }
     }
 }
