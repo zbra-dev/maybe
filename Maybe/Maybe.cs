@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ZBRA.Maybe
 {
@@ -67,6 +68,20 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
+        /// Returns the value or a default provided by defaultSupplier.
+        /// </summary>
+        /// <returns>
+        /// The value if HasValue is true, otherwise returns the value provided by defaultSupplier
+        /// </returns>
+        /// <param name="defaultSupplier"> The default value supplier.</param>
+        public async Task<T> OrAsync(Func<Task<T>> defaultSupplier)
+        {
+            defaultSupplier = defaultSupplier ?? throw new ArgumentNullException(nameof(defaultSupplier));
+
+            return HasValue ? obj : await defaultSupplier();
+        }
+
+        /// <summary>
         /// Returns this object or an alternative.
         /// </summary>
         /// <returns>
@@ -78,6 +93,20 @@ namespace ZBRA.Maybe
             alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
             return HasValue ? this : alternativeSupplier();
+        }
+
+        /// <summary>
+        /// Returns this object or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided by alternativeSupplier
+        /// </returns>
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public async Task<Maybe<T>> OrMaybeAsync(Func<Task<Maybe<T>>> alternativeSupplier)
+        {
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return HasValue ? this : await alternativeSupplier();
         }
 
         /// <summary>
@@ -116,6 +145,20 @@ namespace ZBRA.Maybe
             alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
             return HasValue ? this : alternativeSupplier().ToMaybe();
+        }
+
+        /// <summary>
+        /// Returns this object or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided provided by alternativeSupplier
+        /// </returns>
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public async Task<Maybe<T>> OrMaybeAsync(Func<Task<T>> alternativeSupplier)
+        {
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return HasValue ? this : (await alternativeSupplier()).ToMaybe();
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
@@ -25,6 +26,17 @@ namespace ZBRA.Maybe.Test
         {
             var result = value.ToMaybe()
                 .Or(() => defaultValue);
+
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(1, 2, 1)]
+        [InlineData(null, 2, 2)]
+        public async Task OrAsync_Func_ShouldReturnValueOrDefaultValue(int? value, int defaultValue, int expected)
+        {
+            var result = await value.ToMaybe()
+                .OrAsync(async () => await Task.FromResult(defaultValue));
 
             result.Should().Be(expected);
         }
@@ -190,6 +202,16 @@ namespace ZBRA.Maybe.Test
             result = subject
                 .Select(s => s.Name)
                 .OrMaybe(() => alternative);
+            result.Should().Be(expected.ToMaybe());
+        }
+
+        [Theory]
+        [MemberData(nameof(OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
+        public async Task OrMaybeAsync_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
+        {
+            var result = await subject
+                .Select(s => s.Name)
+                .OrMaybeAsync(async () => await Task.FromResult(alternative));
             result.Should().Be(expected.ToMaybe());
         }
 
