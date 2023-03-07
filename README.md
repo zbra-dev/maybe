@@ -74,3 +74,81 @@ if (a < b)
     // Nothing will always be less than any int value
 }
 ```
+
+# Documentation
+
+## MaybeExtensions.OrEmpty
+Allow to get the encapsulated value or an empty string.
+
+Returns the maybe value if HasValue is true, otherwise `string.Empty`.
+
+### Examples
+```
+var maybe = "some value".ToMaybe();
+var v = maybe.OrEmpty();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: some value
+```
+```
+var maybe = Maybe<string>.Nothing;
+var v = maybe.OrEmpty();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: 
+```
+
+## MaybeExtensions.OrNull
+Allow to get the encapsulated value or null.
+
+Returns the maybe value if HasValue is true, otherwise `null`.
+
+### Examples
+```
+var maybe = "some value".ToMaybe();
+var v = maybe.OrNull();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: some value
+```
+```
+var maybe = Maybe<string>.Nothing;
+var v = maybe.OrNull();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: 
+```
+
+## MaybeExtensions.OrTrue
+Allow to get the boolean maybe encapsulated value or True.
+
+Returns the maybe value if HasValue is true, otherwise `true`.
+
+### Examples
+```
+var maybe = false.ToMaybe();
+var v = maybe.OrTrue();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: False
+```
+```
+var maybe = Maybe<bool>.Nothing;
+var v = maybe.OrTrue();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: True
+```
+
+## MaybeExtensions.OrFalse
+Allow to get the boolean maybe encapsulated value or False.
+
+Returns the maybe value if HasValue is true, otherwise `false`.
+
+### Examples
+```
+var maybe = false.ToMaybe();
+var v = maybe.OrFalse();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: False
+```
+```
+var maybe = Maybe<bool>.Nothing;
+var v = maybe.OrFalse();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: False
+```
