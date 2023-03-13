@@ -78,9 +78,16 @@ if (a < b)
 # Documentation
 
 ## MaybeExtensions.OrEmpty
+
+### Remarks
 Allow to get the encapsulated value or an empty string.
 
 Returns the maybe value if HasValue is true, otherwise `string.Empty`.
+
+### Method definition
+```
+public static string OrEmpty(this Maybe<string> subject);
+```
 
 ### Examples
 ```
@@ -97,9 +104,15 @@ Console.WriteLine($"Print Value: {v}");
 ```
 
 ## MaybeExtensions.OrNull
+### Remarks
 Allow to get the encapsulated value or null.
 
 Returns the maybe value if HasValue is true, otherwise `null`.
+
+### Method definition
+```
+public static T OrNull<T>(this Maybe<T> subject) where T : class;
+```
 
 ### Examples
 ```
@@ -116,10 +129,14 @@ Console.WriteLine($"Print Value: {v}");
 ```
 
 ## MaybeExtensions.OrTrue
+### Remarks
 Allow to get the boolean maybe encapsulated value or True.
 
 Returns the maybe value if HasValue is true, otherwise `true`.
-
+### Method definition
+```
+public static bool OrTrue(this Maybe<bool> subject);
+```
 ### Examples
 ```
 var maybe = false.ToMaybe();
@@ -135,10 +152,15 @@ Console.WriteLine($"Print Value: {v}");
 ```
 
 ## MaybeExtensions.OrFalse
+### Remarks
 Allow to get the boolean maybe encapsulated value or False.
 
 Returns the maybe value if HasValue is true, otherwise `false`.
 
+### Method defintion
+```
+public static bool OrFalse(this Maybe<bool> subject);
+```
 ### Examples
 ```
 var maybe = false.ToMaybe();
@@ -152,3 +174,153 @@ var v = maybe.OrFalse();
 Console.WriteLine($"Print Value: {v}");
 // Print Value: False
 ```
+
+
+## MaybeExtensions.ToNullable
+### Remarks
+Convert a Maybe to Nullable. 
+
+If the Maybe.HasValue is true, return its `value` otherwise a `null`.
+
+### Method definitions
+```
+public static T? ToNullable<T>(this Maybe<T> value) where T : struct
+```
+### Examples
+```
+var maybe = 1234.ToMaybe();
+var v = maybe.ToNullable();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: 1234
+```
+```
+var maybe = Maybe<int>.Nothing;
+var v = maybe.ToNullable();
+Console.WriteLine($"Print Value: {v}");
+// Print Value: 
+```
+
+## MaybeExtensions.ToMaybe
+### Remarks
+/// Converts the value to Maybe&lt;S&gt;.
+/// Maybe&lt;<typeparamref name="S"/>&gt;.Nothing if value.HasValue is false,
+/// otherwise new Maybe&lt;<typeparamref name="S"/>&gt;(value.Value)
+/// <param name="value"> The value to be converted.</param>
+### Method definitions
+```
+```
+### Examples
+```
+```
+```
+```
+
+# RAW DATA
+
+## MaybeExtensions.ToMaybe
+overloads
+
+/// Converts the value to Maybe&lt;S&gt;.
+/// Maybe&lt;<typeparamref name="S"/>&gt;.Nothing if value.HasValue is false,
+/// otherwise new Maybe&lt;<typeparamref name="S"/>&gt;(value.Value)
+/// <param name="value"> The value to be converted.</param>
+
+Maybe&lt;S&gt; ToMaybe&lt;S&gt;(this S? value) where S : struct
+
+/// <summary>
+/// This methods prevents stacking maybes, it just returns value
+/// </summary>
+/// <returns>
+/// value
+/// </returns>
+/// <param name="value"> The value to be converted.</param>
+
+Maybe<T> ToMaybe<T>(this Maybe<T> value)
+
+/// <summary>
+/// Converts the value to Maybe&lt;<typeparamref name="T"/>&gt;.
+/// </summary>
+/// <returns>
+/// Maybe&lt;<typeparamref name="T"/>&gt;.Nothing if value is null,
+/// otherwise new Maybe&lt;<typeparamref name="T"/>&gt;(value)
+/// </returns>
+/// <param name="value"> The value to be converted.</param>
+Maybe<T> ToMaybe<T>(this T value)
+
+
+## MaybeExtensions.Select
+
+/// <summary>
+/// Projects the value according to the selector.
+/// Analogous to Linq's Select.
+/// </summary>
+/// <returns>
+/// Maybe&lt;<typeparamref name="V"/>&gt;.Nothing if subject.HasValue is false,
+/// otherwise returns an instance of Maybe&lt;<typeparamref name="V"/>&gt; with the projected value
+/// </returns>
+/// <param name="subject"> The subject that will be projected.</param>
+/// <param name="selector"> The selector to be applied.</param>
+Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V> selector)
+
+/// <summary>
+/// Projects the value according to the selector.
+/// Analogous to Linq's Select.
+/// </summary>
+/// <returns>
+/// Maybe&lt;<typeparamref name="V"/>&gt;.Nothing if subject.HasValue is false,
+/// otherwise returns an instance of Maybe&lt;<typeparamref name="V"/>&gt; with the projected value
+/// </returns>
+/// <param name="subject"> The subject that will be projected.</param>
+/// <param name="selector"> The selector to be applied.</param>
+Maybe<V> Select<T, V>(this Maybe<T> subject, Func<T, V?> selector)
+
+## MaybeExtensions.SelectMany
+/// <summary>
+/// Projects the value according to the selector and flatten it.
+/// Analogous to Linq's SelectMany.
+/// </summary>
+/// <returns>
+/// Maybe&lt;<typeparamref name="V"/>&gt;.Nothing if subject.HasValue is false,
+/// otherwise returns an instance of Maybe&lt;<typeparamref name="V"/>&gt; with the projected value
+/// </returns>
+/// <param name="subject"> The subject that will be projected.</param>
+/// <param name="selector"> The selector to be applied.</param>
+Maybe<V> SelectMany<T, V>(this Maybe<T> subject, Func<T, Maybe<V>> selector)
+
+
+## MaybeExtensions.Zip
+### Overloads 
+
+/// <summary>
+/// Zips two maybes together. Analogous to Linq's Zip.
+/// </summary>
+/// <returns>
+/// The zipped maybe
+/// </returns>
+/// <param name="subject"> The subject that will be projected.</param>
+/// <param name="other"> The other maybe to be zipped.</param>
+/// <param name="transformer"> The transformer function to be applied.</param>
+Maybe<R> Zip<T, U, R>(this Maybe<T> subject, Maybe<U> other, Func<T, U, R> transformer)
+
+/// <summary>
+/// Zips two maybes together. Analogous to Linq's Zip.
+/// </summary>
+/// <returns>
+/// The zipped maybe
+/// </returns>
+/// <param name="subject"> The subject that will be projected.</param>
+/// <param name="other"> The other maybe to be zipped.</param>
+/// <param name="transformer"> The transformer function to be applied.</param>
+Maybe<R> Zip<T, U, R>(this Maybe<T> subject, Maybe<U> other, Func<T, U, Maybe<R>> transformer)
+
+## MaybeExtensions.ZipAndConsume
+/// <summary>
+/// Zips and consumes two maybes.
+/// </summary>
+/// <param name="subject"> The subject that will be projected.</param>
+/// <param name="other"> The other maybe to be zipped.</param>
+/// <param name="consumer"> The action to be applied to both maybes.</param>
+void ZipAndConsume<T, U>(this Maybe<T> subject, Maybe<U> other, Action<T, U> consumer)
+
+# End of  Methods Extensions
+

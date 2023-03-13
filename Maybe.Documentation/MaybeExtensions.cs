@@ -76,5 +76,23 @@ namespace Maybe.Documentation
             Console.WriteLine($"Print Value: {v}");
             // Print Value: False   
         }
+
+        internal static void ToNullableExample_WithValue()
+        {
+            Console.WriteLine("ToNullable example with value");
+            var maybe = 1234.ToMaybe();
+            var v = maybe.ToNullable();
+            Console.WriteLine($"Print Value: {v}");
+            // Print Value: 1234
+        }
+
+        internal static void ToNullableExample_WithoutValue()
+        {
+            Console.WriteLine("ToNullable example without value");
+            var maybe = Maybe<int>.Nothing;
+            var v = maybe.ToNullable();
+            Console.WriteLine($"Print Value: {v}");
+            // Print Value: 
+        }
     }
 }

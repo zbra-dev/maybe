@@ -13,4 +13,9 @@ MaybeExtensions.OrTrueExample_WithoutValue();
 MaybeExtensions.OrFalseExample_WithValue();
 MaybeExtensions.OrFalseExample_WithoutValue();
 
+
+//ToNullable
+MaybeExtensions.ToNullableExample_WithValue();
+MaybeExtensions.ToNullableExample_WithoutValue();
+
 Console.ReadLine();
