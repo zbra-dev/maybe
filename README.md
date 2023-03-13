@@ -182,7 +182,7 @@ Convert a Maybe to Nullable.
 
 If the Maybe.HasValue is true, return its `value` otherwise a `null`.
 
-### Method definitions
+### Method definition
 ```
 public static T? ToNullable<T>(this Maybe<T> value) where T : struct
 ```
@@ -206,7 +206,7 @@ Console.WriteLine($"Print Value: {v}");
 /// Maybe&lt;<typeparamref name="S"/>&gt;.Nothing if value.HasValue is false,
 /// otherwise new Maybe&lt;<typeparamref name="S"/>&gt;(value.Value)
 /// <param name="value"> The value to be converted.</param>
-### Method definitions
+### Method definition
 ```
 ```
 ### Examples
