@@ -18,4 +18,10 @@ MaybeExtensions.OrFalseExample_WithoutValue();
 MaybeExtensions.ToNullableExample_WithValue();
 MaybeExtensions.ToNullableExample_WithoutValue();
 
+//ToMaybe
+MaybeExtensions.ToMaybeExample_WithObjectValue();
+MaybeExtensions.ToMaybeExample_WithStructValue();
+MaybeExtensions.ToMaybeExample_WithMaybeValue();
+MaybeExtensions.ToMaybeExample_WithMaybeNothingValue();
+
 Console.ReadLine();

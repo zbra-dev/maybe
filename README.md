@@ -77,6 +77,71 @@ if (a < b)
 
 # Documentation
 
+
+## MaybeExtensions.ToMaybe
+### Remarks
+Converts the value to a Maybe.
+
+If the value is null, so it returns a Maybe.Nothing for that specific type.
+For structs it always returns the Maybe.
+
+### Method definition
+```
+public static Maybe<T> ToMaybe<T>(this T value)
+```
+### Overloads
+Overload to convert structs.
+```
+public static Maybe<S> ToMaybe<S>(this S? value) where S : struct
+```
+
+This overload will always return the original Maybe, preveting the user to create a Maybe of a Maybe.
+```
+public static Maybe<T> ToMaybe<T>(this Maybe<T> value)
+```
+
+### Examples
+Transform an object to a maybe and access its properties
+```
+var myObject = new { PropertyA = "Value Of Property A", PropertyB = 66 };
+var maybe = myObject.ToMaybe();
+Console.WriteLine($"Print Value: {maybe}");
+// Print Value: { PropertyA = Value Of Property A, PropertyB = 66 }
+Console.WriteLine($"Maybe PropertyA value: {maybe.Select(o => o.PropertyA)}");
+// Maybe PropertyA value: Value Of Property A
+Console.WriteLine($"Maybe PropertyB value: {maybe.Select(o => o.PropertyB)}");
+// Maybe PropertyB value: 66
+```
+Transform an int to a maybe and access it value.
+```
+var myInt = 66;
+var maybe = myInt.ToMaybe();
+Console.WriteLine($"Print Value: {maybe}");
+// Print Value: 66
+Console.WriteLine($"Print Maybe value: {maybe.Select(i => i)}");
+//Print Maybe value: 66
+```
+Try to transform a Maybe object to another Maybe. 
+```
+var myObject = new { PropertyA = "Value Of Property A", PropertyB = 66 };
+var maybe = myObject.ToMaybe();
+var secondMaybe = maybe.ToMaybe();
+Console.WriteLine($"First Maybe Print Value: {maybe}");
+// First Maybe Print Value: { PropertyA = Value Of Property A, PropertyB = 66 }
+Console.WriteLine($"Second Maybe Print Value: {secondMaybe}");
+// Second Maybe Print Value: { PropertyA = Value Of Property A, PropertyB = 66 }
+
+```
+Try to transform a empty Maybe to another Maybe
+```
+var maybe = Maybe<string>.Nothing;
+var secondMaybe = maybe.ToMaybe();
+Console.WriteLine($"First Maybe Print Value: {maybe}");
+// First Maybe Print Value: 
+Console.WriteLine($"Second Maybe Print Value: {secondMaybe}");
+// Second Maybe Print Value: 
+```
+
 ## MaybeExtensions.OrEmpty
 
 ### Remarks
@@ -200,20 +265,6 @@ Console.WriteLine($"Print Value: {v}");
 // Print Value: 
 ```
 
-## MaybeExtensions.ToMaybe
-### Remarks
-/// Converts the value to Maybe&lt;S&gt;.
-/// Maybe&lt;<typeparamref name="S"/>&gt;.Nothing if value.HasValue is false,
-/// otherwise new Maybe&lt;<typeparamref name="S"/>&gt;(value.Value)
-/// <param name="value"> The value to be converted.</param>
-### Method definition
-```
-```
-### Examples
-```
-```
-```
-```
 
 # RAW DATA
 

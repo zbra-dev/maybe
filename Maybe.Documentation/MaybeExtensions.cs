@@ -94,5 +94,52 @@ namespace Maybe.Documentation
             Console.WriteLine($"Print Value: {v}");
             // Print Value: 
         }
+
+        internal static void ToMaybeExample_WithObjectValue()
+        {
+            Console.WriteLine("ToMaybe example with object");
+            var myObject = new { PropertyA = "Value Of Property A", PropertyB = 66 };
+            var maybe = myObject.ToMaybe();
+            Console.WriteLine($"Print Value: {maybe}");
+            // Print Value: { PropertyA = Value Of Property A, PropertyB = 66 }
+            Console.WriteLine($"Maybe PropertyA value: {maybe.Select(o => o.PropertyA)}");
+            // Maybe PropertyA value: Value Of Property A
+            Console.WriteLine($"Maybe PropertyB value: {maybe.Select(o => o.PropertyB)}");
+            // Maybe PropertyB value: 66
+        }
+
+        internal static void ToMaybeExample_WithStructValue()
+        {
+            Console.WriteLine("ToMaybe example with struct");
+            var myInt = 66;
+            var maybe = myInt.ToMaybe();
+            Console.WriteLine($"Print Value: {maybe}");
+            // Print Value: 66
+            Console.WriteLine($"Print Maybe value: {maybe.Select(i => i)}");
+            //Print Maybe value: 66
+        }
+
+        internal static void ToMaybeExample_WithMaybeValue()
+        {
+            Console.WriteLine("ToMaybe example with a Maybe of an object");
+            var myObject = new { PropertyA = "Value Of Property A", PropertyB = 66 };
+            var maybe = myObject.ToMaybe();
+            var secondMaybe = maybe.ToMaybe();
+            Console.WriteLine($"First Maybe Print Value: {maybe}");
+            // First Maybe Print Value: { PropertyA = Value Of Property A, PropertyB = 66 }
+            Console.WriteLine($"Second Maybe Print Value: {secondMaybe}");
+            // Second Maybe Print Value: { PropertyA = Value Of Property A, PropertyB = 66 }
+        }
+
+        internal static void ToMaybeExample_WithMaybeNothingValue()
+        {
+            Console.WriteLine("ToMaybe example with a Maybe of an object");
+            var maybe = Maybe<string>.Nothing;
+            var secondMaybe = maybe.ToMaybe();
+            Console.WriteLine($"First Maybe Print Value: {maybe}");
+            // First Maybe Print Value: 
+            Console.WriteLine($"Second Maybe Print Value: {secondMaybe}");
+            // Second Maybe Print Value: 
+        }
     }
 }
