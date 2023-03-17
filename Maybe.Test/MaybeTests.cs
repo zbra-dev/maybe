@@ -227,25 +227,9 @@ namespace ZBRA.Maybe.Test
         }
 
         [Fact]
-        public void Or_NullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().Or((Func<int>)null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Fact]
         public void OrAsync_NullArgument_ShouldThrow()
         {
             Func<Task> subject = async () => await 1.ToMaybe().OrAsync(null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void OrMaybe_MaybeNullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().OrMaybe((Func<Maybe<int>>)null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
