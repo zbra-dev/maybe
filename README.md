@@ -74,3 +74,7 @@ if (a < b)
     // Nothing will always be less than any int value
 }
 ```
+
+# See more details
+
+[Maybe Extension](docs/maybe-extension.md)
