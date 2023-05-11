@@ -1,5 +1,7 @@
-using FluentAssertions;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 
 namespace ZBRA.Maybe.Test
@@ -24,6 +26,17 @@ namespace ZBRA.Maybe.Test
         {
             var result = value.ToMaybe()
                 .Or(() => defaultValue);
+
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(1, 2, 1)]
+        [InlineData(null, 2, 2)]
+        public async Task OrAsync_Func_ShouldReturnValueOrDefaultValue(int? value, int defaultValue, int expected)
+        {
+            var result = await value.ToMaybe()
+                .OrAsync(async () => await Task.FromResult(defaultValue));
 
             result.Should().Be(expected);
         }
@@ -69,107 +82,6 @@ namespace ZBRA.Maybe.Test
         public void OrThrow_NullArgument_ShouldThrow()
         {
             Action subject = () => 1.ToMaybe().OrThrow(null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void Consume_WithValue_ShouldExecuteAction()
-        {
-            string result = null;
-            var expected = 1;
-
-            expected.ToMaybe()
-                .Consume(i => result = i.ToString());
-
-            result.Should().Be(expected.ToString());
-        }
-
-        [Fact]
-        public void Consume_WithNoValue_ShouldNotExecuteAction()
-        {
-            var result = "a";
-
-            Maybe<string>.Nothing
-                .Consume(i => result = "b");
-
-            result.Should().Be("a");
-        }
-
-        [Fact]
-        public void Consume_NullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().Consume(null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Theory]
-        [InlineData(null, null, null)]
-        [InlineData(null, 2, null)]
-        [InlineData(2, null, null)]
-        [InlineData(1, 2, "3")]
-        public void Zip_WithTransformer_ShouldZipValues(int? value, double? otherValue, string expected)
-        {
-            static string transformer(int v, double o) => (v + o).ToString();
-
-            var result = value.ToMaybe()
-                .Zip(otherValue.ToMaybe(), transformer);
-
-            result.Should().Be(expected.ToMaybe());
-        }
-
-        [Theory]
-        [InlineData(null, null, null)]
-        [InlineData(null, 2, null)]
-        [InlineData(2, null, null)]
-        [InlineData(1, 2, "3")]
-        public void Zip_WithMaybeTransformer_ShouldZipValues(int? value, double? otherValue, string expected)
-        {
-            static Maybe<string> transformer(int v, double o) => (v + o).ToString().ToMaybe();
-
-            var result = value.ToMaybe()
-                .Zip(otherValue.ToMaybe(), transformer);
-
-            result.Should().Be(expected.ToMaybe());
-        }
-
-        [Fact]
-        public void Zip_NullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, int>)null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void Zip_MaybeNullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().Zip(Maybe<int>.Nothing, (Func<int, int, Maybe<int>>)null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Theory]
-        [InlineData(null, null, null)]
-        [InlineData(null, 2, null)]
-        [InlineData(2, null, null)]
-        [InlineData(1, 2, "3")]
-        public void ZipConsume_WhenBothValuesExist_ShouldExecuteAction(int? value, double? otherValue, string expected)
-        {
-            string result = null;
-            void action(int v, double o) => result = (v + o).ToString();
-
-            value.ToMaybe()
-                .ZipAndConsume(otherValue.ToMaybe(), action);
-
-            result.Should().Be(expected);
-        }
-
-        [Fact]
-        public void ZipAndConsume_NullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().ZipAndConsume(Maybe<int>.Nothing, null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -293,6 +205,16 @@ namespace ZBRA.Maybe.Test
             result.Should().Be(expected.ToMaybe());
         }
 
+        [Theory]
+        [MemberData(nameof(OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases))]
+        public async Task OrMaybeAsync_WithAlternative_ShouldReturnSubjectOrAlternative(Maybe<StringObj> subject, string alternative, string expected)
+        {
+            var result = await subject
+                .Select(s => s.Name)
+                .OrMaybeAsync(async () => await Task.FromResult(alternative));
+            result.Should().Be(expected.ToMaybe());
+        }
+
         public static TheoryData<Maybe<StringObj>, string, string> OrMaybe_WithAlternative_ShouldReturnSubjectOrAlternativeTestCases()
         {
             return new TheoryData<Maybe<StringObj>, string, string>
@@ -305,17 +227,9 @@ namespace ZBRA.Maybe.Test
         }
 
         [Fact]
-        public void Or_NullArgument_ShouldThrow()
+        public void OrAsync_NullArgument_ShouldThrow()
         {
-            Action subject = () => 1.ToMaybe().Or((Func<int>)null);
-
-            subject.Should().ThrowExactly<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void OrMaybe_MaybeNullArgument_ShouldThrow()
-        {
-            Action subject = () => 1.ToMaybe().OrMaybe((Func<Maybe<int>>)null);
+            Func<Task> subject = async () => await 1.ToMaybe().OrAsync(null);
 
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -328,5 +242,54 @@ namespace ZBRA.Maybe.Test
             subject.Should().ThrowExactly<ArgumentNullException>();
         }
 
+        [Fact]
+        public void OrMaybeAsync_Func_MaybeNullArgument_ShouldThrow()
+        {
+            Func<Task> subject = async () => await 1.ToMaybe().OrMaybeAsync(null);
+
+            subject.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void ImplicitConversion_FromNullObject_ShouldReturnMaybeWithoutValue()
+        {
+            Maybe<object> subject = null;
+
+            subject.Should().Be(Maybe<object>.Nothing);
+        }
+
+        [Theory]
+        [MemberData(nameof(NonNullData))]
+        public void ImplicitConversion_FromNonNullObject_ShouldReturnMaybeWithValue<T>(T value)
+        {
+            Maybe<T> subject = value;
+
+            subject.Value.Should().Be(value);
+        }
+
+        public static TheoryData<object> NonNullData()
+        {
+            return new TheoryData<object>()
+            {
+                '1',
+                1,
+                0,
+                1.0,
+                DateTime.Now,
+                new List<string>(),
+                1.ToMaybe(),
+                (1, 2),
+                "1",
+                true,
+                (byte)1,
+                (sbyte)1,
+                (float)1.0,
+                (uint)1,
+                (long)1,
+                (ulong)1,
+                (short)1,
+                (ushort)1,
+            };
+        }
     }
 }

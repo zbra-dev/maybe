@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ZBRA.Maybe
 {
@@ -8,7 +9,7 @@ namespace ZBRA.Maybe
     /// </summary>
     public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IComparable<Maybe<T>>
     {
-        /// <value>A Maybe without a value.</value>
+        /// <summary>A Maybe without a value.</summary>
         public static readonly Maybe<T> Nothing = new Maybe<T>(default, false);
 
         private readonly T obj;
@@ -25,10 +26,10 @@ namespace ZBRA.Maybe
             HasValue = true;
         }
 
-        /// <value>True if there is a value present, otherwise false.</value>
+        /// <summary>True if there is a value present, otherwise false.</summary>
         public bool HasValue { get; }
 
-        /// <value>The encapsulated value.</value>
+        /// <summary>The encapsulated value.</summary>
         /// <exception cref="Exception">Thrown if HasValue is false.</exception>
         public T Value
         {
@@ -47,7 +48,7 @@ namespace ZBRA.Maybe
         /// Returns the value or a default.
         /// </summary>
         /// <returns>
-        /// The value if HasValue is true, otherwise returns defaultValue 
+        /// The value if HasValue is true, otherwise returns defaultValue
         /// </returns>
         /// <param name="defaultValue"> The default value.</param>
         public T Or(T defaultValue) => HasValue ? obj : defaultValue;
@@ -67,6 +68,20 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
+        /// Returns the value or a default provided by defaultSupplier.
+        /// </summary>
+        /// <returns>
+        /// The value if HasValue is true, otherwise returns the value provided by defaultSupplier
+        /// </returns>
+        /// <param name="defaultSupplier"> The default value supplier.</param>
+        public async Task<T> OrAsync(Func<Task<T>> defaultSupplier)
+        {
+            defaultSupplier = defaultSupplier ?? throw new ArgumentNullException(nameof(defaultSupplier));
+
+            return HasValue ? obj : await defaultSupplier();
+        }
+
+        /// <summary>
         /// Returns this object or an alternative.
         /// </summary>
         /// <returns>
@@ -78,6 +93,20 @@ namespace ZBRA.Maybe
             alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
 
             return HasValue ? this : alternativeSupplier();
+        }
+
+        /// <summary>
+        /// Returns this object or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided by alternativeSupplier
+        /// </returns>
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public async Task<Maybe<T>> OrMaybeAsync(Func<Task<Maybe<T>>> alternativeSupplier)
+        {
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return HasValue ? this : await alternativeSupplier();
         }
 
         /// <summary>
@@ -119,6 +148,20 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
+        /// Returns this object or an alternative.
+        /// </summary>
+        /// <returns>
+        /// This if HasValue is true, otherwise an alternative provided provided by alternativeSupplier
+        /// </returns>
+        /// <param name="alternativeSupplier"> The alternative supplier.</param>
+        public async Task<Maybe<T>> OrMaybeAsync(Func<Task<T>> alternativeSupplier)
+        {
+            alternativeSupplier = alternativeSupplier ?? throw new ArgumentNullException(nameof(alternativeSupplier));
+
+            return HasValue ? this : (await alternativeSupplier()).ToMaybe();
+        }
+
+        /// <summary>
         /// Returns the value if HasValue is true, otherwise throws an exception.
         /// </summary>
         /// <returns>
@@ -135,20 +178,6 @@ namespace ZBRA.Maybe
                 return obj;
             }
             throw errorSupplier();
-        }
-
-        /// <summary>
-        /// Applies an action to the value if it's present.
-        /// </summary>
-        /// <param name="consumer"> The action to be applied to the value.</param>
-        public void Consume(Action<T> consumer)
-        {
-            consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
-
-            if (HasValue)
-            {
-                consumer(obj);
-            }
         }
 
         /// <summary>
@@ -216,7 +245,7 @@ namespace ZBRA.Maybe
         /// Determines if this instance is equals to another obj instance.
         /// </summary>
         /// <returns>
-        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt; 
+        /// True if obj is an instance of Maybe&lt;<typeparamref name="T"/>&gt;
         /// and it matches the current instance using Equals(Maybe&lt;T&gt; other).
         /// False otherwise
         /// </returns>
@@ -240,10 +269,10 @@ namespace ZBRA.Maybe
         public override string ToString() => HasValue ? Value.ToString() : string.Empty;
 
         /// <summary>
-        /// Comparison method responsible for ordering or sorting collections of <see cref="Maybe{T}" />. <br/>    
-        /// A return of 0 means that both maybes are equal.<br/>     
-        /// A return of -1 means that this instance of maybe is less than the other maybe being compared.<br/>     
-        /// A return of 1 means that this instance of maybe is greater than the other maybe being compared.<br/>  
+        /// Comparison method responsible for ordering or sorting collections of <see cref="Maybe{T}" />. <br/>
+        /// A return of 0 means that both maybes are equal.<br/>
+        /// A return of -1 means that this instance of maybe is less than the other maybe being compared.<br/>
+        /// A return of 1 means that this instance of maybe is greater than the other maybe being compared.<br/>
         /// </summary>
         /// <param name="other">The other <see cref="Maybe{T}" /> to compare</param>
         /// <returns>
@@ -318,6 +347,25 @@ namespace ZBRA.Maybe
         /// <param name="right">The second <see cref="Maybe{T}" /> to compare.</param>
         /// <returns>A boolean indicating whether or not the <see cref="Maybe{T}" /> are unequal.</returns>
         public static bool operator !=(Maybe<T> left, Maybe<T> right) => !left.Equals(right);
+        #endregion
+
+        #region Implicit type conversion
+        /// <summary>
+        /// Converts the value to <see cref="Maybe{T}" />.
+        /// </summary>
+        /// <param name="value"> The value to be converted.</param>
+        /// <returns>
+        /// <see cref="Maybe{T}" />.Nothing if value is null,
+        /// otherwise new <see cref="Maybe{T}" />(value)
+        /// </returns>
+        public static implicit operator Maybe<T>(T value)
+        {
+            if (value == null)
+            {
+                return Nothing;
+            }
+            return new Maybe<T>(value);
+        }
         #endregion
     }
 }
