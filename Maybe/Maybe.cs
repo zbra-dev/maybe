@@ -37,7 +37,7 @@ namespace ZBRA.Maybe
             {
                 if (!HasValue)
                 {
-                    throw new Exception("No Value is present");
+                    throw new Exception($"Maybe<{typeof(T).Name}>: No Value is present");
                 }
 
                 return obj;

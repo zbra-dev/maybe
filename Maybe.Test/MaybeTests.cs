@@ -9,6 +9,26 @@ namespace ZBRA.Maybe.Test
     public class MaybeTests
     {
         [Theory]
+        [InlineData(1, true)]
+        [InlineData(null, false)]
+        public void HasValue_ShouldReturnCorrectly(int? value, bool expected)
+        {
+            Maybe<int> maybe = value.ToMaybe();
+
+            maybe.HasValue.Should().Be(expected);
+        }
+
+        [Fact]
+        public void Nothing_DirectAccessToValue_ShouldThrow()
+        {
+            Maybe<int> maybe = Maybe<int>.Nothing;
+
+            Func<int> func = () => maybe.Value;
+
+            func.Should().ThrowExactly<Exception>().WithMessage("*No Value is present");
+        }
+
+        [Theory]
         [InlineData(1, 2, 1)]
         [InlineData(null, 2, 2)]
         public void Or_ShouldReturnValueOrDefaultValue(int? value, int defaultValue, int expected)

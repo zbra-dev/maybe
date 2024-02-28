@@ -76,7 +76,7 @@ namespace ZBRA.Maybe.Test
 
             Func<Maybe<T>> getResult = () => enumerableMock.Object.MaybeSingle();
 
-            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("Sequence contains more than one element");
+            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("*Sequence contains more than one element");
 
             enumerableMock.Verify(it => it.GetEnumerator(), Times.Exactly(testData.ExpectedGetEnumeratorCalls));
             enumeratorMock.Verify(it => it.Current, Times.Exactly(testData.ExpectedCurrentCalls));
@@ -91,7 +91,7 @@ namespace ZBRA.Maybe.Test
 
             Func<Maybe<T>> getResult = () => enumerableMock.Object.MaybeSingle(testData.Predicate);
 
-            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("Sequence contains more than one matching element");
+            getResult.Should().ThrowExactly<InvalidOperationException>().WithMessage("*Sequence contains more than one matching element");
 
             enumerableMock.Verify(it => it.GetEnumerator(), Times.Exactly(testData.ExpectedGetEnumeratorCalls));
             enumeratorMock.Verify(it => it.Current, Times.Exactly(testData.ExpectedCurrentCalls));
