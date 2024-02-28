@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/zbra-dev/maybe</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <AssemblyName>ZBRA.Maybe</AssemblyName>
     <RootNamespace>ZBRA.Maybe</RootNamespace>
   </PropertyGroup>

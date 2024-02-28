@@ -106,7 +106,7 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns <see cref="Maybe{T}" /> of the only element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// Returns <see cref="Maybe{T}" /> of the only element of a sequence or <see cref="Maybe{T}.Nothing" />
         /// if the sequence is empty or the only element is <see langword="null" />.<br/>
         /// This method throws an <see cref="ArgumentNullException"/> if there is more than one element in the sequence.
         /// </summary>
@@ -131,7 +131,7 @@ namespace ZBRA.Maybe
 
                     if (enumerator.MoveNext())
                     {
-                        throw new InvalidOperationException("Sequence contains more than one element");
+                        throw new InvalidOperationException($"Maybe<IEnumerable<{typeof(T).Name}>>: Sequence contains more than one element");
                     }
 
                     return current.ToMaybe();
@@ -142,8 +142,8 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns the only element of a sequence that satisfies a specified condition or 
-        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/> 
+        /// Returns the only element of a sequence that satisfies a specified condition or
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
         /// This method throws an <see cref="ArgumentNullException"/> if more than one element satisfies the condition.
         /// </summary>
         /// <returns>
@@ -175,7 +175,7 @@ namespace ZBRA.Maybe
                         {
                             if (predicate(enumerator.Current))
                             {
-                                throw new InvalidOperationException("Sequence contains more than one matching element");
+                                throw new InvalidOperationException($"Maybe<IEnumerable<{typeof(T).Name}>>: Sequence contains more than one matching element");
                             }
                         }
 
@@ -188,7 +188,7 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns <see cref="Maybe{T}" /> of the only element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// Returns <see cref="Maybe{T}" /> of the only element of a sequence or <see cref="Maybe{T}.Nothing" />
         /// if the sequence is empty or the only element is <see langword="null" />.<br/>
         /// This method throws an <see cref="ArgumentNullException"/> if there is more than one element in the sequence.
         /// </summary>
@@ -213,7 +213,7 @@ namespace ZBRA.Maybe
 
                     if (enumerator.MoveNext())
                     {
-                        throw new InvalidOperationException("Sequence contains more than one element");
+                        throw new InvalidOperationException($"Maybe<IEnumerable<{typeof(T).Name}>>: Sequence contains more than one element");
                     }
 
                     return current.ToMaybe();
@@ -224,8 +224,8 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns the only element of a sequence that satisfies a specified condition or 
-        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/> 
+        /// Returns the only element of a sequence that satisfies a specified condition or
+        /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
         /// This method throws an <see cref="ArgumentNullException"/> if more than one element satisfies the condition.
         /// </summary>
         /// <returns>
@@ -257,7 +257,7 @@ namespace ZBRA.Maybe
                         {
                             if (predicate(enumerator.Current))
                             {
-                                throw new InvalidOperationException("Sequence contains more than one matching element");
+                                throw new InvalidOperationException($"Maybe<IEnumerable<{typeof(T).Name}>>: Sequence contains more than one matching element");
                             }
                         }
 
@@ -270,7 +270,7 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" />
         /// if the sequence is empty or the first element is <see langword="null" />.<br/>
         /// </summary>
         /// <returns>
@@ -294,7 +294,7 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns the first element of a sequence that satisfies a specified condition or 
+        /// Returns the first element of a sequence that satisfies a specified condition or
         /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
         /// </summary>
         /// <returns>
@@ -325,7 +325,7 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" /> 
+        /// Returns <see cref="Maybe{T}" /> of the first element of a sequence or <see cref="Maybe{T}.Nothing" />
         /// if the sequence is empty or the first element is <see langword="null" />.<br/>
         /// </summary>
         /// <returns>
@@ -349,7 +349,7 @@ namespace ZBRA.Maybe
         }
 
         /// <summary>
-        /// Returns the first element of a sequence that satisfies a specified condition or 
+        /// Returns the first element of a sequence that satisfies a specified condition or
         /// <see cref="Maybe{T}.Nothing" /> if no such element exists or it is <see langword="null" />.<br/>
         /// </summary>
         /// <returns>
